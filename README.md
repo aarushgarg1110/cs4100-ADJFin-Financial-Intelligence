@@ -21,3 +21,13 @@ The system uses **reinforcement learning** (DQN/PPO) to train an agent that make
 
 ## Repository Structure
 - TBD
+
+## Agent Interface
+
+Agents implement a minimal common interface in `agents/base_agent.py` to enable swapping RL and baseline strategies. See `agents/dqn_agent.py` (SB3 DQN wrapper; discrete actions) and `agents/baseline_agents.py` (equal-weight heuristic) for examples.
+
+## Algorithm Choice (Week 1 notes)
+
+- DQN: efficient for discrete action spaces; requires discretization for our Box(6) actions.
+- PPO/A2C: better for continuous control; PPO generally more stable sample-wise.
+- Recommendation: keep the DQN stub for comparisons with discretized actions; consider PPO/SAC if continuous actions are retained.
