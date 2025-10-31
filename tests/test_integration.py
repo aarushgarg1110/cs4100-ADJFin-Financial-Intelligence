@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 
 import sys
-sys.path.append('environment')
-sys.path.append('data')
+sys.path.append('../environment')
+sys.path.append('../data')
 
 from finance_env import FinanceEnv
 import numpy as np
