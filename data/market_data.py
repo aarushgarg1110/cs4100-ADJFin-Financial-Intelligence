@@ -27,14 +27,14 @@ class MarketDataManager:
         for asset, ticker in tickers.items():
             try:
                 # Download data without custom session (let yfinance handle it)
-                data = yf.download(ticker, start=start_date, progress=False)
+                data = yf.download(ticker, start=start_date, progress=False, auto_adjust=False)
                 
                 # Calculate monthly returns
-                monthly_data = data['Adj Close'].resample('M').last()
+                monthly_data = data['Adj Close'].resample('ME').last()
                 monthly_returns = monthly_data.pct_change().dropna()
                 
                 self.data[asset] = data
-                self.returns[asset] = monthly_returns.values
+                self.returns[asset] = monthly_returns.values.flatten()
                 
                 print(f"SUCCESS {asset}: {len(monthly_returns)} months of data")
                 
