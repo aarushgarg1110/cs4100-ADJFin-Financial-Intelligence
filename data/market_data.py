@@ -26,7 +26,7 @@ class MarketDataManager:
         
         for asset, ticker in tickers.items():
             try:
-                # Download data
+                # Download data without custom session (let yfinance handle it)
                 data = yf.download(ticker, start=start_date, progress=False)
                 
                 # Calculate monthly returns
@@ -36,10 +36,11 @@ class MarketDataManager:
                 self.data[asset] = data
                 self.returns[asset] = monthly_returns.values
                 
-                print(f"✅ {asset}: {len(monthly_returns)} months of data")
+                print(f"SUCCESS {asset}: {len(monthly_returns)} months of data")
                 
             except Exception as e:
-                print(f"❌ Error downloading {asset}: {e}")
+                print(f"ERROR downloading {asset}: {e}")
+                print(f"   Using fallback synthetic data for {asset}")
                 # Fallback to synthetic data
                 self.returns[asset] = self._generate_fallback_returns(asset)
     

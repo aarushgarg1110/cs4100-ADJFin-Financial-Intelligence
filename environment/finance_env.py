@@ -1,6 +1,10 @@
 import numpy as np
 import gymnasium as gym
 from gymnasium import spaces
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'data'))
+from market_data import MarketDataManager
 
 class FinanceEnv(gym.Env):
     """
@@ -19,13 +23,22 @@ class FinanceEnv(gym.Env):
         # State space: 15 variables
         self.observation_space = spaces.Box(low=0, high=np.inf, shape=(15,))
         
+        # Initialize market data manager
+        print("Loading market data...")
+        self.market_data = MarketDataManager()
+        self.market_data.download_data()
+        
+        # Classify regimes for all assets
+        for asset in self.market_data.returns:
+            self.market_data.classify_regimes(asset)
+        
+        print("Market data loaded successfully!")
+        
         # Financial parameters (realistic 2024 values)
         self.params = {
             'credit_card_apr': 0.22,
             'student_loan_apr': 0.065,
             'savings_apy': 0.045,
-            'stock_mean_monthly': 0.0087,  # ~10.5% annual
-            'bond_mean_monthly': 0.0041,   # ~5% annual
             'job_loss_prob': 0.0033,       # 4% annual
             'medical_prob': 0.008,         # 10% annual
             'raise_prob': 0.004,           # 5% annual
@@ -105,10 +118,10 @@ class FinanceEnv(gym.Env):
             self.real_estate += re_alloc * available_money
             self.cash += (1 - stock_alloc - bond_alloc - re_alloc) * available_money
         
-        # Apply market returns
+        # Apply market returns using real historical data
         self.stocks *= (1 + self.stock_return_1m)
-        self.bonds *= (1 + np.random.normal(self.params['bond_mean_monthly'], 0.02))
-        self.real_estate *= (1 + np.random.normal(0.006, 0.03))  # ~7% annual
+        self.bonds *= (1 + self.market_data.sample_return('bonds', self.market_regime))
+        self.real_estate *= (1 + self.market_data.sample_return('real_estate', self.market_regime))
         
         # Apply interest and payments
         self.cash *= (1 + self.params['savings_apy']/12)
@@ -147,12 +160,8 @@ class FinanceEnv(gym.Env):
         if np.random.rand() < 0.05:  # 5% chance regime changes
             self.market_regime = np.random.choice([0, 1, 2])
         
-        if self.market_regime == 1:  # Bull market
-            self.stock_return_1m = np.random.normal(0.012, 0.04)
-        elif self.market_regime == 2:  # Bear market  
-            self.stock_return_1m = np.random.normal(-0.01, 0.06)
-        else:  # Normal market
-            self.stock_return_1m = np.random.normal(self.params['stock_mean_monthly'], 0.04)
+        # Sample realistic stock returns based on current regime
+        self.stock_return_1m = self.market_data.sample_return('stocks', self.market_regime)
     
     def _apply_life_events(self):
         self.recent_event = 0
