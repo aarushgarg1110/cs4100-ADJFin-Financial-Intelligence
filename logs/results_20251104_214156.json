@@ -1,0 +1,22 @@
+{
+  "Q-Learning": {
+    "agent_name": "Q_Learning_Agent",
+    "mean_reward": 7774.4318732261645,
+    "std_reward": 7792.399371814521,
+    "mean_net_worth": 8305506.300235316,
+    "std_net_worth": 18567644.045058858,
+    "mean_episode_length": 360.0,
+    "bankruptcy_rate": 0.0,
+    "episodes": 20
+  },
+  "DQN": {
+    "agent_name": "DQN_Agent",
+    "mean_reward": 12713.268612897478,
+    "std_reward": 13307.269819617804,
+    "mean_net_worth": 10291973.664731205,
+    "std_net_worth": 10353581.215647103,
+    "mean_episode_length": 360.0,
+    "bankruptcy_rate": 0.0,
+    "episodes": 20
+  }
+}
