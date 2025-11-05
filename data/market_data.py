@@ -145,6 +145,27 @@ class MarketDataManager:
         }
 
         return inflation, rates
+    
+    def next_regime(self, current_regime: int) -> int:
+        """
+        Transition between market regimes stochastically.
+
+        Args:
+        current_regime (int): Current regime (0 = normal, 1 = bull, 2 = bear)
+
+        Returns:
+        int: Next regime ID (0, 1, or 2)
+        """
+        # Transition matrix defines how likely each regime is to persist or change
+        transition_matrix = {
+        0: [0.80, 0.15, 0.05],  # Normal → (Normal, Bull, Bear)
+        1: [0.20, 0.70, 0.10],  # Bull   → (Normal, Bull, Bear)
+        2: [0.40, 0.10, 0.50]   # Bear   → (Normal, Bull, Bear)
+        }
+
+        # Randomly choose next regime using weighted probabilities
+        next_r = np.random.choice([0, 1, 2], p=transition_matrix[current_regime])
+        return next_r
 
     def get_summary(self):
         """Print summary of downloaded data."""
