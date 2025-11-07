@@ -1,9 +1,5 @@
 import numpy as np
 import gymnasium as gym
-from gymnasium import spaces
-import sys
-import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'data'))
 from market_data import MarketDataManager
 
 class FinanceEnv(gym.Env):
@@ -14,19 +10,25 @@ class FinanceEnv(gym.Env):
     Action: 6 decisions for asset allocation and debt payments
     """
     
+    # Class-level market data (shared across all instances)
+    _market_data = None
+    
     def __init__(self):
         super().__init__()
         
         # Action space: [stock_alloc, bond_alloc, re_alloc, emergency_contrib, cc_payment, student_payment]
-        self.action_space = spaces.Box(low=0, high=1, shape=(6,))
+        self.action_space = gym.spaces.Box(low=0, high=1, shape=(6,))
         
         # State space: 15 variables
-        self.observation_space = spaces.Box(low=0, high=np.inf, shape=(15,))
+        self.observation_space = gym.spaces.Box(low=0, high=np.inf, shape=(15,))
         
-        # Initialize market data manager
-        print("Loading market data...")
-        self.market_data = MarketDataManager()
-        self.market_data.download_data()
+        # Initialize market data manager (only once)
+        if FinanceEnv._market_data is None:
+            print("Loading market data (one-time setup)...")
+            FinanceEnv._market_data = MarketDataManager()
+            FinanceEnv._market_data.download_data()
+        
+        self.market_data = FinanceEnv._market_data
         
         # Classify regimes for all assets
         for asset in self.market_data.returns:
@@ -75,6 +77,10 @@ class FinanceEnv(gym.Env):
         self.recent_event = 0   # 0=none, 1=job_loss, 2=medical, 3=raise
         self.months_unemployed = 0
         self.month = 0
+        
+        # Initialize market regime and macro data
+        self.current_regime = 0
+        self.inflation, self.rates = self.market_data.simulate_macro_factors()
         
         return self._get_state(), {}
     
@@ -163,7 +169,7 @@ class FinanceEnv(gym.Env):
         reward = self._calculate_reward()
         
         # Check if done (30 years = 360 months)
-        done = self.month >= 360
+        done = self.month >= 359
         
         return self._get_state(), reward, done, False, {}
     
