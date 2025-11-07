@@ -255,7 +255,7 @@ def main():
         n_bins=5
     )
     
-    q_rewards = q_agent.train(trainer.env, n_episodes=500, verbose=True)
+    q_rewards = q_agent.train(trainer.env, n_episodes=5000, verbose=True)
     q_agent.save(str(trainer.save_dir / "q_learning_finance.pkl"))
     
     # Train DQN agent
@@ -277,7 +277,7 @@ def main():
         hidden_dim=128
     )
     
-    dqn_rewards = dqn_agent.train(trainer.env, n_episodes=500, verbose=True)
+    dqn_rewards = dqn_agent.train(trainer.env, n_episodes=5000, verbose=True)
     dqn_agent.save(str(trainer.save_dir / "dqn_finance.pth"))
     
     # Plot training curves
