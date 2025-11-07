@@ -1,9 +1,5 @@
-import sys
-sys.path.append('environment')
-sys.path.append('agents')
-
-from finance_env import FinanceEnv
-from baseline_agents import get_all_baseline_agents
+from environment.finance_env import FinanceEnv
+from agents.baseline_human_strats import get_all_baseline_agents
 import numpy as np
 
 def test_baseline_agents_in_environment():

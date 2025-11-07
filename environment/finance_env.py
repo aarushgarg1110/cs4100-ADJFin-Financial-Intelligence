@@ -44,6 +44,12 @@ class FinanceEnv(gym.Env):
             'raise_prob': 0.004,           # 5% annual
         }
         
+        # Simulate macro factors for entire simulation (30 years = 360 months)
+        self.inflation, self.rates = self.market_data.simulate_macro_factors(months=360)
+
+        # Initialize current regime
+        self.current_regime = 0  # start in Normal (0 = normal, 1 = bull, 2 = bear)
+
         self.reset()
     
     def reset(self, seed=None, options=None):
@@ -65,7 +71,6 @@ class FinanceEnv(gym.Env):
         
         # Market and life event state
         self.stock_return_1m = 0
-        self.market_regime = 0  # 0=normal, 1=bull, 2=bear
         self.interest_rate = 0.05
         self.recent_event = 0   # 0=none, 1=job_loss, 2=medical, 3=raise
         self.months_unemployed = 0
@@ -76,7 +81,7 @@ class FinanceEnv(gym.Env):
     def _get_state(self):
         return np.array([
             self.cash,
-            self.stocks, 
+            self.stocks,
             self.bonds,
             self.real_estate,
             self.credit_card_debt,
@@ -85,11 +90,11 @@ class FinanceEnv(gym.Env):
             self.age,
             self.emergency_fund,
             self.stock_return_1m,
-            self.market_regime,
-            self.interest_rate,
+            self.current_regime,
+            self.inflation[self.month],
+            self.rates[self.month],
             self.recent_event,
-            self.months_unemployed,
-            self.month
+            self.months_unemployed
         ])
     
     def step(self, action):
@@ -104,6 +109,18 @@ class FinanceEnv(gym.Env):
         
         # Generate market returns
         self._update_market()
+
+        # Apply macroeconomic effects
+        inflation = self.inflation[self.month]
+        interest = self.rates[self.month]
+
+        # Inflation increases monthly expenses
+        base_expenses = 2000 * (1 + inflation)
+        available_money = max(0, self.monthly_income - base_expenses)
+
+        # Interest rate affects debt growth
+        self.credit_card_debt *= (1 + interest / 12)
+        self.student_loan *= (1 + interest / 12)
         
         # Apply life events
         self._apply_life_events()
@@ -117,11 +134,6 @@ class FinanceEnv(gym.Env):
             self.bonds += bond_alloc * available_money
             self.real_estate += re_alloc * available_money
             self.cash += (1 - stock_alloc - bond_alloc - re_alloc) * available_money
-        
-        # Apply market returns using real historical data
-        self.stocks *= (1 + self.stock_return_1m)
-        self.bonds *= (1 + self.market_data.sample_return('bonds', self.market_regime))
-        self.real_estate *= (1 + self.market_data.sample_return('real_estate', self.market_regime))
         
         # Apply interest and payments
         self.cash *= (1 + self.params['savings_apy']/12)
@@ -156,12 +168,19 @@ class FinanceEnv(gym.Env):
         return self._get_state(), reward, done, False, {}
     
     def _update_market(self):
-        # Simple regime switching
-        if np.random.rand() < 0.05:  # 5% chance regime changes
-            self.market_regime = np.random.choice([0, 1, 2])
-        
-        # Sample realistic stock returns based on current regime
-        self.stock_return_1m = self.market_data.sample_return('stocks', self.market_regime)
+        """Advance the market one month using realistic regime transitions."""
+        # Update regime stochastically using transition matrix
+        self.current_regime = self.market_data.next_regime(self.current_regime)
+
+        # Sample asset returns based on the current regime
+        self.stock_return_1m = self.market_data.sample_return('stocks', self.current_regime)
+        self.bond_return_1m = self.market_data.sample_return('bonds', self.current_regime)
+        self.re_return_1m = self.market_data.sample_return('real_estate', self.current_regime)
+    
+        # Apply returns to assets
+        self.stocks *= (1 + self.stock_return_1m)
+        self.bonds *= (1 + self.bond_return_1m)
+        self.real_estate *= (1 + self.re_return_1m)
     
     def _apply_life_events(self):
         self.recent_event = 0

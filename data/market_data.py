@@ -114,6 +114,59 @@ class MarketDataManager:
         
         return np.random.normal(regime_stat['mean'], regime_stat['std'])
     
+    def simulate_macro_factors(self, months=360, base_inflation=0.002, base_rate=0.01):
+        """
+        Simulate long-term macroeconomic factors for the financial environment.
+
+        Generates two time series over a specified number of months:
+        • Inflation rates — small monthly percentages that represent rising living costs.
+        • Interest rates — monthly effective borrowing/lending rates.
+
+        These values introduce realistic economic variation into the simulation so that
+        expenses, debt growth, and investment performance can respond dynamically to
+        changing macro conditions.
+
+        Returns:
+        inflation (np.ndarray): Array of monthly inflation rates.
+        rates (np.ndarray): Array of monthly interest rates.
+        """
+        np.random.seed(0)  # for reproducibility
+
+        # Monthly inflation: mean 0.2% (≈2.4% annual), small volatility
+        inflation = np.random.normal(base_inflation, 0.001, months)
+
+        # Interest rates: mean 1% annualized (~0.08% monthly), moderate volatility
+        rates = np.clip(np.random.normal(base_rate, 0.002, months), 0, None)
+
+        # Store for reference (optional)
+        self.macro = {
+            "inflation": inflation,
+            "rates": rates
+        }
+
+        return inflation, rates
+    
+    def next_regime(self, current_regime: int) -> int:
+        """
+        Transition between market regimes stochastically.
+
+        Args:
+        current_regime (int): Current regime (0 = normal, 1 = bull, 2 = bear)
+
+        Returns:
+        int: Next regime ID (0, 1, or 2)
+        """
+        # Transition matrix defines how likely each regime is to persist or change
+        transition_matrix = {
+        0: [0.80, 0.15, 0.05],  # Normal → (Normal, Bull, Bear)
+        1: [0.20, 0.70, 0.10],  # Bull   → (Normal, Bull, Bear)
+        2: [0.40, 0.10, 0.50]   # Bear   → (Normal, Bull, Bear)
+        }
+
+        # Randomly choose next regime using weighted probabilities
+        next_r = np.random.choice([0, 1, 2], p=transition_matrix[current_regime])
+        return next_r
+
     def get_summary(self):
         """Print summary of downloaded data."""
         
@@ -159,3 +212,14 @@ def load_market_data():
 if __name__ == "__main__":
     # Test the market data module
     manager = load_market_data()
+
+# Example for testing simulate_macro_factors
+# if __name__ == "__main__":
+#     import numpy as np
+#     from market_data import load_market_data
+#     manager = load_market_data()
+#     inflation, rates = manager.simulate_macro_factors(months=12)
+#     print("\nInflation sample (first 5 months):", np.round(inflation[:5], 4))
+#     print("Interest rates sample (first 5 months):", np.round(rates[:5], 4))
+#     print("\nAverage monthly inflation:", np.mean(inflation))
+#     print("Average monthly interest rate:", np.mean(rates))
