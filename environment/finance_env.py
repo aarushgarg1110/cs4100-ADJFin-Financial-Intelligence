@@ -18,7 +18,7 @@ class FinanceEnv(gym.Env):
         super().__init__()
         
         # Action space: [stock_alloc, bond_alloc, re_alloc, emergency_contrib, cc_payment, student_payment]
-        self.action_space = spaces.Box(low=0, high=1, shape=(6,))
+        self.action_space = spaces.Box(low=0, high=1, shape=(10,))
         
         # State space: 15 variables
         self.observation_space = spaces.Box(low=0, high=np.inf, shape=(15,))
@@ -39,8 +39,8 @@ class FinanceEnv(gym.Env):
             'credit_card_apr': 0.22,
             'student_loan_apr': 0.065,
             'savings_apy': 0.045,
-            'job_loss_prob': 0.0033,       # 4% annual
-            'medical_prob': 0.008,         # 10% annual
+            'job_loss_prob': 0.0025,       # 3% annual
+            'medical_prob': 0.004,         # 5% annual
             'raise_prob': 0.004,           # 5% annual
         }
         
@@ -61,7 +61,10 @@ class FinanceEnv(gym.Env):
         self.stocks = np.random.uniform(0, 10000)
         self.bonds = np.random.uniform(0, 5000)
         self.real_estate = 0
-        
+
+        self.retirement_account = 0
+        self.has_insurance = False
+
         self.credit_card_debt = np.random.uniform(0, 8000)
         self.student_loan = np.random.uniform(5000, 25000)
         
@@ -98,8 +101,11 @@ class FinanceEnv(gym.Env):
         ])
     
     def step(self, action):
-        stock_alloc, bond_alloc, re_alloc, emergency_contrib, cc_payment, student_payment = action
+        (stock_alloc, bond_alloc, re_alloc, emergency_contrib, cc_payment, student_payment,
+         retirement_contrib, insurance_payment, education_investment, spending_rate) = action
         
+        self.spending_rate = spending_rate
+
         # Normalize allocations
         total_alloc = stock_alloc + bond_alloc + re_alloc
         if total_alloc > 0:
@@ -124,6 +130,26 @@ class FinanceEnv(gym.Env):
         
         # Apply life events
         self._apply_life_events()
+
+        # --- New high-level actions ---
+        # Retirement contributions grow tax-free (long-term savings)
+        self.retirement_account += retirement_contrib * self.monthly_income
+        self.retirement_account *= (1 + 0.06 / 12)
+
+        # Insurance: reduces loss from medical emergencies (if paid enough)
+        insurance_cost = insurance_payment * self.monthly_income
+        self.has_insurance = insurance_payment > 0.03
+        self.cash -= insurance_cost
+
+        # Education investment: small cost, long-term income gain chance
+        edu_cost = education_investment * self.monthly_income
+        self.cash -= edu_cost
+        if np.random.rand() < 0.02:  # 2% monthly chance
+            self.monthly_income *= 1.02  # permanent small raise
+
+        # Lifestyle spending (reduces available cash)
+        spending_cost = spending_rate * self.monthly_income
+        self.cash -= spending_cost      
         
         # Calculate available money for investing
         available_money = max(0, self.monthly_income - 2000)  # Keep $2k for expenses
@@ -201,11 +227,13 @@ class FinanceEnv(gym.Env):
         if np.random.rand() < self.params['medical_prob']:
             self.recent_event = 2
             cost = np.random.uniform(1000, 10000)
+            if self.has_insurance:
+                cost *= 0.5  # insurance halves medical cost
             if self.emergency_fund >= cost:
                 self.emergency_fund -= cost
             else:
                 self.cash -= (cost - self.emergency_fund)
-                self.emergency_fund = 0
+                self.emergency_fund = 0     
         
         # Salary raise
         if np.random.rand() < self.params['raise_prob']:
@@ -214,9 +242,9 @@ class FinanceEnv(gym.Env):
     
     def _calculate_reward(self):
         # Net worth
-        net_worth = (self.cash + self.stocks + self.bonds + self.real_estate + 
-                    self.emergency_fund - self.credit_card_debt - self.student_loan)
-        
+        net_worth = (self.cash + self.stocks + self.bonds + self.real_estate + self.emergency_fund +
+                     getattr(self, "retirement_account", 0) - self.credit_card_debt - self.student_loan)
+
         # Base reward: net worth growth
         reward = net_worth / 100000  # Scale down
         
@@ -234,4 +262,11 @@ class FinanceEnv(gym.Env):
         if self.credit_card_debt == 0:  # Debt free
             reward += 2
             
+        # Bonus for building retirement savings
+        if getattr(self, "retirement_account", 0) > 100000:
+            reward += 2
+
+        # Penalty for overspending
+        reward -= self.spending_rate * 2
+
         return reward
