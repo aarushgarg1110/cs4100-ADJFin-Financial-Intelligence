@@ -1,0 +1,354 @@
+{
+  "ppo": [
+    {
+      "final_net_worth": 5672741.5107421875,
+      "total_reward": 9085.791585922068,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 5830316.660644531,
+      "total_reward": 9342.28927596064,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 5764283.59765625,
+      "total_reward": 9241.140389274195,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 5727186.369140625,
+      "total_reward": 9148.74714972593,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 5890406.2880859375,
+      "total_reward": 9448.060073537777,
+      "bankruptcy": false,
+      "debt_free": true
+    }
+  ],
+  "dqn": [
+    {
+      "final_net_worth": 6087179.6416015625,
+      "total_reward": 9645.756465397146,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 6312629.231689453,
+      "total_reward": 10049.020502243802,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 6202594.123046875,
+      "total_reward": 9867.163668147059,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 6173657.0732421875,
+      "total_reward": 9806.48247913401,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 6357266.1611328125,
+      "total_reward": 10121.30406063465,
+      "bankruptcy": false,
+      "debt_free": true
+    }
+  ],
+  "sac": [
+    {
+      "final_net_worth": 3695071.3842773438,
+      "total_reward": 5521.814017578486,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 5948083.0287107155,
+      "total_reward": 9013.054541729523,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 5324684.5615234375,
+      "total_reward": 9339.85023689909,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 6173657.0732421875,
+      "total_reward": 9729.27632579543,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 4204546.64172722,
+      "total_reward": 5614.655888898534,
+      "bankruptcy": false,
+      "debt_free": false
+    }
+  ],
+  "60_40": [
+    {
+      "final_net_worth": 3748948.886524054,
+      "total_reward": 5323.449111539251,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3903788.18909651,
+      "total_reward": 5665.226240151638,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3818849.6086272416,
+      "total_reward": 5502.438203399327,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3803611.1549749086,
+      "total_reward": 5549.8226858940725,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3940580.20376457,
+      "total_reward": 5595.327340841703,
+      "bankruptcy": false,
+      "debt_free": true
+    }
+  ],
+  "debt_avalanche": [
+    {
+      "final_net_worth": 3665533.8276327373,
+      "total_reward": 5613.242097873301,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3803511.6999306763,
+      "total_reward": 5860.918091560765,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3724735.021473969,
+      "total_reward": 5735.660090498042,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3713066.0871880897,
+      "total_reward": 5711.788189595859,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3839631.7986362264,
+      "total_reward": 5906.276689088913,
+      "bankruptcy": false,
+      "debt_free": true
+    }
+  ],
+  "equal_weight": [
+    {
+      "final_net_worth": 3896387.7646673853,
+      "total_reward": 5697.102850773101,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 4062385.3521566517,
+      "total_reward": 6064.055794801485,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3973481.0839253445,
+      "total_reward": 5892.3201981115135,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3956077.5949112866,
+      "total_reward": 5934.819832169226,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 4100416.7457266413,
+      "total_reward": 5996.953236927364,
+      "bankruptcy": false,
+      "debt_free": true
+    }
+  ],
+  "age_based": [
+    {
+      "final_net_worth": 3819784.296466326,
+      "total_reward": 5483.958048525858,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3988333.0431390116,
+      "total_reward": 5812.80222813827,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3898522.085319816,
+      "total_reward": 5650.533341584762,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3880623.59641226,
+      "total_reward": 5666.983664037689,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 4026647.800406104,
+      "total_reward": 5794.731815666429,
+      "bankruptcy": false,
+      "debt_free": true
+    }
+  ],
+  "markowitz": [
+    {
+      "final_net_worth": 3817233.292461512,
+      "total_reward": 5552.25878976954,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3969403.161754882,
+      "total_reward": 5865.184419959007,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3885413.3058400988,
+      "total_reward": 5708.573033380334,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 3870692.800733444,
+      "total_reward": 5728.112022475575,
+      "bankruptcy": false,
+      "debt_free": true
+    },
+    {
+      "final_net_worth": 4005898.675723158,
+      "total_reward": 5845.345893977678,
+      "bankruptcy": false,
+      "debt_free": true
+    }
+  ],
+  "all_stocks": [
+    {
+      "final_net_worth": 4193934.19948539,
+      "total_reward": 5273.285015720435,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 4389399.040695008,
+      "total_reward": 5576.554763151947,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 4289188.402230506,
+      "total_reward": 5429.70356494973,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 4266861.081771126,
+      "total_reward": 6046.986990772404,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 4428204.317546287,
+      "total_reward": 5626.288884598934,
+      "bankruptcy": false,
+      "debt_free": false
+    }
+  ],
+  "cash_hoarder": [
+    {
+      "final_net_worth": 4670040.9707556395,
+      "total_reward": 7625.999411680941,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 4747818.860952463,
+      "total_reward": 7838.195856774836,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 4689434.51612208,
+      "total_reward": 7721.092143238127,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 4689941.924517155,
+      "total_reward": 8355.52408530929,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 4773552.350767934,
+      "total_reward": 7882.258179245324,
+      "bankruptcy": false,
+      "debt_free": false
+    }
+  ],
+  "debt_ignorer": [
+    {
+      "final_net_worth": 3702161.1160565447,
+      "total_reward": 4374.4824127204965,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 3859964.9143211846,
+      "total_reward": 4613.827075080866,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 3773239.507697711,
+      "total_reward": 4487.021594142853,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 3756994.468986114,
+      "total_reward": 5115.410970339965,
+      "bankruptcy": false,
+      "debt_free": false
+    },
+    {
+      "final_net_worth": 3891868.81078242,
+      "total_reward": 4657.93792112665,
+      "bankruptcy": false,
+      "debt_free": false
+    }
+  ]
+}

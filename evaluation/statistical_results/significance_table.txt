@@ -1,0 +1,17 @@
+Agent Performance with Statistical Significance
+================================================================================
+
+         Agent Mean_Formatted     CI_Formatted  cohens_d Significance
+           dqn         $6.23M [$6.10M, $6.35M] 25.213990          ***
+           ppo         $5.78M [$5.68M, $5.88M] 23.666630          ***
+           sac         $5.07M [$3.75M, $6.15M]  1.596593             
+  cash_hoarder         $4.71M [$4.67M, $4.77M] 13.771314             
+    all_stocks         $4.31M [$4.20M, $4.42M]  5.423264             
+  equal_weight         $4.00M [$3.90M, $4.10M]  1.926502             
+     age_based         $3.92M [$3.83M, $4.02M]  0.985217             
+     markowitz         $3.91M [$3.82M, $4.00M]  0.862351          ***
+         60_40         $3.84M [$3.75M, $3.94M]       NaN          ***
+  debt_ignorer         $3.80M [$3.71M, $3.89M] -0.595867          ***
+debt_avalanche         $3.75M [$3.67M, $3.84M] -1.262324             
+
+*** = Significant after Bonferroni correction (p < 0.05/n)
