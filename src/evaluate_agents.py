@@ -191,6 +191,11 @@ def main():
         dqn_agent = ContinuousDQNAgent()
         dqn_agent.load('models/dqn_model.pth')
         agents.append(dqn_agent)
+
+    if os.path.exists('models/sac_model.pth'):
+        sac_agent = SACAgent()
+        sac_agent.load('models/sac_model.pth')
+        agents.append(sac_agent)
     
     # Evaluate each agent
     all_results = []
