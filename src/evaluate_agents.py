@@ -13,9 +13,17 @@ sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
 from environment.finance_env import FinanceEnv
 from agents import (
-    SixtyFortyAgent, DebtAvalancheAgent, EqualWeightAgent, 
-    AgeBasedAgent, MarkowitzAgent, PPOAgent, ContinuousDQNAgent,
-    AllStocksAgent, CashHoarderAgent, DebtIgnorerAgent
+    SixtyFortyAgent,
+    DebtAvalancheAgent,
+    EqualWeightAgent,
+    AgeBasedAgent,
+    MarkowitzAgent,
+    PPOAgent,
+    ContinuousDQNAgent,
+    AllStocksAgent,
+    CashHoarderAgent,
+    DebtIgnorerAgent,
+    SACAgent,
 )
 
 def calculate_net_worth(state):

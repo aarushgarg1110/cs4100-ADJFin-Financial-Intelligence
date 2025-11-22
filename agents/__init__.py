@@ -5,13 +5,17 @@ Financial agents for reinforcement learning research
 from .base_agent import BaseFinancialAgent
 from .baseline_strategies import (
     SixtyFortyAgent,
-    DebtAvalancheAgent, 
+    DebtAvalancheAgent,
     EqualWeightAgent,
     AgeBasedAgent,
-    MarkowitzAgent
+    MarkowitzAgent,
+    AllStocksAgent,
+    CashHoarderAgent,
+    DebtIgnorerAgent,
 )
 from .ppo_agent import PPOAgent
 from .continuous_dqn_agent import ContinuousDQNAgent
+from .sac_agent import SACAgent
 
 __all__ = [
     'BaseFinancialAgent',
@@ -21,5 +25,9 @@ __all__ = [
     'AgeBasedAgent',
     'MarkowitzAgent',
     'PPOAgent',
-    'ContinuousDQNAgent'
+    'AllStocksAgent',
+    'CashHoarderAgent',
+    'DebtIgnorerAgent',
+    'ContinuousDQNAgent',
+    'SACAgent',
 ]
