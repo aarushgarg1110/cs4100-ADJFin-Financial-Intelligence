@@ -1,6 +1,6 @@
 import numpy as np
 import gymnasium as gym
-from market_data import MarketDataManager
+from .market_data import MarketDataManager
 
 class FinanceEnv(gym.Env):
     """
@@ -36,6 +36,37 @@ class FinanceEnv(gym.Env):
         
         print("Market data loaded successfully!")
         
+        # ===== FINANCIAL CONSTANTS =====
+        # Expense Model
+        self.BASE_MONTHLY_EXPENSES = 2000  # Base living costs
+        self.LIFESTYLE_SCALING_FACTOR = 0.15  # % of income for lifestyle expenses (reduced from 0.3)
+        
+        # Income Growth
+        self.ANNUAL_RAISE_RATE = 1.035  # 3.5% annual raise
+        self.CAREER_PLATEAU_AGE = 50  # Age when income growth slows
+        self.LATE_CAREER_VARIATION = (0.98, 1.01)  # Income variation after plateau
+        
+        # Debt Payments
+        self.CC_MIN_PAYMENT = 25  # Minimum credit card payment
+        self.CC_MIN_PAYMENT_PCT = 0.02  # 2% of balance
+        self.STUDENT_MIN_PAYMENT = 50  # Minimum student loan payment
+        self.STUDENT_MIN_PAYMENT_PCT = 0.01  # 1% of balance
+        
+        # Reward Parameters
+        self.NET_WORTH_SCALE = 100000  # Divisor for net worth reward
+        self.BANKRUPTCY_THRESHOLD = -10000  # Net worth bankruptcy level
+        self.BANKRUPTCY_PENALTY = 100  # Penalty for bankruptcy
+        self.EXCESSIVE_DEBT_THRESHOLD = 15000  # Credit card debt threshold
+        self.DEBT_PENALTY_SCALE = 1000  # Divisor for debt penalty
+        self.EMERGENCY_FUND_MONTHS = 6  # Months of expenses for emergency fund
+        self.EMERGENCY_FUND_BONUS = 2  # Reward for adequate emergency fund
+        self.DEBT_FREE_BONUS = 4  # Reward for being debt-free
+        
+        # Simulation Parameters
+        self.STARTING_AGE = 25
+        self.SIMULATION_YEARS = 30
+        self.SIMULATION_MONTHS = 360  # 30 years
+        
         # Financial parameters (realistic 2024 values)
         self.params = {
             'credit_card_apr': 0.22,
@@ -47,7 +78,7 @@ class FinanceEnv(gym.Env):
         }
         
         # Simulate macro factors for entire simulation (30 years = 360 months)
-        self.inflation, self.rates = self.market_data.simulate_macro_factors(months=360)
+        self.inflation, self.rates = self.market_data.simulate_macro_factors(months=self.SIMULATION_MONTHS)
 
         # Initialize current regime
         self.current_regime = 0  # start in Normal (0 = normal, 1 = bull, 2 = bear)
@@ -68,7 +99,7 @@ class FinanceEnv(gym.Env):
         self.student_loan = np.random.uniform(5000, 25000)
         
         self.monthly_income = np.random.uniform(3500, 6000)
-        self.age = 25
+        self.age = self.STARTING_AGE
         self.emergency_fund = np.random.uniform(500, 3000)
         
         # Market and life event state
@@ -115,61 +146,62 @@ class FinanceEnv(gym.Env):
         
         # Generate market returns
         self._update_market()
-
-        # Apply macroeconomic effects
-        inflation = self.inflation[self.month]
-        interest = self.rates[self.month]
-
-        # Inflation increases monthly expenses
-        base_expenses = 2000 * (1 + inflation)
-        available_money = max(0, self.monthly_income - base_expenses)
-
-        # Interest rate affects debt growth
-        self.credit_card_debt *= (1 + interest / 12)
-        self.student_loan *= (1 + interest / 12)
         
-        # Apply life events
+        # Apply life events (affects income)
         self._apply_life_events()
         
-        # Calculate available money for investing
-        available_money = max(0, self.monthly_income - 2000)  # Keep $2k for expenses
+        # Apply macroeconomic effects
+        inflation = self.inflation[self.month]
         
-        # Asset allocation
-        if available_money > 0:
-            self.stocks += stock_alloc * available_money
-            self.bonds += bond_alloc * available_money
-            self.real_estate += re_alloc * available_money
-            self.cash += (1 - stock_alloc - bond_alloc - re_alloc) * available_money
+        # Hybrid expense model: base living costs + lifestyle scaling
+        # Lower earners spend higher %, higher earners save more %
+        base_expenses = self.BASE_MONTHLY_EXPENSES * (1 + inflation) + self.LIFESTYLE_SCALING_FACTOR * self.monthly_income
+        available_money = max(0, self.monthly_income - base_expenses)
         
-        # Apply interest and payments
-        self.cash *= (1 + self.params['savings_apy']/12)
+        # Calculate debt payments first (from available money)
+        cc_min = max(self.CC_MIN_PAYMENT, self.credit_card_debt * self.CC_MIN_PAYMENT_PCT)
+        student_min = max(self.STUDENT_MIN_PAYMENT, self.student_loan * self.STUDENT_MIN_PAYMENT_PCT)
         
-        # Debt payments
-        cc_min = max(25, self.credit_card_debt * 0.02)
-        student_min = max(50, self.student_loan * 0.01)
+        total_cc_payment = min(cc_min + cc_payment * available_money, self.credit_card_debt, available_money)
+        total_student_payment = min(student_min + student_payment * available_money, self.student_loan, available_money - total_cc_payment)
         
-        total_cc_payment = min(cc_min + cc_payment * self.monthly_income, self.credit_card_debt)
-        total_student_payment = min(student_min + student_payment * self.monthly_income, self.student_loan)
-        
+        # Reduce debt
         self.credit_card_debt = max(0, self.credit_card_debt - total_cc_payment)
         self.student_loan = max(0, self.student_loan - total_student_payment)
         
-        # Apply interest on remaining debt
+        # Money left after debt payments
+        money_after_debt = available_money - total_cc_payment - total_student_payment
+        
+        # Emergency fund contribution (from remaining money)
+        emergency_contribution = min(emergency_contrib * money_after_debt, money_after_debt)
+        self.emergency_fund += emergency_contribution
+        
+        # Money left for investments
+        money_for_investments = money_after_debt - emergency_contribution
+        
+        # Asset allocation
+        if money_for_investments > 0:
+            self.stocks += stock_alloc * money_for_investments
+            self.bonds += bond_alloc * money_for_investments
+            self.real_estate += re_alloc * money_for_investments
+            self.cash += (1 - stock_alloc - bond_alloc - re_alloc) * money_for_investments
+        
+        # Apply interest to cash
+        self.cash *= (1 + self.params['savings_apy']/12)
+        
+        # Apply interest on remaining debt (ONCE per month)
         self.credit_card_debt *= (1 + self.params['credit_card_apr']/12)
         self.student_loan *= (1 + self.params['student_loan_apr']/12)
         
-        # Emergency fund contribution
-        self.emergency_fund += emergency_contrib * self.monthly_income
-        
         # Update time
         self.month += 1
-        self.age = 25 + self.month / 12
+        self.age = self.STARTING_AGE + self.month / 12
         
         # Calculate reward
         reward = self._calculate_reward()
         
         # Check if done (30 years = 360 months)
-        done = self.month >= 359
+        done = self.month >= self.SIMULATION_MONTHS - 1
         
         return self._get_state(), reward, done, False, {}
     
@@ -190,6 +222,15 @@ class FinanceEnv(gym.Env):
     
     def _apply_life_events(self):
         self.recent_event = 0
+        
+        # Annual salary growth (applied once per year = every 12 months)
+        if self.month > 0 and self.month % 12 == 0 and self.months_unemployed == 0:
+            if self.age < self.CAREER_PLATEAU_AGE:
+                # 3.5% annual raise until age 50
+                self.monthly_income *= self.ANNUAL_RAISE_RATE
+            elif self.age < 55:
+                # Plateau/slight decline after 50
+                self.monthly_income *= np.random.uniform(*self.LATE_CAREER_VARIATION)
         
         # Job loss
         if self.months_unemployed == 0 and np.random.rand() < self.params['job_loss_prob']:
@@ -213,7 +254,7 @@ class FinanceEnv(gym.Env):
                 self.cash -= (cost - self.emergency_fund)
                 self.emergency_fund = 0
         
-        # Salary raise
+        # Occasional promotion/bonus (5% annual chance for 10-15% bump)
         if np.random.rand() < self.params['raise_prob']:
             self.recent_event = 3
             self.monthly_income *= np.random.uniform(1.02, 1.07)
@@ -224,20 +265,26 @@ class FinanceEnv(gym.Env):
                     self.emergency_fund - self.credit_card_debt - self.student_loan)
         
         # Base reward: net worth growth
-        reward = net_worth / 100000  # Scale down
+        reward = net_worth / self.NET_WORTH_SCALE
         
         # Penalties
-        if net_worth < -10000:  # Bankruptcy threshold
-            reward -= 100
+        if net_worth < self.BANKRUPTCY_THRESHOLD:
+            reward -= self.BANKRUPTCY_PENALTY
             
-        if self.credit_card_debt > 15000:  # Excessive debt
-            reward -= (self.credit_card_debt - 15000) / 1000
+        if self.credit_card_debt > self.EXCESSIVE_DEBT_THRESHOLD:
+            reward -= (self.credit_card_debt - self.EXCESSIVE_DEBT_THRESHOLD) / self.DEBT_PENALTY_SCALE
             
-        # Bonuses
-        if self.emergency_fund >= 6000:  # Good emergency fund
-            reward += 1
+        # Calculate emergency fund threshold based on BASE expenses only
+        # (grows slowly with inflation, not income - more learnable for RL)
+        inflation = self.inflation[self.month]
+        base_monthly_expenses = self.BASE_MONTHLY_EXPENSES * (1 + inflation)
+        emergency_threshold = base_monthly_expenses * self.EMERGENCY_FUND_MONTHS
+        
+        # Bonuses (scaled to be meaningful)
+        if self.emergency_fund >= emergency_threshold:
+            reward += self.EMERGENCY_FUND_BONUS
             
-        if self.credit_card_debt == 0:  # Debt free
-            reward += 2
+        if self.credit_card_debt == 0:
+            reward += self.DEBT_FREE_BONUS
             
         return reward

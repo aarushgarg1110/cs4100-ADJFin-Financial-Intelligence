@@ -24,10 +24,10 @@ __all__ = [
     'EqualWeightAgent', 
     'AgeBasedAgent',
     'MarkowitzAgent',
-    'PPOAgent',
     'AllStocksAgent',
     'CashHoarderAgent',
     'DebtIgnorerAgent',
+    'PPOAgent',
     'ContinuousDQNAgent',
     'SACAgent',
 ]

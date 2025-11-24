@@ -94,7 +94,6 @@ class ContinuousDQNAgent(BaseFinancialAgent):
         # Experience replay
         self.replay_buffer = ReplayBuffer()
         self.batch_size = 64
-        self.batch_size = 64
         
         # Training mode
         self.training = True
@@ -112,15 +111,6 @@ class ContinuousDQNAgent(BaseFinancialAgent):
                 action = torch.clamp(action + noise, 0, 1)
         
         return action.cpu().numpy().flatten()
-    
-    def learn_from_experience(self, state, action, reward, next_state, done):
-        """Store experience and update networks"""
-        # Store experience
-        self.replay_buffer.push(state, action, reward, next_state, done)
-        
-        # Update networks if enough experiences
-        if len(self.replay_buffer) > self.batch_size:
-            self._update_networks()
     
     def _update_networks(self):
         """Update actor and critic networks"""
@@ -157,6 +147,8 @@ class ContinuousDQNAgent(BaseFinancialAgent):
         # Soft update target networks
         self._soft_update(self.target_actor, self.actor)
         self._soft_update(self.target_critic, self.critic)
+        
+        return actor_loss.item(), critic_loss.item()
     
     def _soft_update(self, target, source):
         """Soft update target network"""
@@ -179,6 +171,8 @@ class ContinuousDQNAgent(BaseFinancialAgent):
     def train(self, env, num_episodes=1000):
         """Train Continuous DQN agent"""
         episode_rewards = []
+        actor_losses = []
+        critic_losses = []
         
         for episode in tqdm(range(num_episodes), desc="Training DQN"):
             state, _ = env.reset()
@@ -191,11 +185,14 @@ class ContinuousDQNAgent(BaseFinancialAgent):
                 
                 self.replay_buffer.push(state, action, reward, next_state, done)
                 
-                if len(self.replay_buffer) > self.batch_size:
-                    self._update_networks()
-                
                 state = next_state
                 episode_reward += reward
+            
+            # Update once per episode (instead of every step)
+            if len(self.replay_buffer) > self.batch_size:
+                actor_loss, critic_loss = self._update_networks()
+                actor_losses.append(actor_loss)
+                critic_losses.append(critic_loss)
             
             episode_rewards.append(episode_reward)
             
@@ -211,4 +208,4 @@ class ContinuousDQNAgent(BaseFinancialAgent):
         os.makedirs('models', exist_ok=True)
         self.save('models/dqn_model.pth')
         
-        return episode_rewards
+        return episode_rewards, actor_losses, critic_losses

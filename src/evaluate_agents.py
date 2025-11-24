@@ -162,8 +162,8 @@ def plot_results(all_results):
     
     # Save to visualization directory
     import os
-    os.makedirs('../visualization', exist_ok=True)
-    plt.savefig('../visualization/agent_comparison_results.png', dpi=300, bbox_inches='tight')
+    os.makedirs('visualization', exist_ok=True)
+    plt.savefig('visualization/agent_comparison_results.png', dpi=300, bbox_inches='tight')
     print("Results saved to visualization/agent_comparison_results.png")
     plt.show()
 

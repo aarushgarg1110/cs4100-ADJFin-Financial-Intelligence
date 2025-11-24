@@ -53,8 +53,8 @@ class BaseFinancialAgent(ABC):
             'emergency_fund': state[8],
             'stock_return_1m': state[9],
             'market_regime': state[10],
-            'interest_rate': state[11],
-            'recent_event': state[12],
-            'months_unemployed': state[13],
-            'month': state[14]
+            'inflation': state[11],
+            'interest_rate': state[12],
+            'recent_event': state[13],
+            'months_unemployed': state[14]
         }

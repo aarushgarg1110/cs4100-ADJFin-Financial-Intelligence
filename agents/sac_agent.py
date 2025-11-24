@@ -104,7 +104,7 @@ class SACAgent(BaseFinancialAgent):
         tau=0.005,
         alpha=0.2,
         target_entropy=None,
-        batch_size=256,
+        batch_size=64,
         name="SAC_Agent",
     ):
         super().__init__(name)
@@ -157,13 +157,6 @@ class SACAgent(BaseFinancialAgent):
         self.actor.train()
         return action.cpu().numpy().flatten()
 
-    def learn_from_experience(self, state, action, reward, next_state, done):
-        """Store transition and update networks"""
-        self.replay_buffer.push(state, action, reward, next_state, done)
-
-        if len(self.replay_buffer) >= self.batch_size:
-            self._update_networks()
-
     def _update_networks(self):
         states, actions, rewards, next_states, dones = self.replay_buffer.sample(self.batch_size)
 
@@ -214,6 +207,8 @@ class SACAgent(BaseFinancialAgent):
         # Soft update targets
         self._soft_update(self.target_q1, self.q1)
         self._soft_update(self.target_q2, self.q2)
+        
+        return actor_loss.item(), (q1_loss.item() + q2_loss.item()) / 2
 
     def _soft_update(self, target, source):
         for target_param, param in zip(target.parameters(), source.parameters()):
@@ -245,6 +240,8 @@ class SACAgent(BaseFinancialAgent):
     def train(self, env, num_episodes=1000):
         """Self-contained training loop (mirrors other agents)"""
         episode_rewards = []
+        actor_losses = []
+        critic_losses = []
 
         progress = tqdm(range(num_episodes), desc="Training SAC")
         for episode in progress:
@@ -257,10 +254,16 @@ class SACAgent(BaseFinancialAgent):
                 next_state, reward, terminated, truncated, _ = env.step(action)
                 done = terminated or truncated
 
-                self.learn_from_experience(state, action, reward, next_state, float(done))
+                self.replay_buffer.push(state, action, reward, next_state, float(done))
 
                 state = next_state
                 total_reward += reward
+
+            # Update once per episode (instead of every step)
+            if len(self.replay_buffer) >= self.batch_size:
+                actor_loss, critic_loss = self._update_networks()
+                actor_losses.append(actor_loss)
+                critic_losses.append(critic_loss)
 
             episode_rewards.append(total_reward)
 
@@ -270,8 +273,7 @@ class SACAgent(BaseFinancialAgent):
 
         # Persist models
         import os
-
         os.makedirs("models", exist_ok=True)
         self.save("models/sac_model.pth")
 
-        return episode_rewards
+        return episode_rewards, actor_losses, critic_losses

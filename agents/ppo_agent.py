@@ -104,16 +104,25 @@ class PPOAgent(BaseFinancialAgent):
         actions = torch.FloatTensor(np.array(actions)).to(self.device)
         rewards = torch.FloatTensor(np.array(rewards)).to(self.device)
         
-        # Compute returns and advantages
+        # Compute returns (only once)
         returns = self._compute_returns(rewards)
-        values = self.value_net(states).squeeze()
-        advantages = returns - values
         
-        # Normalize advantages
-        advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
+        # Store old policy and compute advantages ONCE before any updates
+        with torch.no_grad():
+            old_alpha, old_beta = self.policy_net(states)
+            old_dist = Beta(old_alpha, old_beta)
+            old_log_probs = old_dist.log_prob(actions).sum(dim=1)
+            
+            # Compute advantages once (stable training signal)
+            values = self.value_net(states).squeeze()
+            advantages = returns - values
+            advantages = (advantages - advantages.mean()) / (advantages.std() + 1e-8)
         
-        # PPO update (simplified single-step version)
-        self._update_policy(states, actions, advantages, returns)
+        # PPO update with multiple epochs (reuse data 5 times)
+        for epoch in range(5):
+            policy_loss, value_loss = self._update_policy(states, actions, advantages, returns, old_log_probs)
+        
+        return policy_loss, value_loss
     
     def _compute_returns(self, rewards):
         """Compute discounted returns"""
@@ -124,17 +133,23 @@ class PPOAgent(BaseFinancialAgent):
             returns.insert(0, R)
         return torch.FloatTensor(returns).to(self.device)
     
-    def _update_policy(self, states, actions, advantages, returns):
-        """Update policy and value networks"""
+    def _update_policy(self, states, actions, advantages, returns, old_log_probs):
+        """Update policy and value networks with PPO clipping"""
         # Get current policy outputs
         alpha, beta = self.policy_net(states)
         dist = Beta(alpha, beta)
         
-        # Policy loss (simplified)
-        log_probs = dist.log_prob(actions).sum(dim=1)
-        policy_loss = -(log_probs * advantages).mean()
+        # Current policy probabilities
+        new_log_probs = dist.log_prob(actions).sum(dim=1)
         
-        # Value loss
+        # Policy ratio (how much policy changed)
+        ratio = torch.exp(new_log_probs - old_log_probs)
+        
+        # PPO clipped objective
+        clipped_ratio = torch.clamp(ratio, 1 - self.eps_clip, 1 + self.eps_clip)
+        policy_loss = -torch.min(ratio * advantages, clipped_ratio * advantages).mean()
+        
+        # Value loss (unchanged)
         values = self.value_net(states).squeeze()
         value_loss = nn.MSELoss()(values, returns)
         
@@ -147,6 +162,8 @@ class PPOAgent(BaseFinancialAgent):
         self.value_optimizer.zero_grad()
         value_loss.backward()
         self.value_optimizer.step()
+        
+        return policy_loss.item(), value_loss.item()
     
     def save(self, path):
         """Save model weights"""
@@ -164,6 +181,8 @@ class PPOAgent(BaseFinancialAgent):
     def train(self, env, num_episodes=1000):
         """Train PPO agent"""
         episode_rewards = []
+        policy_losses = []
+        value_losses = []
         
         for episode in tqdm(range(num_episodes), desc="Training PPO"):
             state, _ = env.reset()
@@ -185,7 +204,9 @@ class PPOAgent(BaseFinancialAgent):
             
             # Update after each episode
             if len(states) > 0:
-                self.learn_from_experience(states, actions, rewards, [], [])
+                policy_loss, value_loss = self.learn_from_experience(states, actions, rewards, [], [])
+                policy_losses.append(policy_loss)
+                value_losses.append(value_loss)
             
             episode_rewards.append(episode_reward)
             
@@ -198,4 +219,4 @@ class PPOAgent(BaseFinancialAgent):
         os.makedirs('models', exist_ok=True)
         self.save('models/ppo_model.pth')
         
-        return episode_rewards
+        return episode_rewards, policy_losses, value_losses
