@@ -57,10 +57,10 @@ class FinanceEnv(gym.Env):
         self.BANKRUPTCY_THRESHOLD = -10000  # Net worth bankruptcy level
         self.BANKRUPTCY_PENALTY = 100  # Penalty for bankruptcy
         self.EXCESSIVE_DEBT_THRESHOLD = 15000  # Credit card debt threshold
-        self.DEBT_PENALTY_SCALE = 1000  # Divisor for debt penalty
+        self.DEBT_PENALTY_SCALE = 100  # Divisor for debt penalty (reduced from 1000)
         self.EMERGENCY_FUND_MONTHS = 6  # Months of expenses for emergency fund
-        self.EMERGENCY_FUND_BONUS = 2  # Reward for adequate emergency fund
-        self.DEBT_FREE_BONUS = 4  # Reward for being debt-free
+        self.EMERGENCY_FUND_BONUS = 5  # Reward for adequate emergency fund (increased from 2)
+        self.DEBT_FREE_BONUS = 10  # Reward for being debt-free (increased from 4)
         
         # Simulation Parameters
         self.STARTING_AGE = 25
@@ -271,6 +271,16 @@ class FinanceEnv(gym.Env):
         if net_worth < self.BANKRUPTCY_THRESHOLD:
             reward -= self.BANKRUPTCY_PENALTY
             
+        # Continuous debt penalty (penalize by monthly interest cost)
+        if self.credit_card_debt > 0:
+            monthly_cc_interest = self.credit_card_debt * (self.params['credit_card_apr'] / 12)
+            reward -= monthly_cc_interest / self.DEBT_PENALTY_SCALE
+            
+        if self.student_loan > 0:
+            monthly_student_interest = self.student_loan * (self.params['student_loan_apr'] / 12)
+            reward -= monthly_student_interest / self.DEBT_PENALTY_SCALE
+            
+        # Extra penalty for excessive CC debt
         if self.credit_card_debt > self.EXCESSIVE_DEBT_THRESHOLD:
             reward -= (self.credit_card_debt - self.EXCESSIVE_DEBT_THRESHOLD) / self.DEBT_PENALTY_SCALE
             

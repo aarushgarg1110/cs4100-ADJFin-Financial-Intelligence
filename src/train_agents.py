@@ -96,7 +96,18 @@ def main():
                         default=['all'], help='Agents to train (default: all)')
     parser.add_argument('--episodes', type=int, default=1000, 
                         help='Number of training episodes (default: 1000)')
+    parser.add_argument('--seed', type=int, default=None,
+                        help='Random seed for reproducibility (default: None)')
     args = parser.parse_args()
+    
+    # Set global seeds if provided
+    if args.seed is not None:
+        np.random.seed(args.seed)
+        import torch
+        torch.manual_seed(args.seed)
+        if torch.cuda.is_available():
+            torch.cuda.manual_seed(args.seed)
+        print(f"Using seed: {args.seed}")
     
     agents_to_train = ['ppo', 'dqn', 'sac'] if 'all' in args.agents else args.agents
     print(f"Training {', '.join(agents_to_train).upper()} for {args.episodes} episodes...")
@@ -107,19 +118,19 @@ def main():
     if 'ppo' in agents_to_train:
         print("=== Training PPO Agent ===")
         ppo_agent = PPOAgent()
-        ppo_data = ppo_agent.train(env, num_episodes=args.episodes)
+        ppo_data = ppo_agent.train(env, num_episodes=args.episodes, seed=args.seed)
         print(f"PPO training complete. Final avg reward: {np.mean(ppo_data[0][-100:]):.2f}")
     
     if 'dqn' in agents_to_train:
         print("\n=== Training DQN Agent ===")
         dqn_agent = ContinuousDQNAgent()
-        dqn_data = dqn_agent.train(env, num_episodes=args.episodes)
+        dqn_data = dqn_agent.train(env, num_episodes=args.episodes, seed=args.seed)
         print(f"DQN training complete. Final avg reward: {np.mean(dqn_data[0][-100:]):.2f}")
 
     if 'sac' in agents_to_train:
         print("\n=== Training SAC Agent ===")
         sac_agent = SACAgent()
-        sac_data = sac_agent.train(env, num_episodes=args.episodes)
+        sac_data = sac_agent.train(env, num_episodes=args.episodes, seed=args.seed)
         tail = sac_data[0][-100:] if len(sac_data[0]) >= 100 else sac_data[0]
         print(f"SAC training complete. Final avg reward: {np.mean(tail):.2f}")
     

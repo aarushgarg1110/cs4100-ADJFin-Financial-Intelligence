@@ -93,7 +93,7 @@ class ContinuousDQNAgent(BaseFinancialAgent):
         
         # Experience replay
         self.replay_buffer = ReplayBuffer()
-        self.batch_size = 64
+        self.batch_size = 128  # Increased from 64
         
         # Training mode
         self.training = True
@@ -168,16 +168,18 @@ class ContinuousDQNAgent(BaseFinancialAgent):
         self.actor.load_state_dict(checkpoint['actor_state_dict'])
         self.critic.load_state_dict(checkpoint['critic_state_dict'])
     
-    def train(self, env, num_episodes=1000):
+    def train(self, env, num_episodes=1000, seed=None):
         """Train Continuous DQN agent"""
         episode_rewards = []
         actor_losses = []
         critic_losses = []
         
         for episode in tqdm(range(num_episodes), desc="Training DQN"):
-            state, _ = env.reset()
+            episode_seed = seed + episode if seed is not None else None
+            state, _ = env.reset(seed=episode_seed)
             episode_reward = 0
             done = False
+            step_count = 0
             
             while not done:
                 action = self.get_action(state)
@@ -185,19 +187,21 @@ class ContinuousDQNAgent(BaseFinancialAgent):
                 
                 self.replay_buffer.push(state, action, reward, next_state, done)
                 
+                step_count += 1
+                
+                # Update every 30 steps
+                if step_count % 30 == 0 and len(self.replay_buffer) > self.batch_size:
+                    actor_loss, critic_loss = self._update_networks()
+                    actor_losses.append(actor_loss)
+                    critic_losses.append(critic_loss)
+                
                 state = next_state
                 episode_reward += reward
             
-            # Update once per episode (instead of every step)
-            if len(self.replay_buffer) > self.batch_size:
-                actor_loss, critic_loss = self._update_networks()
-                actor_losses.append(actor_loss)
-                critic_losses.append(critic_loss)
-            
             episode_rewards.append(episode_reward)
             
-            # Decay exploration noise
-            self.noise_std = max(0.01, self.noise_std * 0.995)
+            # Decay exploration noise (slower decay, higher minimum)
+            self.noise_std = max(0.05, self.noise_std * 0.999)
             
             if episode % 100 == 0:
                 avg_reward = np.mean(episode_rewards[-100:])

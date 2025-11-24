@@ -178,18 +178,21 @@ class PPOAgent(BaseFinancialAgent):
         self.policy_net.load_state_dict(checkpoint['policy_state_dict'])
         self.value_net.load_state_dict(checkpoint['value_state_dict'])
     
-    def train(self, env, num_episodes=1000):
+    def train(self, env, num_episodes=1000, seed=None):
         """Train PPO agent"""
         episode_rewards = []
         policy_losses = []
         value_losses = []
         
         for episode in tqdm(range(num_episodes), desc="Training PPO"):
-            state, _ = env.reset()
+            episode_seed = seed + episode if seed is not None else None
+            state, _ = env.reset(seed=episode_seed)
             episode_reward = 0
             done = False
             
             states, actions, rewards = [], [], []
+            step_count = 0
+            update_frequency = 30  # Update every 30 steps
             
             while not done:
                 action = self.get_action(state)
@@ -199,10 +202,19 @@ class PPOAgent(BaseFinancialAgent):
                 actions.append(action)
                 rewards.append(reward)
                 
+                step_count += 1
+                
+                # Update every 30 steps
+                if step_count % update_frequency == 0 and len(states) > 0:
+                    policy_loss, value_loss = self.learn_from_experience(states, actions, rewards, [], [])
+                    policy_losses.append(policy_loss)
+                    value_losses.append(value_loss)
+                    states, actions, rewards = [], [], []
+                
                 state = next_state
                 episode_reward += reward
             
-            # Update after each episode
+            # Final update for remaining steps
             if len(states) > 0:
                 policy_loss, value_loss = self.learn_from_experience(states, actions, rewards, [], [])
                 policy_losses.append(policy_loss)
