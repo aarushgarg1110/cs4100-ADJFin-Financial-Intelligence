@@ -60,7 +60,7 @@ class ValueNetwork(nn.Module):
 class PPOAgent(BaseFinancialAgent):
     """PPO agent for continuous financial control"""
     
-    def __init__(self, lr=3e-4, gamma=0.99, eps_clip=0.2, name="PPO_Agent"):
+    def __init__(self, lr=3e-4, gamma=0.995, eps_clip=0.2, name="PPO_Agent"):
         super().__init__(name)
         
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -79,6 +79,7 @@ class PPOAgent(BaseFinancialAgent):
         
         # Training mode
         self.training = True
+        self.update_freq = 30
         
     def get_action(self, state):
         """Get action for given state"""
@@ -222,9 +223,11 @@ class PPOAgent(BaseFinancialAgent):
             
             episode_rewards.append(episode_reward)
             
-            if episode % 100 == 0:
-                avg_reward = np.mean(episode_rewards[-100:])
-                tqdm.write(f"Episode {episode}, Avg Reward: {avg_reward:.2f}")
+            if (episode + 1) % 25 == 0 or (episode + 1) == num_episodes:
+                avg_reward = np.mean(episode_rewards[-25:])
+                avg_actor = np.mean(policy_losses[-25:]) if len(policy_losses) >= 25 else 0
+                avg_critic = np.mean(value_losses[-25:]) if len(value_losses) >= 25 else 0
+                tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Policy Loss: {avg_actor:.4f} | Value Loss: {avg_critic:.4f}")
         
         # Save model
         import os

@@ -7,11 +7,10 @@ Run multiple instances in parallel: each terminal runs this script simultaneousl
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-
+import json
 import argparse
 import numpy as np
 import optuna
-from optuna.visualization import plot_optimization_history, plot_param_importances
 import matplotlib.pyplot as plt
 from tqdm import tqdm
 
@@ -163,17 +162,16 @@ def train_sac_trial(config, env, num_episodes, trial_num, print_freq=50):
     final_score = np.mean(episode_rewards[-10:])
     print(f"  Trial {trial_num} complete: {final_score:.2f}\n")
     return final_score
-    return final_score
 
 
 def objective_dqn(trial, env, num_episodes, print_freq):
     """Optuna objective for DQN"""
     config = {
-        'lr': trial.suggest_float('lr', 1e-4, 3e-3, log=True),
+        'lr': trial.suggest_categorical('lr', [1e-4, 3e-4, 1e-3, 3e-3]),
         'batch_size': trial.suggest_categorical('batch_size', [64, 128, 256]),
-        'tau': trial.suggest_float('tau', 0.001, 0.01, log=True),
-        'noise_std': trial.suggest_float('noise_std', 0.05, 0.2),
-        'noise_decay': trial.suggest_float('noise_decay', 0.99, 0.999)
+        'tau': trial.suggest_categorical('tau', [0.001, 0.003, 0.005, 0.01]),
+        'noise_std': trial.suggest_categorical('noise_std', [0.05, 0.1, 0.15, 0.2]),
+        'noise_decay': trial.suggest_categorical('noise_decay', [0.99, 0.995, 0.998, 0.999])
     }
     
     return train_dqn_trial(config, env, num_episodes, trial.number, print_freq)
@@ -182,9 +180,9 @@ def objective_dqn(trial, env, num_episodes, print_freq):
 def objective_ppo(trial, env, num_episodes, print_freq):
     """Optuna objective for PPO"""
     config = {
-        'lr': trial.suggest_float('lr', 1e-4, 1e-3, log=True),
-        'gamma': trial.suggest_float('gamma', 0.95, 0.995),
-        'eps_clip': trial.suggest_float('eps_clip', 0.1, 0.3),
+        'lr': trial.suggest_categorical('lr', [1e-4, 3e-4, 1e-3]),
+        'gamma': trial.suggest_categorical('gamma', [0.95, 0.98, 0.99, 0.995]),
+        'eps_clip': trial.suggest_categorical('eps_clip', [0.1, 0.15, 0.2, 0.25, 0.3]),
         'update_freq': trial.suggest_categorical('update_freq', [20, 30, 40, 60])
     }
     
@@ -194,36 +192,13 @@ def objective_ppo(trial, env, num_episodes, print_freq):
 def objective_sac(trial, env, num_episodes, print_freq):
     """Optuna objective for SAC"""
     config = {
-        'lr': trial.suggest_float('lr', 1e-4, 1e-3, log=True),
-        'alpha': trial.suggest_float('alpha', 0.1, 0.5),
-        'tau': trial.suggest_float('tau', 0.001, 0.01, log=True),
+        'lr': trial.suggest_categorical('lr', [1e-4, 3e-4, 1e-3]),
+        'alpha': trial.suggest_categorical('alpha', [0.1, 0.2, 0.3, 0.4, 0.5]),
+        'tau': trial.suggest_categorical('tau', [0.001, 0.003, 0.005, 0.01]),
         'batch_size': trial.suggest_categorical('batch_size', [64, 128, 256])
     }
     
     return train_sac_trial(config, env, num_episodes, trial.number, print_freq)
-
-
-def plot_study_results(study, agent_name):
-    """Plot optimization history and parameter importances"""
-    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(15, 5))
-    
-    # Optimization history
-    optuna.visualization.matplotlib.plot_optimization_history(study, ax=ax1)
-    ax1.set_title(f'{agent_name.upper()} Optimization History')
-    
-    # Parameter importances
-    try:
-        optuna.visualization.matplotlib.plot_param_importances(study, ax=ax2)
-        ax2.set_title(f'{agent_name.upper()} Parameter Importances')
-    except:
-        ax2.text(0.5, 0.5, 'Not enough trials for importance', ha='center', va='center')
-    
-    plt.tight_layout()
-    os.makedirs('visualization', exist_ok=True)
-    plt.savefig(f'visualization/{agent_name}_optuna_results.png', dpi=300, bbox_inches='tight')
-    print(f"\nPlot saved to visualization/{agent_name}_optuna_results.png")
-    plt.show()
-
 
 def main():
     parser = argparse.ArgumentParser(description='Optuna hyperparameter optimization')
@@ -236,7 +211,7 @@ def main():
     parser.add_argument('--print-freq', type=int, default=25,
                         help='Print progress every N episodes (default: 25)')
     parser.add_argument('--db-url', type=str, 
-                        default='postgresql://postgres.bjhmumywhwhfmlottket:2Aquick10!@aws-1-us-east-2.pooler.supabase.com:6543/postgres',
+                        default=os.environ.get('OPTUNA_DB_URL'),
                         help='Supabase PostgreSQL URL for parallel optimization (default: hardcoded Supabase)')
     parser.add_argument('--study-name', type=str, default=None,
                         help='Study name (default: {agent}_hpo)')
@@ -318,11 +293,7 @@ def main():
     for key, value in study.best_params.items():
         print(f"  {key}: {value}")
     
-    # Plot results
-    plot_study_results(study, args.agent)
-    
     # Save best params
-    import json
     best_params_file = f'models/{args.agent}_best_params.json'
     os.makedirs('models', exist_ok=True)
     with open(best_params_file, 'w') as f:

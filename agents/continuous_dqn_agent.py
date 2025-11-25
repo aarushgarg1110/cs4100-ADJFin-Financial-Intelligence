@@ -67,7 +67,7 @@ class ReplayBuffer:
 class ContinuousDQNAgent(BaseFinancialAgent):
     """Continuous DQN using actor-critic architecture"""
     
-    def __init__(self, lr=1e-3, gamma=0.99, tau=0.005, noise_std=0.1, name="Continuous_DQN"):
+    def __init__(self, lr=1e-4, gamma=0.99, tau=0.001, noise_std=0.15, name="Continuous_DQN"):
         super().__init__(name)
         
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -90,10 +90,11 @@ class ContinuousDQNAgent(BaseFinancialAgent):
         self.gamma = gamma
         self.tau = tau
         self.noise_std = noise_std
+        self.noise_decay = 0.999  # updated
         
         # Experience replay
         self.replay_buffer = ReplayBuffer()
-        self.batch_size = 128  # Increased from 64
+        self.batch_size = 256  # updated to best
         
         # Training mode
         self.training = True
@@ -203,9 +204,11 @@ class ContinuousDQNAgent(BaseFinancialAgent):
             # Decay exploration noise (slower decay, higher minimum)
             self.noise_std = max(0.05, self.noise_std * 0.999)
             
-            if episode % 100 == 0:
-                avg_reward = np.mean(episode_rewards[-100:])
-                tqdm.write(f"Episode {episode}, Avg Reward: {avg_reward:.2f}, Noise: {self.noise_std:.3f}")
+            if (episode + 1) % 25 == 0 or (episode + 1) == num_episodes:
+                avg_reward = np.mean(episode_rewards[-25:])
+                avg_actor = np.mean(actor_losses[-25:]) if len(actor_losses) >= 25 else 0
+                avg_critic = np.mean(critic_losses[-25:]) if len(critic_losses) >= 25 else 0
+                tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Actor Loss: {avg_actor:.4f} | Critic Loss: {avg_critic:.4f}")
         
         # Save model
         import os

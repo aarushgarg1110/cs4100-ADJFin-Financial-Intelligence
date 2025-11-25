@@ -5,6 +5,7 @@ Training script for RL agents with learning curve visualization
 
 import argparse
 import os
+import torch
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
@@ -96,14 +97,13 @@ def main():
                         default=['all'], help='Agents to train (default: all)')
     parser.add_argument('--episodes', type=int, default=1000, 
                         help='Number of training episodes (default: 1000)')
-    parser.add_argument('--seed', type=int, default=None,
-                        help='Random seed for reproducibility (default: None)')
+    parser.add_argument('--seed', type=int, default=42,
+                        help='Random seed for reproducibility (default: 42)')
     args = parser.parse_args()
     
     # Set global seeds if provided
     if args.seed is not None:
         np.random.seed(args.seed)
-        import torch
         torch.manual_seed(args.seed)
         if torch.cuda.is_available():
             torch.cuda.manual_seed(args.seed)

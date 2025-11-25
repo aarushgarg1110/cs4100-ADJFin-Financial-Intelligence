@@ -99,12 +99,12 @@ class SACAgent(BaseFinancialAgent):
 
     def __init__(
         self,
-        lr=3e-4,
+        lr=3e-4,  # will update below
         gamma=0.995,
-        tau=0.005,
-        alpha=0.2,
+        tau=0.001,  # updated
+        alpha=0.4,  # updated
         target_entropy=None,
-        batch_size=64,
+        batch_size=64,  # already best
         name="SAC_Agent",
     ):
         super().__init__(name)
@@ -271,9 +271,11 @@ class SACAgent(BaseFinancialAgent):
 
             episode_rewards.append(total_reward)
 
-            if (episode + 1) % 100 == 0:
-                avg_reward = np.mean(episode_rewards[-100:])
-                tqdm.write(f"[SAC] Episode {episode + 1}, Avg Reward (last 100): {avg_reward:.2f}")
+            if (episode + 1) % 25 == 0 or (episode + 1) == num_episodes:
+                avg_reward = np.mean(episode_rewards[-25:])
+                avg_actor = np.mean(actor_losses[-25:]) if len(actor_losses) >= 25 else 0
+                avg_critic = np.mean(critic_losses[-25:]) if len(critic_losses) >= 25 else 0
+                tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Actor Loss: {avg_actor:.4f} | Critic Loss: {avg_critic:.4f}")
 
         # Persist models
         import os

@@ -1,0 +1,1005 @@
+============================================================
+OPTIMIZATION COMPLETE
+============================================================
+Best trial: 21
+Best value: 8044.70
+
+Best hyperparameters:
+  lr: 0.0003
+  alpha: 0.4
+  tau: 0.001
+  batch_size: 64
+
+============================================================
+Starting Optuna optimization for SAC
+Trials: 10 | Episodes per trial: 100
+============================================================
+
+  0%|                              | 0/10 [00:00<?, ?it/s]
+Trial 0:
+  lr=0.001000, alpha=0.30, tau=0.003000, batch_size=256
+                                                            Ep 25/100 | Reward: 3931.11 | Actor Loss: 16257.2586 | Critic Loss: 3560888.4473
+
+  Trial 0:  29%|██▌      | 29/100 [01:35<06:14,  5.28s/it]
+  Trial 0:  30%|██▋      | 30/100 [01:39
+  Trial 0:  31%|██▊      | 31/100 [01:43
+  Trial 0:  32%|██▉      | 32/100 [01:48
+  Trial 0:  33%|██▉      | 33/100 [01:52
+  Trial 0:  34%|███      | 34/100 [01:55
+  Trial 0:  35%|███▏     | 35/100 [01:59<04:30,  4.16s
+  Trial 0:  36%|███▏     | 36/100 [02:06<05:
+  Trial 0:  37%|███▎     | 37/100 [02:13<05:
+  Trial 0:  38%|███▍     | 38/100 [02:18<05:
+  Trial 0:  39%|███▌     | 39/100 [02:24<05:
+  Trial 0:  40%|███▌     | 40/100 [02:29<05:
+  Trial 0:  41%|███▋     | 41/100 [02:35<05:
+  Trial 0:  42%|███▊     | 42/100 [02:41<05:
+  Trial 0:  43%|███▊     | 43/100 [02:46<05:
+  Trial 0:  44%|███▉     | 44/100 [02:52<05:
+  Trial 0:  45%|████     | 45/100 [02:58<05:09,  5.63
+  Trial 0:  46%|████▏    | 46/100 [03:03<05:02,  5.61s/it]  Ep 50/100 | Reward: 3951.96 | Actor Loss: 16361.6459 | Critic Loss: 3552354.9762
+                                                            Ep 75/100 | Reward: 4106.04 | Actor Loss: 16419.0151 | Critic Loss: 3766126.379197s/it]
+                                                            Ep 100/100 | Reward: 4094.54 | Actor Loss: 16870.4275 | Critic Loss: 2780750.24538s/it]
+                                                            Trial 0 complete: 3590.63
+
+[I 2025-11-24 11:49:10,712] Trial 0 finished with value: 3590.6324382014777 and parameters: {'lr': 0.001, 'alpha': 0.3, 'tau': 0.003, 'batch_size': 256}. Best is trial 2 with value: 3722.18693027827.
+Best trial: 2. Best value: 3722.19:  10%| | 1/10 [08:54<1:
+Trial 9:
+  lr=0.000100, alpha=0.10, tau=0.010000, batch_size=128
+                                                                                          Ep 25/100 | Reward: 5781.08 | Actor Loss: 14643.0204 | Critic Loss: 2789373.058043s/it]
+                                                                                          Ep 50/100 | Reward: 4810.61 | Actor Loss: 15973.0422 | Critic Loss: 2074182.150703s/it]
+                                                                                          Ep 75/100 | Reward: 4310.74 | Actor Loss: 15625.5355 | Critic Loss: 4010496.793049s/it]
+                                                                                          Ep 100/100 | Reward: 4254.08 | Actor Loss: 15549.8340 | Critic Loss: 2854213.05735s/it]
+                                                                                          Trial 9 complete: 3742.40
+
+[I 2025-11-24 11:57:03,513] Trial 9 finished with value: 3742.3984572376803 and parameters: {'lr': 0.0001, 'alpha': 0.1, 'tau': 0.01, 'batch_size': 128}. Best is trial 8 with value: 7163.59914929079.
+Best trial: 8. Best value: 7163.6:  20%|▏| 2/10 [16:46<1:0
+Trial 17:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7440.48 | Actor Loss: -3210.9162 | Critic Loss: 862902.0031.39s/it]
+                                                                                          Ep 50/100 | Reward: 7263.36 | Actor Loss: -2555.8103 | Critic Loss: 28176647.35627s/it]
+                                                                                          Ep 75/100 | Reward: 7397.80 | Actor Loss: -10473.9508 | Critic Loss: 6005804.64446s/it]
+                                                                                          Ep 100/100 | Reward: 7216.17 | Actor Loss: -11242.6196 | Critic Loss: 6965880.3419s/it]
+                                                                                          Trial 17 complete: 7147.50
+
+[I 2025-11-24 12:04:18,664] Trial 17 finished with value: 7147.498764139593 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 16 with value: 7339.2221940201.
+Best trial: 16. Best value: 7339.22:  30%|▎| 3/10 [23:59<5
+Trial 25:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7369.16 | Actor Loss: 6912.7176 | Critic Loss: 769717.79804.53s/it]
+                                                                                          Ep 50/100 | Reward: 7251.72 | Actor Loss: 6948.0170 | Critic Loss: 912920.58724.27s/it]
+                                                                                          Ep 75/100 | Reward: 7370.84 | Actor Loss: 6937.6981 | Critic Loss: 602623.74284.48s/it]
+                                                                                          Ep 100/100 | Reward: 7214.65 | Actor Loss: 6670.5947 | Critic Loss: 847042.6837.35s/it]
+                                                                                          Trial 25 complete: 7163.60
+
+[I 2025-11-24 12:11:55,904] Trial 25 finished with value: 7163.599899961862 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  40%|▍| 4/10 [31:37<46
+Trial 30:
+  lr=0.000300, alpha=0.40, tau=0.003000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7347.83 | Actor Loss: 15898.6671 | Critic Loss: 971825.1391.74s/it]
+                                                                                          Ep 50/100 | Reward: 7119.32 | Actor Loss: 15129.8895 | Critic Loss: 4339649.795158s/it]
+                                                                                          Ep 75/100 | Reward: 7234.07 | Actor Loss: 15277.0581 | Critic Loss: 1236312.863242s/it]
+                                                                                          Ep 100/100 | Reward: 7074.68 | Actor Loss: 14873.9184 | Critic Loss: 2867385.31175s/it]
+                                                                                          Trial 30 complete: 7028.85
+
+[I 2025-11-24 12:19:38,133] Trial 30 finished with value: 7028.854703419172 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  50%|▌| 5/10 [39:18<38
+Trial 38:
+  lr=0.000300, alpha=0.20, tau=0.001000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 3997.64 | Actor Loss: 3298.3598 | Critic Loss: 289853.17364.74s/it]
+                                                                                          Ep 50/100 | Reward: 4081.07 | Actor Loss: 3070.6763 | Critic Loss: 116825.28985.35s/it]
+                                                                                          Ep 75/100 | Reward: 4239.34 | Actor Loss: 2982.8570 | Critic Loss: 320310.11595.00s/it]
+                                                                                          Ep 100/100 | Reward: 4229.67 | Actor Loss: 2606.2582 | Critic Loss: 92298.68615.09s/it]
+                                                                                          Trial 38 complete: 3722.19
+
+[I 2025-11-24 12:28:01,190] Trial 38 finished with value: 3722.1876809493465 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  60%|▌| 6/10 [47:41<31
+Trial 46:
+  lr=0.001000, alpha=0.20, tau=0.010000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7223.27 | Actor Loss: 7665.0696 | Critic Loss: 1237581.0381.35s/it]
+                                                                                          Ep 50/100 | Reward: 7101.35 | Actor Loss: 8058.7389 | Critic Loss: 2133579.0872.30s/it]
+                                                                                          Ep 75/100 | Reward: 7221.28 | Actor Loss: 7703.6098 | Critic Loss: 1255527.8750.25s/it]
+                                                                                          Ep 100/100 | Reward: 7058.07 | Actor Loss: 7409.2079 | Critic Loss: 1392322.800626s/it]
+                                                                                          Trial 46 complete: 6986.00
+
+[I 2025-11-24 12:35:10,195] Trial 46 finished with value: 6985.999543848171 and parameters: {'lr': 0.001, 'alpha': 0.2, 'tau': 0.01, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  70%|▋| 7/10 [54:50<23
+Trial 54:
+  lr=0.000100, alpha=0.50, tau=0.005000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 5088.16 | Actor Loss: -17778.6883 | Critic Loss: 4477466.21773s/it]
+                                                                                          Ep 50/100 | Reward: 4691.70 | Actor Loss: -17559.8667 | Critic Loss: 3144374.86168s/it]
+                                                                                          Ep 75/100 | Reward: 4494.16 | Actor Loss: -17342.0809 | Critic Loss: 3280534.69566s/it]
+                                                                                          Ep 100/100 | Reward: 4373.05 | Actor Loss: -16798.6110 | Critic Loss: 2985543.4793s/it]
+                                                                                          Trial 54 complete: 4080.64
+
+[I 2025-11-24 12:44:27,820] Trial 54 finished with value: 4080.641561153857 and parameters: {'lr': 0.0001, 'alpha': 0.5, 'tau': 0.005, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  80%|▊| 8/10 [1:04:08<
+Trial 62:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=128
+                                                                                          Ep 25/100 | Reward: 4060.46 | Actor Loss: 15061.2501 | Critic Loss: 2174024.814517s/it]
+                                                                                          Ep 50/100 | Reward: 3951.96 | Actor Loss: 14958.9315 | Critic Loss: 3648653.122259s/it]
+                                                                                          Ep 75/100 | Reward: 4106.04 | Actor Loss: 15213.8989 | Critic Loss: 2875850.618945s/it]
+                                                                                          Ep 100/100 | Reward: 4094.54 | Actor Loss: 15507.9491 | Critic Loss: 2827871.62108s/it]
+                                                                                          Trial 62 complete: 3590.63
+
+[I 2025-11-24 12:52:03,159] Trial 62 finished with value: 3590.6324382014777 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 128}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  90%|▉| 9/10 [1:11:43<
+Trial 70:
+  lr=0.000300, alpha=0.30, tau=0.001000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 7318.60 | Actor Loss: 12330.9602 | Critic Loss: 1545709.841176s/it]
+                                                                                          Ep 50/100 | Reward: 7256.64 | Actor Loss: 11019.9655 | Critic Loss: 2064139.131383s/it]
+                                                                                          Ep 75/100 | Reward: 7493.89 | Actor Loss: 8805.4987 | Critic Loss: 2122080.9541.49s/it]
+                                                                                          Ep 100/100 | Reward: 7214.65 | Actor Loss: 9423.7237 | Critic Loss: 2563585.047355s/it]
+                                                                                          Trial 70 complete: 7163.60
+
+[I 2025-11-24 13:00:06,091] Trial 70 finished with value: 7163.599899961862 and parameters: {'lr': 0.0003, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7: 100%|█| 10/10 [1:19:46
+
+============================================================
+Starting Optuna optimization for SAC
+Trials: 10 | Episodes per trial: 100
+============================================================
+
+  0%|                              | 0/10 [00:00<?, ?it/s]
+Trial 4:
+  lr=0.000100, alpha=0.30, tau=0.005000, batch_size=256
+
+  Trial 4:   2%| |  Ep 25/100 | Reward: 7722.98 | Actor Loss: -193.5276 | Critic Loss: 854733.5600:  24%|▏|
+                    Ep 50/100 | Reward: 6643.04 | Actor Loss: -734.3585 | Critic Loss: 686738.1369:  49%|▍|
+                    Ep 75/100 | Reward: 4688.63 | Actor Loss: -555.9451 | Critic Loss: 501688.5619:  74%|▋|
+                    Ep 100/100 | Reward: 4821.15 | Actor Loss: -475.9270 | Critic Loss: 408797.4997  99%|▉|
+                    Trial 4 complete: 4288.94
+
+[I 2025-11-24 11:52:28,963] Trial 4 finished with value: 4288.936563037618 and parameters: {'lr': 0.0001, 'alpha': 0.3, 'tau': 0.005, 'batch_size': 256}. Best is trial 7 with value: 7044.70972573005.
+Best trial: 7. Best value: 7044.71:  10%| | 1/10 [10:17<1:
+Trial 15:
+  lr=0.000300, alpha=0.10, tau=0.001000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 4161.02 | Actor Loss: -952.1117 | Critic Loss: 17028.8246 5.66s/it]
+                                                                                          Ep 50/100 | Reward: 3951.96 | Actor Loss: -977.4259 | Critic Loss: 29210.7550 5.91s/it]
+                                                                                          Ep 75/100 | Reward: 4106.03 | Actor Loss: -657.5496 | Critic Loss: 493373.25255.65s/it]
+                                                                                          Ep 100/100 | Reward: 4094.54 | Actor Loss: -1013.8040 | Critic Loss: 25797.9729.65s/it]
+                                                                                          Trial 15 complete: 3590.63
+
+[I 2025-11-24 12:02:32,521] Trial 15 finished with value: 3590.6310067065665 and parameters: {'lr': 0.0003, 'alpha': 0.1, 'tau': 0.001, 'batch_size': 256}. Best is trial 14 with value: 7176.79591411624.
+Best trial: 14. Best value: 7176.8:  20%|▏| 2/10 [20:18<1:
+Trial 23:
+  lr=0.000300, alpha=0.40, tau=0.005000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 4452.82 | Actor Loss: -3805.7512 | Critic Loss: 232383.8045.18s/it]
+                                                                                          Ep 50/100 | Reward: 4081.07 | Actor Loss: -3849.7293 | Critic Loss: 229311.7439.16s/it]
+                                                                                          Ep 75/100 | Reward: 4239.33 | Actor Loss: -3696.0277 | Critic Loss: 214447.4552.76s/it]
+                                                                                          Ep 100/100 | Reward: 4229.67 | Actor Loss: -3701.1530 | Critic Loss: 156650.919936s/it]
+                                                                                          Trial 23 complete: 3722.19
+
+[I 2025-11-24 12:13:12,636] Trial 23 finished with value: 3722.186249454433 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.005, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  30%|▎| 3/10 [30:58<1:
+Trial 34:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7166.09 | Actor Loss: -8239.8167 | Critic Loss: 1215816.020147s/it]
+                                                                                          Ep 50/100 | Reward: 7251.72 | Actor Loss: -8746.5698 | Critic Loss: 1209626.175955s/it]
+                                                                                          Ep 75/100 | Reward: 7370.84 | Actor Loss: -9177.8662 | Critic Loss: 3270615.490179s/it]
+                                                                                          Ep 100/100 | Reward: 7215.22 | Actor Loss: -9090.7331 | Critic Loss: 2191941.04341s/it]
+                                                                                          Trial 34 complete: 7164.42
+
+[I 2025-11-24 12:21:02,279] Trial 34 finished with value: 7164.418340014265 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  40%|▍| 4/10 [38:47<56
+Trial 42:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 3887.34 | Actor Loss: -2596.9858 | Critic Loss: 199350.5494.14s/it]
+                                                                                          Ep 50/100 | Reward: 3951.96 | Actor Loss: -2677.1931 | Critic Loss: 255285.0405.94s/it]
+                                                                                          Ep 75/100 | Reward: 4106.03 | Actor Loss: -2806.1366 | Critic Loss: 79486.65065.00s/it]
+                                                                                          Ep 100/100 | Reward: 4094.54 | Actor Loss: -2772.0008 | Critic Loss: 167584.830845s/it]
+                                                                                          Trial 42 complete: 3590.63
+
+[I 2025-11-24 12:29:20,495] Trial 42 finished with value: 3590.6310067065665 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  50%|▌| 5/10 [47:05<44
+Trial 50:
+  lr=0.001000, alpha=0.50, tau=0.003000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 7283.33 | Actor Loss: 13840.9881 | Critic Loss: 2942699.280798s/it]
+                                                                                          Ep 50/100 | Reward: 7119.32 | Actor Loss: 14445.0317 | Critic Loss: 3357667.853094s/it]
+                                                                                          Ep 75/100 | Reward: 7234.06 | Actor Loss: 14339.6206 | Critic Loss: 1779528.559756s/it]
+                                                                                          Ep 100/100 | Reward: 7074.68 | Actor Loss: 14689.1626 | Critic Loss: 2376318.62184s/it]
+                                                                                          Trial 50 complete: 7028.85
+
+[I 2025-11-24 12:39:04,418] Trial 50 finished with value: 7028.853271924262 and parameters: {'lr': 0.001, 'alpha': 0.5, 'tau': 0.003, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  60%|▌| 6/10 [56:49<36
+Trial 58:
+  lr=0.000100, alpha=0.40, tau=0.005000, batch_size=128
+                                                                                          Ep 25/100 | Reward: 4079.01 | Actor Loss: -2167.9887 | Critic Loss: 183186.9494.29s/it]
+                                                                                          Ep 50/100 | Reward: 4081.07 | Actor Loss: -2428.3780 | Critic Loss: 65975.09614.05s/it]
+                                                                                          Ep 75/100 | Reward: 4239.31 | Actor Loss: -2443.7040 | Critic Loss: 80558.63674.04s/it]
+                                                                                          Ep 100/100 | Reward: 4229.67 | Actor Loss: -2427.3950 | Critic Loss: 54376.0438.47s/it]
+                                                                                          Trial 58 complete: 3722.19
+
+[I 2025-11-24 12:46:15,931] Trial 58 finished with value: 3722.186249454433 and parameters: {'lr': 0.0001, 'alpha': 0.4, 'tau': 0.005, 'batch_size': 128}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  70%|▋| 7/10 [1:04:01<
+Trial 66:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7348.73 | Actor Loss: 11161.3957 | Critic Loss: 1325188.388718s/it]
+                                                                                          Ep 50/100 | Reward: 7251.72 | Actor Loss: 11268.6490 | Critic Loss: 2090444.247728s/it]
+                                                                                          Ep 75/100 | Reward: 7370.84 | Actor Loss: 11106.3219 | Critic Loss: 1540665.413533s/it]
+                                                                                          Ep 100/100 | Reward: 7214.65 | Actor Loss: 11466.1883 | Critic Loss: 1592117.77641s/it]
+                                                                                          Trial 66 complete: 7163.60
+
+[I 2025-11-24 12:53:23,284] Trial 66 finished with value: 7163.598468466946 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  80%|▊| 8/10 [1:11:08<
+Trial 73:
+  lr=0.000300, alpha=0.30, tau=0.003000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 7359.04 | Actor Loss: 28469.5583 | Critic Loss: 12871598.50061s/it]
+                                                                                          Ep 50/100 | Reward: 7251.72 | Actor Loss: 28319.7962 | Critic Loss: 10713698.07597s/it]
+                                                                                          Ep 75/100 | Reward: 7370.84 | Actor Loss: 27820.8503 | Critic Loss: 10594245.46378s/it]
+                                                                                          Ep 100/100 | Reward: 7214.65 | Actor Loss: 27462.0416 | Critic Loss: 6170975.41511s/it]
+                                                                                          Trial 73 complete: 7163.60
+
+[I 2025-11-24 13:00:42,671] Trial 73 finished with value: 7163.598468466946 and parameters: {'lr': 0.0003, 'alpha': 0.3, 'tau': 0.003, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  90%|▉| 9/10 [1:18:28<
+Trial 79:
+  lr=0.000300, alpha=0.10, tau=0.001000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 4067.90 | Actor Loss: 12700.9991 | Critic Loss: 3161046.988866s/it]
+                                                                                          Ep 50/100 | Reward: 3807.85 | Actor Loss: 12582.3390 | Critic Loss: 3975350.203759s/it]
+                                                                                          Ep 75/100 | Reward: 3968.84 | Actor Loss: 11939.3839 | Critic Loss: 2146197.218434s/it]
+                                                                                          Ep 100/100 | Reward: 3919.39 | Actor Loss: 11880.1117 | Critic Loss: 2675377.80625it/s]
+                                                                                          Trial 79 complete: 3375.57
+
+[I 2025-11-24 13:03:13,208] Trial 79 finished with value: 3375.5685229304036 and parameters: {'lr': 0.0003, 'alpha': 0.1, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7: 100%|█| 10/10 [1:20:58
+
+============================================================
+Starting Optuna optimization for SAC
+Trials: 10 | Episodes per trial: 100
+============================================================
+
+  0%|                              | 0/10 [00:00<?, ?it/s]
+Trial 1:
+  lr=0.001000, alpha=0.20, tau=0.005000, batch_size=128
+
+  Trial 1:   2%|▏         | 2/100 [00:07<05
+  Trial 1:   3%|▎         | 3/100 [00:10<05
+  Trial 1:   4%|▍         | 4/100 [00:13<05
+  Trial 1:   5%|▌         | 5/100 [00:16<05
+  Trial 1:   6%|▌         | 6/100 [00:20<05
+  Trial 1:   7%|▋         | 7/100 [00:23<05
+  Trial 1:   8%|▊         | 8/100 [00:27<05
+  Trial 1:   9%|▉         | 9/100 [00:30<04
+  Trial 1:  10%|▉        | 10/100 [00:32<04:43,  3.15s/it]
+  Trial 1:  12%|█        | 12/100 [00:43<06:08,  4.19s/it]  Ep 25/100 | Reward: 3934.22 | Actor Loss: 13476.4981 | Critic Loss: 1773357.66904.26s/it]
+                                                            Ep 50/100 | Reward: 4081.07 | Actor Loss: 13588.0530 | Critic Loss: 2071320.523345,  5.60s/it]
+                                                            Ep 75/100 | Reward: 4239.33 | Actor Loss: 13128.3347 | Critic Loss: 2734306.169859,  4.58s/it]
+                                                            Ep 100/100 | Reward: 4229.67 | Actor Loss: 13367.4547 | Critic Loss: 1835310.43474,  4.43s/it]
+                                                            Trial 1 complete: 3722.19
+
+[I 2025-11-24 11:49:33,630] Trial 1 finished with value: 3722.186979677316 and parameters: {'lr': 0.001, 'alpha': 0.2, 'tau': 0.005, 'batch_size': 128}. Best is trial 1 with value: 3722.18697967732.
+Best trial: 1. Best value: 3722.19:  10%| | 1/10 [07:30<1:
+Trial 10:
+  lr=0.000300, alpha=0.40, tau=0.005000, batch_size=256
+                                                                                                 Ep 25/100 | Reward: 7472.62 | Actor Loss: 2743.4343 | Critic Loss: 342261.86457:19,  5.78s/it]
+                                                                                                 Ep 50/100 | Reward: 7293.11 | Actor Loss: 3433.9304 | Critic Loss: 414635.66304:59,  5.87s/it]
+                                                                                                 Ep 75/100 | Reward: 7412.96 | Actor Loss: 3774.6784 | Critic Loss: 442320.85022:26,  5.64s/it]
+                                                                                                 Ep 100/100 | Reward: 7248.54 | Actor Loss: 3841.5500 | Critic Loss: 370939.4857:05,  5.77s/it]
+                                                                                                 Trial 10 complete: 7169.58
+
+[I 2025-11-24 11:59:28,652] Trial 10 finished with value: 7169.584049055115 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.005, 'batch_size': 256}. Best is trial 10 with value: 7169.58404905512.
+Best trial: 10. Best value: 7169.58:  20%|▏| 2/10 [17:25<1
+Trial 19:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=256
+                                                                                                 Ep 25/100 | Reward: 3970.49 | Actor Loss: 11307.0639 | Critic Loss: 1899751.244407,  5.63s/it]
+                                                                                                 Ep 50/100 | Reward: 4081.07 | Actor Loss: 11202.7547 | Critic Loss: 1394441.211855,  5.80s/it]
+                                                                                                 Ep 75/100 | Reward: 4239.33 | Actor Loss: 11004.9596 | Critic Loss: 1286895.396947,  6.44s/it]
+                                                                                                 Ep 100/100 | Reward: 4229.67 | Actor Loss: 11232.2073 | Critic Loss: 1393502.01546,  6.66s/it]
+                                                                                                 Trial 19 complete: 3722.19
+
+[I 2025-11-24 12:09:55,997] Trial 19 finished with value: 3722.186979677316 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  30%|▎| 3/10 [27:51<1:
+Trial 29:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                                 Ep 25/100 | Reward: 7663.83 | Actor Loss: 18135.2304 | Critic Loss: 12699154.88751,  4.36s/it]
+                                                                                                 Ep 50/100 | Reward: 7732.88 | Actor Loss: 21614.0950 | Critic Loss: 7831955.686355,  4.61s/it]
+                                                                                                 Ep 75/100 | Reward: 7853.60 | Actor Loss: 21448.2022 | Critic Loss: 9553060.751303,  4.76s/it]
+                                                                                                 Ep 100/100 | Reward: 7688.13 | Actor Loss: 22208.2998 | Critic Loss: 11360737.1200,  4.51s/it]
+                                                                                                 Trial 29 complete: 7607.67
+
+[I 2025-11-24 12:17:33,046] Trial 29 finished with value: 7607.671565008888 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  40%|▍| 4/10 [35:28<52
+Trial 37:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                                 Ep 25/100 | Reward: 6144.21 | Actor Loss: 14449.2923 | Critic Loss: 3126452.366714,  4.93s/it]
+                                                                                                 Ep 50/100 | Reward: 7119.32 | Actor Loss: 14809.2155 | Critic Loss: 3484303.425902,  4.76s/it]
+                                                                                                 Ep 75/100 | Reward: 7234.07 | Actor Loss: 14727.1270 | Critic Loss: 3035769.475016,  5.24s/it]
+                                                                                                 Ep 100/100 | Reward: 7074.68 | Actor Loss: 14872.9300 | Critic Loss: 2774020.87104,  4.96s/it]
+                                                                                                 Trial 37 complete: 7028.85
+
+[I 2025-11-24 12:25:53,714] Trial 37 finished with value: 7028.8540021471445 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  50%|▌| 5/10 [43:48<43
+Trial 45:
+  lr=0.001000, alpha=0.20, tau=0.010000, batch_size=64
+                                                                                                 Ep 25/100 | Reward: 6846.94 | Actor Loss: 19920.4530 | Critic Loss: 13071568.72482,  5.03s/it]
+                                                                                                 Ep 50/100 | Reward: 6666.30 | Actor Loss: 19896.0130 | Critic Loss: 4737677.263644,  4.40s/it]
+                                                                                                 Ep 75/100 | Reward: 6782.20 | Actor Loss: 20586.2713 | Critic Loss: 10111050.25091,  4.27s/it]
+                                                                                                 Ep 100/100 | Reward: 6622.95 | Actor Loss: 19936.4122 | Critic Loss: 4782645.01584,  4.26s/it]
+                                                                                                 Trial 45 complete: 6571.03
+
+[I 2025-11-24 12:33:29,364] Trial 45 finished with value: 6571.026780035961 and parameters: {'lr': 0.001, 'alpha': 0.2, 'tau': 0.01, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  60%|▌| 6/10 [51:24<33
+Trial 53:
+  lr=0.000100, alpha=0.50, tau=0.005000, batch_size=256
+                                                                                                 Ep 25/100 | Reward: 7481.13 | Actor Loss: 21989.5515 | Critic Loss: 9672780.922522,  5.82s/it]
+                                                                                                 Ep 50/100 | Reward: 7251.58 | Actor Loss: 22351.7253 | Critic Loss: 9450157.613739,  5.48s/it]
+                                                                                                 Ep 75/100 | Reward: 7370.84 | Actor Loss: 22081.5019 | Critic Loss: 8292306.320624,  5.56s/it]
+                                                                                                 Ep 100/100 | Reward: 7214.65 | Actor Loss: 22057.7225 | Critic Loss: 7831604.51065,  5.41s/it]
+                                                                                                 Trial 53 complete: 7163.60
+
+[I 2025-11-24 12:42:53,393] Trial 53 finished with value: 7163.59919868983 and parameters: {'lr': 0.0001, 'alpha': 0.5, 'tau': 0.005, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  70%|▋| 7/10 [1:00:47<
+Trial 61:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=128
+                                                                                                 Ep 25/100 | Reward: 7232.59 | Actor Loss: 7212.0419 | Critic Loss: 940480.24555:22,  4.24s/it]
+                                                                                                 Ep 50/100 | Reward: 7119.32 | Actor Loss: 7107.0192 | Critic Loss: 850385.93213:36,  4.24s/it]
+                                                                                                 Ep 75/100 | Reward: 7234.07 | Actor Loss: 7060.0906 | Critic Loss: 1120990.5669:01,  4.68s/it]
+                                                                                                 Ep 100/100 | Reward: 7074.68 | Actor Loss: 6984.3899 | Critic Loss: 714571.8156:04,  4.68s/it]
+                                                                                                 Trial 61 complete: 7028.85
+
+[I 2025-11-24 12:50:18,491] Trial 61 finished with value: 7028.8540021471445 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 128}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  80%|▊| 8/10 [1:08:12<
+Trial 69:
+  lr=0.000300, alpha=0.30, tau=0.001000, batch_size=256
+                                                                                                 Ep 25/100 | Reward: 6555.81 | Actor Loss: -3220.6527 | Critic Loss: 1541512.452529,  5.91s/it]
+                                                                                                 Ep 50/100 | Reward: 4975.51 | Actor Loss: -982.9800 | Critic Loss: 260337.16864:11,  4.92s/it]
+                                                                                                 Ep 75/100 | Reward: 5137.66 | Actor Loss: 197.3280 | Critic Loss: 147340.465301:59,  4.61s/it]
+                                                                                                 Ep 100/100 | Reward: 5115.39 | Actor Loss: 720.8500 | Critic Loss: 262349.06690:04,  4.27s/it]
+                                                                                                 Trial 69 complete: 4569.24
+
+[I 2025-11-24 12:59:01,330] Trial 69 finished with value: 4569.238063094432 and parameters: {'lr': 0.0003, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  90%|▉| 9/10 [1:16:55<
+Trial 77:
+  lr=0.000300, alpha=0.30, tau=0.001000, batch_size=256
+                                                                                                 Ep 25/100 | Reward: 4171.63 | Actor Loss: 6608.5808 | Critic Loss: 341419.77773:17,  2.60s/it]
+                                                                                                 Ep 50/100 | Reward: 3951.96 | Actor Loss: 6547.3935 | Critic Loss: 390777.99801:44,  2.05s/it]
+                                                                                                 Ep 75/100 | Reward: 4106.04 | Actor Loss: 6656.3716 | Critic Loss: 675105.26640:53,  2.05s/it]
+                                                                                                 Ep 100/100 | Reward: 4094.54 | Actor Loss: 6512.9261 | Critic Loss: 265872.7290:01,  1.61s/it]
+                                                                                                 Trial 77 complete: 3590.63
+
+[I 2025-11-24 13:02:53,855] Trial 77 finished with value: 3590.6317369294493 and parameters: {'lr': 0.0003, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7: 100%|█| 10/10 [1:20:48
+
+============================================================
+Starting Optuna optimization for SAC
+Trials: 10 | Episodes per trial: 100
+============================================================
+
+  0%|                              | 0/10 [00:00<?, ?it/s]
+Trial 2:
+  lr=0.000100, alpha=0.10, tau=0.003000, batch_size=64
+
+  Trial 2:  13%|█▏       | 13/100 [00:43<05:41,  3.92s/it]  Ep 25/100 | Reward: 5861.69 | Actor Loss: 15350.8261 | Critic Loss: 2949826.5595
+  Trial 2:  24%|██▏      | 24/100 [01:26<04:51,  3.84s/it]  Ep 50/100 | Reward: 4081.07 | Actor Loss: 15707.0810 | Critic Loss: 5284864.25694.52s/it]
+                                                            Ep 75/100 | Reward: 4239.33 | Actor Loss: 15608.9309 | Critic Loss: 2394882.01474.28s/it]
+                                                            Ep 100/100 | Reward: 4229.67 | Actor Loss: 15770.9954 | Critic Loss: 1744805.9277.23s/it]
+                                                            Trial 2 complete: 3722.19
+
+[I 2025-11-24 11:49:02,886] Trial 2 finished with value: 3722.1869302782734 and parameters: {'lr': 0.0001, 'alpha': 0.1, 'tau': 0.003, 'batch_size': 64}. Best is trial 2 with value: 3722.18693027827.
+Best trial: 2. Best value: 3722.19:  10%| | 1/10 [06:57<1:
+Trial 8:
+  lr=0.000100, alpha=0.40, tau=0.001000, batch_size=128
+                                                                                            Ep 25/100 | Reward: 7472.69 | Actor Loss: 3605.7517 | Critic Loss: 1397929.0242 4.41s/it]
+                                                                                            Ep 50/100 | Reward: 7246.95 | Actor Loss: 5544.0786 | Critic Loss: 4487854.4866 4.99s/it]
+                                                                                            Ep 75/100 | Reward: 7229.97 | Actor Loss: 6171.8922 | Critic Loss: 1390300.3381 4.63s/it]
+                                                                                            Ep 100/100 | Reward: 7191.20 | Actor Loss: 6757.0732 | Critic Loss: 590015.0938 4.37s/it]
+                                                                                            Trial 8 complete: 7163.60
+
+[I 2025-11-24 11:56:57,872] Trial 8 finished with value: 7163.599149290788 and parameters: {'lr': 0.0001, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 128}. Best is trial 8 with value: 7163.59914929079.
+Best trial: 8. Best value: 7163.6:  20%|▏| 2/10 [14:54<1:0
+Trial 16:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 8197.02 | Actor Loss: 36206.7603 | Critic Loss: 38232969.2500.41s/it]
+                                                                                            Ep 50/100 | Reward: 7589.81 | Actor Loss: 28614.2141 | Critic Loss: 37892344.2100.07s/it]
+                                                                                            Ep 75/100 | Reward: 7578.90 | Actor Loss: 22542.6683 | Critic Loss: 17059961.4625.87s/it]
+                                                                                            Ep 100/100 | Reward: 7414.59 | Actor Loss: 22127.5943 | Critic Loss: 4988795.7550.19s/it]
+                                                                                            Trial 16 complete: 7339.22
+
+[I 2025-11-24 12:04:18,262] Trial 16 finished with value: 7339.2221940201 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 16 with value: 7339.2221940201.
+Best trial: 16. Best value: 7339.22:  30%|▎| 3/10 [22:13<5
+Trial 24:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 6931.62 | Actor Loss: 16142.6562 | Critic Loss: 4118542.21094.54s/it]
+                                                                                            Ep 50/100 | Reward: 7119.32 | Actor Loss: 15497.7650 | Critic Loss: 2371041.83454.27s/it]
+                                                                                            Ep 75/100 | Reward: 7234.07 | Actor Loss: 15483.2570 | Critic Loss: 2054160.68354.49s/it]
+                                                                                            Ep 100/100 | Reward: 7074.68 | Actor Loss: 15526.9873 | Critic Loss: 4680330.0742.37s/it]
+                                                                                            Trial 24 complete: 7028.85
+
+[I 2025-11-24 12:11:56,083] Trial 24 finished with value: 7028.853952748102 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  40%|▍| 4/10 [29:51<45
+Trial 31:
+  lr=0.000300, alpha=0.40, tau=0.003000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 7362.06 | Actor Loss: 18827.3189 | Critic Loss: 2475023.16784.70s/it]
+                                                                                            Ep 50/100 | Reward: 7251.77 | Actor Loss: 19564.8080 | Critic Loss: 2666993.01604.61s/it]
+                                                                                            Ep 75/100 | Reward: 7370.87 | Actor Loss: 19008.8344 | Critic Loss: 2426869.07514.43s/it]
+                                                                                            Ep 100/100 | Reward: 7344.54 | Actor Loss: 21906.1940 | Critic Loss: 9415763.9000.91s/it]
+                                                                                            Trial 31 complete: 7163.60
+
+[I 2025-11-24 12:19:38,416] Trial 31 finished with value: 7163.599149290788 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  50%|▌| 5/10 [37:32<37
+Trial 39:
+  lr=0.000300, alpha=0.20, tau=0.001000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 6962.31 | Actor Loss: 4992.1007 | Critic Loss: 3533245.7622 4.71s/it]
+                                                                                            Ep 50/100 | Reward: 7188.41 | Actor Loss: 3351.3506 | Critic Loss: 432577.4529  5.33s/it]
+                                                                                            Ep 75/100 | Reward: 7311.45 | Actor Loss: 3819.7006 | Critic Loss: 1707785.7489 4.97s/it]
+                                                                                            Ep 100/100 | Reward: 7142.52 | Actor Loss: 3672.7477 | Critic Loss: 253258.8125 5.02s/it]
+                                                                                            Trial 39 complete: 7068.47
+
+[I 2025-11-24 12:28:03,548] Trial 39 finished with value: 7068.474388338975 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  60%|▌| 6/10 [45:57<31
+Trial 47:
+  lr=0.001000, alpha=0.50, tau=0.010000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 4520.33 | Actor Loss: -5041.0511 | Critic Loss: 1013556.44284.35s/it]
+                                                                                            Ep 50/100 | Reward: 4435.16 | Actor Loss: -4170.2767 | Critic Loss: 1887202.25124.24s/it]
+                                                                                            Ep 75/100 | Reward: 4600.15 | Actor Loss: -4201.7118 | Critic Loss: 794184.3769 4.37s/it]
+                                                                                            Ep 100/100 | Reward: 4569.02 | Actor Loss: -3420.9566 | Critic Loss: 1312514.7722.19s/it]
+                                                                                            Trial 47 complete: 4017.50
+
+[I 2025-11-24 12:35:15,029] Trial 47 finished with value: 4017.502935936312 and parameters: {'lr': 0.001, 'alpha': 0.5, 'tau': 0.01, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  70%|▋| 7/10 [53:09<22
+Trial 55:
+  lr=0.000100, alpha=0.50, tau=0.005000, batch_size=256
+                                                                                            Ep 25/100 | Reward: 7324.54 | Actor Loss: 8316.0025 | Critic Loss: 539363.4855  5.48s/it]
+                                                                                            Ep 50/100 | Reward: 7251.72 | Actor Loss: 8281.4937 | Critic Loss: 1018865.0675 5.55s/it]
+                                                                                            Ep 75/100 | Reward: 7370.84 | Actor Loss: 8199.7374 | Critic Loss: 703107.7589  5.85s/it]
+                                                                                            Ep 100/100 | Reward: 7090.93 | Actor Loss: 8185.0229 | Critic Loss: 677140.0889 5.40s/it]
+                                                                                            Trial 55 complete: 6991.29
+
+[I 2025-11-24 12:44:30,817] Trial 55 finished with value: 6991.286393112129 and parameters: {'lr': 0.0001, 'alpha': 0.5, 'tau': 0.005, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  80%|▊| 8/10 [1:02:25<
+Trial 63:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=128
+                                                                                            Ep 25/100 | Reward: 4439.73 | Actor Loss: 3249.6786 | Critic Loss: 126958.1555  4.19s/it]
+                                                                                            Ep 50/100 | Reward: 4080.93 | Actor Loss: 3388.5682 | Critic Loss: 89229.8790,  4.58s/it]
+                                                                                            Ep 75/100 | Reward: 4239.33 | Actor Loss: 3514.9477 | Critic Loss: 179957.9344  4.65s/it]
+                                                                                            Ep 100/100 | Reward: 4229.67 | Actor Loss: 3471.7021 | Critic Loss: 360249.7845 4.67s/it]
+                                                                                            Trial 63 complete: 3722.19
+
+[I 2025-11-24 12:52:10,753] Trial 63 finished with value: 3722.1869302782734 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 128}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  90%|▉| 9/10 [1:10:04<
+Trial 71:
+  lr=0.000300, alpha=0.10, tau=0.003000, batch_size=256
+                                                                                            Ep 25/100 | Reward: 7265.77 | Actor Loss: 18896.6245 | Critic Loss: 3189979.80605.78s/it]
+                                                                                            Ep 50/100 | Reward: 7119.32 | Actor Loss: 19473.5853 | Critic Loss: 3968450.76754.86s/it]
+                                                                                            Ep 75/100 | Reward: 7234.07 | Actor Loss: 19240.2423 | Critic Loss: 4773955.66404.42s/it]
+                                                                                            Ep 100/100 | Reward: 7074.68 | Actor Loss: 19168.3749 | Critic Loss: 5716000.4100.48s/it]
+                                                                                            Trial 71 complete: 7028.85
+
+[I 2025-11-24 13:00:12,543] Trial 71 finished with value: 7028.853952748102 and parameters: {'lr': 0.0003, 'alpha': 0.1, 'tau': 0.003, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7: 100%|█| 10/10 [1:18:06
+
+============================================================
+Starting Optuna optimization for SAC
+Trials: 10 | Episodes per trial: 100
+============================================================
+
+  0%| | 0/10 [00:00
+Trial 7:
+  lr=0.001000, alpha=0.30, tau=0.001000, batch_size=128
+
+  Trial 7:   1%| | 1/100 [00:0
+  Trial 7:   2%| | 2/100 [00:0  Ep 25/100 | Reward: 7350.45 | Actor Loss: 35287.2014 | Critic Loss: 20126727.81140 [01:
+                                Ep 50/100 | Reward: 7251.72 | Actor Loss: 35616.5982 | Critic Loss: 17564197.50320 [03:
+                                Ep 75/100 | Reward: 7370.84 | Actor Loss: 35853.1993 | Critic Loss: 15536854.83250 [05:
+                                Ep 100/100 | Reward: 7167.33 | Actor Loss: 36860.7130 | Critic Loss: 15571846.6494 [07:
+                                Trial 7 complete: 7044.71
+
+[I 2025-11-24 11:50:22,742] Trial 7 finished with value: 7044.709725730047 and parameters: {'lr': 0.001, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 128}. Best is trial 7 with value: 7044.70972573005.
+Best trial: 7. Best
+Trial 13:
+  lr=0.001000, alpha=0.30, tau=0.010000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 7380.90 | Actor Loss: 39754.9347 | Critic Loss: 31187009.56004s/it]
+                                                                                          Ep 50/100 | Reward: 7191.54 | Actor Loss: 39739.1352 | Critic Loss: 26037082.46504s/it]
+                                                                                          Ep 75/100 | Reward: 7311.45 | Actor Loss: 38921.7650 | Critic Loss: 24185879.81508s/it]
+                                                                                          Ep 100/100 | Reward: 7142.59 | Actor Loss: 38157.6423 | Critic Loss: 29992606.2550s/it]
+                                                                                          Trial 13 complete: 7068.48
+
+[I 2025-11-24 12:00:15,521] Trial 13 finished with value: 7068.479422731539 and parameters: {'lr': 0.001, 'alpha': 0.3, 'tau': 0.01, 'batch_size': 256}. Best is trial 10 with value: 7169.58404905512.
+Best trial: 10. Bes
+Trial 21:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7543.95 | Actor Loss: 15718.6321 | Critic Loss: 20480012.20008s/it]
+                                                                                          Ep 50/100 | Reward: 8171.19 | Actor Loss: 22405.2750 | Critic Loss: 26873546.23008s/it]
+                                                                                          Ep 75/100 | Reward: 8293.15 | Actor Loss: 24960.2379 | Critic Loss: 28387913.18507s/it]
+                                                                                          Ep 100/100 | Reward: 8126.64 | Actor Loss: 26427.7390 | Critic Loss: 31358209.9200s/it]
+                                                                                          Trial 21 complete: 8044.70
+
+[I 2025-11-24 12:07:27,681] Trial 21 finished with value: 8044.6997720748595 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Bes
+Trial 28:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7349.41 | Actor Loss: 9249.1396 | Critic Loss: 1944089.8619.64s/it]
+                                                                                          Ep 50/100 | Reward: 7540.49 | Actor Loss: 9233.0419 | Critic Loss: 1861758.8669.72s/it]
+                                                                                          Ep 75/100 | Reward: 7661.28 | Actor Loss: 9323.5297 | Critic Loss: 2334893.8994.45s/it]
+                                                                                          Ep 100/100 | Reward: 7497.03 | Actor Loss: 9393.5837 | Critic Loss: 2136695.579445s/it]
+                                                                                          Trial 28 complete: 7423.47
+
+[I 2025-11-24 12:15:05,130] Trial 28 finished with value: 7423.467245519331 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Bes
+Trial 36:
+  lr=0.000300, alpha=0.50, tau=0.001000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7394.87 | Actor Loss: 11126.9282 | Critic Loss: 3268696.049152s/it]
+                                                                                          Ep 50/100 | Reward: 7251.72 | Actor Loss: 10651.2691 | Critic Loss: 2168813.893791s/it]
+                                                                                          Ep 75/100 | Reward: 7370.84 | Actor Loss: 11170.1161 | Critic Loss: 2275707.574804s/it]
+                                                                                          Ep 100/100 | Reward: 7214.65 | Actor Loss: 10991.6853 | Critic Loss: 1314315.40696s/it]
+                                                                                          Trial 36 complete: 7163.60
+
+[I 2025-11-24 12:23:06,066] Trial 36 finished with value: 7163.598458020923 and parameters: {'lr': 0.0003, 'alpha': 0.5, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Bes
+Trial 44:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 4359.01 | Actor Loss: -4902.9566 | Critic Loss: 5370730.291988s/it]
+                                                                                          Ep 50/100 | Reward: 4346.32 | Actor Loss: -5423.6008 | Critic Loss: 3837568.012595s/it]
+                                                                                          Ep 75/100 | Reward: 4507.34 | Actor Loss: -5479.3308 | Critic Loss: 2165840.812551s/it]
+                                                                                          Ep 100/100 | Reward: 4489.55 | Actor Loss: -5811.4422 | Critic Loss: 2439850.27941s/it]
+                                                                                          Trial 44 complete: 3953.43
+
+[I 2025-11-24 12:31:06,214] Trial 44 finished with value: 3953.426918578384 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Bes
+Trial 52:
+  lr=0.001000, alpha=0.40, tau=0.003000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 4164.83 | Actor Loss: 14901.4334 | Critic Loss: 2634000.209493s/it]
+                                                                                          Ep 50/100 | Reward: 3951.96 | Actor Loss: 14783.4199 | Critic Loss: 3297937.954274s/it]
+                                                                                          Ep 75/100 | Reward: 4106.03 | Actor Loss: 15043.1690 | Critic Loss: 2753079.020048s/it]
+                                                                                          Ep 100/100 | Reward: 4094.54 | Actor Loss: 14113.5807 | Critic Loss: 1872263.96823s/it]
+                                                                                          Trial 52 complete: 3590.63
+
+[I 2025-11-24 12:40:38,545] Trial 52 finished with value: 3590.6309962605424 and parameters: {'lr': 0.001, 'alpha': 0.4, 'tau': 0.003, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Bes
+Trial 60:
+  lr=0.000100, alpha=0.40, tau=0.005000, batch_size=128
+                                                                                          Ep 25/100 | Reward: 7382.65 | Actor Loss: 11482.3416 | Critic Loss: 1638476.153027s/it]
+                                                                                          Ep 50/100 | Reward: 7239.74 | Actor Loss: 11361.4867 | Critic Loss: 2257254.942815s/it]
+                                                                                          Ep 75/100 | Reward: 7352.40 | Actor Loss: 10897.0621 | Critic Loss: 1258205.463937s/it]
+                                                                                          Ep 100/100 | Reward: 7214.65 | Actor Loss: 10767.6825 | Critic Loss: 942088.846258s/it]
+                                                                                          Trial 60 complete: 7163.60
+
+[I 2025-11-24 12:47:55,397] Trial 60 finished with value: 7163.598458020923 and parameters: {'lr': 0.0001, 'alpha': 0.4, 'tau': 0.005, 'batch_size': 128}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Bes
+Trial 68:
+  lr=0.000300, alpha=0.30, tau=0.001000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 8140.00 | Actor Loss: 27521.9876 | Critic Loss: 15786866.85504s/it]
+                                                                                          Ep 50/100 | Reward: 8069.48 | Actor Loss: 27651.5375 | Critic Loss: 19958730.44002s/it]
+                                                                                          Ep 75/100 | Reward: 8195.39 | Actor Loss: 27264.7139 | Critic Loss: 12463672.25509s/it]
+                                                                                          Ep 100/100 | Reward: 8023.01 | Actor Loss: 26843.8963 | Critic Loss: 17448382.9750s/it]
+                                                                                          Trial 68 complete: 7941.14
+
+[I 2025-11-24 12:57:20,744] Trial 68 finished with value: 7941.141534370014 and parameters: {'lr': 0.0003, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Bes
+Trial 76:
+  lr=0.000300, alpha=0.30, tau=0.001000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 4546.30 | Actor Loss: 4918.0323 | Critic Loss: 1551929.9105.17s/it]
+                                                                                          Ep 50/100 | Reward: 3718.21 | Actor Loss: 4098.6047 | Critic Loss: 857952.16642.40s/it]
+                                                                                          Ep 75/100 | Reward: 3878.09 | Actor Loss: 3705.8897 | Critic Loss: 921881.39942.03s/it]
+                                                                                          Ep 100/100 | Reward: 3864.77 | Actor Loss: 3740.6494 | Critic Loss: 647072.3041.99s/it]
+                                                                                          Trial 76 complete: 3338.67
+
+[I 2025-11-24 13:02:17,149] Trial 76 finished with value: 3338.66508083574 and parameters: {'lr': 0.0003, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Bes
+
+============================================================
+Starting Optuna optimization for SAC
+Trials: 10 | Episodes per trial: 100
+============================================================
+
+  0%|                              | 0/10 [00:00<?, ?it/s]
+Trial 3:
+  lr=0.001000, alpha=0.50, tau=0.003000, batch_size=256
+
+  Trial 3:   1%|          | 1/100 [0
+  Trial 3:   2%|▏         | 2/100 [00:06<05:42,  3.49s/it
+  Trial 3:   3%|▎         | 3/100 [00:10<06:13,  3.85s/it
+  Trial 3:   4%|▍         | 4/100 [00:15<06:19,  3.96s/it
+  Trial 3:   5%|▌         | 5/100 [00:19<06:47,  4.29s/it
+  Trial 3:   6%|▌         | 6/100 [00:23<06:29,  4.14s/it
+  Trial 3:   7%|▋         | 7/100 [00:27<06:15,  4.03s/it
+  Trial 3:   8%|▊         | 8/100 [00:31<06:06,  3.
+  Trial 3:   9%|▉         | 9/100 [00:38<07
+  Trial 3:  10%|▉        | 10/100 [00:44<08
+  Trial 3:  11%|▉        | 11/100 [00:50<07
+  Trial 3:  12%|█        | 12/100 [00:55<07
+  Trial 3:  13%|█▏       | 13/100 [01:01<07
+  Trial 3:  14%|█▎       | 14/100 [01:06<07
+  Trial 3:  15%|█▎       | 15/100 [01:13<08
+  Trial 3:  16%|█▍       | 16/100 [01:18<07
+  Trial 3:  17%|█▌       | 17/100 [01:23<07
+  Trial 3:  18%|█▌       | 18/100 [01:29<07
+  Trial 3:  19%|█▋       | 19/100 [01:35<07:34,  5.61s/it]  Ep 25/100 | Reward: 7279.80 | Actor Loss: 14019.4099 | Critic Loss: 2262259.7366
+                                                            Ep 50/100 | Reward: 7119.32 | Actor Loss: 14151.3172 | Critic Loss: 1635134.635994s/it]
+                                                            Ep 75/100 | Reward: 7234.07 | Actor Loss: 13965.9439 | Critic Loss: 2211544.374345s/it]
+                                                            Ep 100/100 | Reward: 7074.68 | Actor Loss: 13954.9851 | Critic Loss: 3138574.32013s/it]
+                                                            Trial 3 complete: 7028.85
+
+[I 2025-11-24 11:51:38,697] Trial 3 finished with value: 7028.854028959226 and parameters: {'lr': 0.001, 'alpha': 0.5, 'tau': 0.003, 'batch_size': 256}. Best is trial 7 with value: 7044.70972573005.
+Best trial: 7. Best value: 7044.71:  10%| | 1/10 [09:32<1:
+Trial 14:
+  lr=0.000100, alpha=0.30, tau=0.003000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 6565.89 | Actor Loss: -2084.9487 | Critic Loss: 77568.79406.01s/it]
+                                                                                          Ep 50/100 | Reward: 7266.78 | Actor Loss: -2188.8198 | Critic Loss: 151040.6246.71s/it]
+                                                                                          Ep 75/100 | Reward: 7416.22 | Actor Loss: -2099.7759 | Critic Loss: 262622.9395.00s/it]
+                                                                                          Ep 100/100 | Reward: 7238.09 | Actor Loss: -2103.0111 | Critic Loss: 87754.3455.85s/it]
+                                                                                          Trial 14 complete: 7176.80
+
+[I 2025-11-24 12:01:38,780] Trial 14 finished with value: 7176.79591411624 and parameters: {'lr': 0.0001, 'alpha': 0.3, 'tau': 0.003, 'batch_size': 256}. Best is trial 14 with value: 7176.79591411624.
+Best trial: 14. Best value: 7176.8:  20%|▏| 2/10 [19:32<1:
+Trial 22:
+  lr=0.000300, alpha=0.40, tau=0.003000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 7637.97 | Actor Loss: 18241.3130 | Critic Loss: 4305915.220004s/it]
+                                                                                          Ep 50/100 | Reward: 7457.76 | Actor Loss: 19098.3193 | Critic Loss: 5208037.420674s/it]
+                                                                                          Ep 75/100 | Reward: 7578.24 | Actor Loss: 19345.0680 | Critic Loss: 5556820.757580s/it]
+                                                                                          Ep 100/100 | Reward: 7413.93 | Actor Loss: 19415.6263 | Critic Loss: 4094431.92758s/it]
+                                                                                          Trial 22 complete: 7338.58
+
+[I 2025-11-24 12:12:11,500] Trial 22 finished with value: 7338.576199570144 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.003, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  30%|▎| 3/10 [30:05<1:
+Trial 32:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 4014.12 | Actor Loss: 10220.3737 | Critic Loss: 5136661.095676s/it]
+                                                                                          Ep 50/100 | Reward: 3915.45 | Actor Loss: 10904.6691 | Critic Loss: 4645051.922545s/it]
+                                                                                          Ep 75/100 | Reward: 4072.41 | Actor Loss: 11639.4432 | Critic Loss: 3547630.959454s/it]
+                                                                                          Ep 100/100 | Reward: 4056.74 | Actor Loss: 10745.6597 | Critic Loss: 6010726.26691s/it]
+                                                                                          Trial 32 complete: 3524.24
+
+[I 2025-11-24 12:19:56,245] Trial 32 finished with value: 3524.2387518615374 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  40%|▍| 4/10 [37:49<55
+Trial 40:
+  lr=0.000300, alpha=0.20, tau=0.010000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 4204.43 | Actor Loss: -17654.2841 | Critic Loss: 7294848.48636s/it]
+                                                                                          Ep 50/100 | Reward: 4105.70 | Actor Loss: -16805.6846 | Critic Loss: 16801368.3538s/it]
+                                                                                          Ep 75/100 | Reward: 4266.65 | Actor Loss: -16452.5050 | Critic Loss: 21305078.9750s/it]
+                                                                                          Ep 100/100 | Reward: 4248.62 | Actor Loss: -15559.0143 | Critic Loss: 3050204.8638s/it]
+                                                                                          Trial 40 complete: 3709.72
+
+[I 2025-11-24 12:28:19,489] Trial 40 finished with value: 3709.7182704363076 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.01, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  50%|▌| 5/10 [46:12<44
+Trial 48:
+  lr=0.000300, alpha=0.50, tau=0.003000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7423.27 | Actor Loss: 4072.9993 | Critic Loss: 153060.94494.38s/it]
+                                                                                          Ep 50/100 | Reward: 7251.72 | Actor Loss: 3661.8503 | Critic Loss: 257348.52554.26s/it]
+                                                                                          Ep 75/100 | Reward: 7370.84 | Actor Loss: 3667.6889 | Critic Loss: 224718.99884.07s/it]
+                                                                                          Ep 100/100 | Reward: 7214.65 | Actor Loss: 3588.3416 | Critic Loss: 258429.0423.28s/it]
+                                                                                          Trial 48 complete: 7163.60
+
+[I 2025-11-24 12:35:27,793] Trial 48 finished with value: 7163.59922550191 and parameters: {'lr': 0.0003, 'alpha': 0.5, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  60%|▌| 6/10 [53:20<33
+Trial 56:
+  lr=0.000100, alpha=0.30, tau=0.005000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 6239.78 | Actor Loss: -2025.4534 | Critic Loss: 70664.11285.38s/it]
+                                                                                          Ep 50/100 | Reward: 4081.07 | Actor Loss: -1988.8899 | Critic Loss: 57061.45505.65s/it]
+                                                                                          Ep 75/100 | Reward: 4663.61 | Actor Loss: 486.3615 | Critic Loss: 508377.0460 5.66s/it]
+                                                                                          Ep 100/100 | Reward: 4248.62 | Actor Loss: 2198.0562 | Critic Loss: 860019.0930.62s/it]
+                                                                                          Trial 56 complete: 3709.72
+
+[I 2025-11-24 12:44:45,863] Trial 56 finished with value: 3709.7182704363076 and parameters: {'lr': 0.0001, 'alpha': 0.3, 'tau': 0.005, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  70%|▋| 7/10 [1:02:38<
+Trial 64:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=128
+                                                                                          Ep 25/100 | Reward: 6795.61 | Actor Loss: -7369.5476 | Critic Loss: 512904.2663.33s/it]
+                                                                                          Ep 50/100 | Reward: 7119.32 | Actor Loss: -7521.0736 | Critic Loss: 1064963.001066s/it]
+                                                                                          Ep 75/100 | Reward: 7234.07 | Actor Loss: -7550.5439 | Critic Loss: 1696507.970860s/it]
+                                                                                          Ep 100/100 | Reward: 7074.68 | Actor Loss: -7703.3981 | Critic Loss: 1260966.00263s/it]
+                                                                                          Trial 64 complete: 7028.85
+
+[I 2025-11-24 12:52:25,565] Trial 64 finished with value: 7028.854028959226 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 128}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  80%|▊| 8/10 [1:10:18<
+Trial 72:
+  lr=0.000300, alpha=0.30, tau=0.003000, batch_size=256
+                                                                                          Ep 25/100 | Reward: 3779.97 | Actor Loss: 26480.7101 | Critic Loss: 12016404.19370s/it]
+                                                                                          Ep 50/100 | Reward: 3784.17 | Actor Loss: 26527.8777 | Critic Loss: 10031203.83383s/it]
+                                                                                          Ep 75/100 | Reward: 3946.73 | Actor Loss: 26699.5149 | Critic Loss: 12569473.47500s/it]
+                                                                                          Ep 100/100 | Reward: 3920.73 | Actor Loss: 26043.5491 | Critic Loss: 11043084.6450s/it]
+                                                                                          Trial 72 complete: 3381.14
+
+[I 2025-11-24 13:00:19,195] Trial 72 finished with value: 3381.1449762962775 and parameters: {'lr': 0.0003, 'alpha': 0.3, 'tau': 0.003, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  90%|▉| 9/10 [1:18:12<
+Trial 78:
+  lr=0.000300, alpha=0.10, tau=0.001000, batch_size=64
+                                                                                          Ep 25/100 | Reward: 7366.32 | Actor Loss: -2976.3045 | Critic Loss: 409080.2534.63s/it]
+                                                                                          Ep 50/100 | Reward: 7230.74 | Actor Loss: -2808.9474 | Critic Loss: 799417.1683.67s/it]
+                                                                                          Ep 75/100 | Reward: 6751.88 | Actor Loss: -2588.9840 | Critic Loss: 515801.6074.51s/it]
+                                                                                          Ep 100/100 | Reward: 5393.62 | Actor Loss: -2434.3636 | Critic Loss: 298368.430832s/it]
+                                                                                          Trial 78 complete: 3722.19
+
+[I 2025-11-24 13:02:59,146] Trial 78 finished with value: 3722.1870064893965 and parameters: {'lr': 0.0003, 'alpha': 0.1, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7: 100%|█| 10/10 [1:20:51
+
+============================================================
+Starting Optuna optimization for SAC
+Trials: 10 | Episodes per trial: 100
+============================================================
+
+  0%|                              | 0/10 [00:00<?, ?it/s]
+Trial 6:
+  lr=0.000100, alpha=0.30, tau=0.010000, batch_size=128
+
+  Trial 6:   2%|▏           | 2/100 [00:08<07:10,  4.40s/it]  Ep 25/100 | Reward: 5253.65 | Actor Loss: 4608.6142 | Critic Loss: 265620.19915:12,  4.11s/it]
+                                                              Ep 50/100 | Reward: 4095.71 | Actor Loss: 4115.2630 | Critic Loss: 223362.36834:01,  4.74s/it]
+                                                              Ep 75/100 | Reward: 4258.09 | Actor Loss: 4065.7216 | Critic Loss: 197670.01642:00,  4.63s/it]
+                                                              Ep 100/100 | Reward: 4257.96 | Actor Loss: 4138.4422 | Critic Loss: 171613.7579:04,  4.47s/it]
+                                                              Trial 6 complete: 3741.93
+
+[I 2025-11-24 11:50:22,825] Trial 6 finished with value: 3741.928322411108 and parameters: {'lr': 0.0001, 'alpha': 0.3, 'tau': 0.01, 'batch_size': 128}. Best is trial 7 with value: 7044.70972573005.
+Best trial: 7. Best value: 7044.71:  10%| | 1/10 [08:07<1:
+Trial 12:
+  lr=0.001000, alpha=0.10, tau=0.005000, batch_size=64
+                                                                                                 Ep 25/100 | Reward: 4001.71 | Actor Loss: 4758.2583 | Critic Loss: 158443.22965:32,  4.38s/it]
+                                                                                                 Ep 50/100 | Reward: 4081.69 | Actor Loss: 4489.4174 | Critic Loss: 586624.79023:48,  4.49s/it]
+                                                                                                 Ep 75/100 | Reward: 4239.95 | Actor Loss: 4557.5418 | Critic Loss: 445388.98611:50,  4.26s/it]
+                                                                                                 Ep 100/100 | Reward: 4230.11 | Actor Loss: 4674.6823 | Critic Loss: 382322.9568:04,  4.51s/it]
+                                                                                                 Trial 12 complete: 3722.61
+
+[I 2025-11-24 11:57:44,380] Trial 12 finished with value: 3722.6080351086543 and parameters: {'lr': 0.001, 'alpha': 0.1, 'tau': 0.005, 'batch_size': 64}. Best is trial 8 with value: 7163.59914929079.
+Best trial: 8. Best value: 7163.6:  20%|▏| 2/10 [15:28<1:0
+Trial 18:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=128
+                                                                                                 Ep 25/100 | Reward: 7023.39 | Actor Loss: 14.6706 | Critic Loss: 25123.02892<05:48,  4.59s/it]
+                                                                                                 Ep 50/100 | Reward: 7084.63 | Actor Loss: 1951.2237 | Critic Loss: 247953.18773:43,  4.37s/it]
+                                                                                                 Ep 75/100 | Reward: 7235.65 | Actor Loss: 2588.0917 | Critic Loss: 306838.11851:54,  4.42s/it]
+                                                                                                 Ep 100/100 | Reward: 7072.16 | Actor Loss: 3153.4619 | Critic Loss: 440355.6552:04,  5.00s/it]
+                                                                                                 Trial 18 complete: 6999.83
+
+[I 2025-11-24 12:05:29,924] Trial 18 finished with value: 6999.832361653973 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 128}. Best is trial 16 with value: 7339.2221940201.
+Best trial: 16. Best value: 7339.22:  30%|▎| 3/10 [23:14<5
+Trial 26:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                                 Ep 25/100 | Reward: 7043.57 | Actor Loss: 6999.6956 | Critic Loss: 905074.02925:37,  4.44s/it]
+                                                                                                 Ep 50/100 | Reward: 7119.94 | Actor Loss: 7194.8652 | Critic Loss: 1890045.1086:12,  4.95s/it]
+                                                                                                 Ep 75/100 | Reward: 7234.68 | Actor Loss: 7413.4641 | Critic Loss: 253837.49842:02,  4.72s/it]
+                                                                                                 Ep 100/100 | Reward: 7075.12 | Actor Loss: 7234.1154 | Critic Loss: 726385.5821:04,  4.42s/it]
+                                                                                                 Trial 26 complete: 7029.28
+
+[I 2025-11-24 12:13:05,425] Trial 26 finished with value: 7029.275057578483 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  40%|▍| 4/10 [30:49<45
+Trial 33:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                                 Ep 25/100 | Reward: 7453.77 | Actor Loss: 28050.7988 | Critic Loss: 27131201.89500,  4.49s/it]
+                                                                                                 Ep 50/100 | Reward: 7218.52 | Actor Loss: 27767.5352 | Critic Loss: 16088481.50251,  4.53s/it]
+                                                                                                 Ep 75/100 | Reward: 6949.25 | Actor Loss: 25263.6880 | Critic Loss: 8859283.153806,  4.86s/it]
+                                                                                                 Ep 100/100 | Reward: 6792.76 | Actor Loss: 22467.3951 | Critic Loss: 6379397.79475,  5.09s/it]
+                                                                                                 Trial 33 complete: 6736.07
+
+[I 2025-11-24 12:20:55,928] Trial 33 finished with value: 6736.070142734646 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  50%|▌| 5/10 [38:39<38
+Trial 41:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                                 Ep 25/100 | Reward: 6931.19 | Actor Loss: 3918.4191 | Critic Loss: 688243.12786:21,  5.02s/it]
+                                                                                                 Ep 50/100 | Reward: 6668.66 | Actor Loss: 3694.9994 | Critic Loss: 625997.65194:14,  5.00s/it]
+                                                                                                 Ep 75/100 | Reward: 6782.81 | Actor Loss: 3417.0887 | Critic Loss: 339370.10172:06,  4.88s/it]
+                                                                                                 Ep 100/100 | Reward: 6623.39 | Actor Loss: 3786.6974 | Critic Loss: 1055108.867504,  4.54s/it]
+                                                                                                 Trial 41 complete: 6571.45
+
+[I 2025-11-24 12:29:16,756] Trial 41 finished with value: 6571.447835467299 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  60%|▌| 6/10 [47:00<31
+Trial 49:
+  lr=0.001000, alpha=0.50, tau=0.003000, batch_size=256
+                                                                                                 Ep 25/100 | Reward: 7076.83 | Actor Loss: 65221.3211 | Critic Loss: 87923168.54259,  6.04s/it]
+                                                                                                 Ep 50/100 | Reward: 6831.83 | Actor Loss: 61585.3180 | Critic Loss: 111075447.5644,  5.96s/it]
+                                                                                                 Ep 75/100 | Reward: 6949.25 | Actor Loss: 62373.0766 | Critic Loss: 77032112.47697,  5.66s/it]
+                                                                                                 Ep 100/100 | Reward: 6792.76 | Actor Loss: 64536.8030 | Critic Loss: 64800556.3975,  5.44s/it]
+                                                                                                 Trial 49 complete: 6736.07
+
+[I 2025-11-24 12:39:00,511] Trial 49 finished with value: 6736.070142734646 and parameters: {'lr': 0.001, 'alpha': 0.5, 'tau': 0.003, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  70%|▋| 7/10 [56:44<25
+Trial 57:
+  lr=0.000100, alpha=0.30, tau=0.005000, batch_size=128
+                                                                                                 Ep 25/100 | Reward: 7137.93 | Actor Loss: 11031.7421 | Critic Loss: 2862617.652220,  4.22s/it]
+                                                                                                 Ep 50/100 | Reward: 6910.04 | Actor Loss: 9580.3209 | Critic Loss: 1718253.6927:33,  4.18s/it]
+                                                                                                 Ep 75/100 | Reward: 7031.05 | Actor Loss: 9301.8882 | Critic Loss: 3208906.5002:47,  4.12s/it]
+                                                                                                 Ep 100/100 | Reward: 6868.48 | Actor Loss: 9015.2340 | Critic Loss: 2231645.887504,  4.41s/it]
+                                                                                                 Trial 57 complete: 6802.79
+
+[I 2025-11-24 12:46:11,787] Trial 57 finished with value: 6802.786193644878 and parameters: {'lr': 0.0001, 'alpha': 0.3, 'tau': 0.005, 'batch_size': 128}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  80%|▊| 8/10 [1:03:55<
+Trial 65:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=128
+                                                                                                 Ep 25/100 | Reward: 7378.47 | Actor Loss: 17071.1175 | Critic Loss: 6461964.357543,  4.52s/it]
+                                                                                                 Ep 50/100 | Reward: 7354.24 | Actor Loss: 18046.9806 | Critic Loss: 5102230.249452,  4.56s/it]
+                                                                                                 Ep 75/100 | Reward: 7474.00 | Actor Loss: 17674.2349 | Critic Loss: 4459028.613702,  4.72s/it]
+                                                                                                 Ep 100/100 | Reward: 7305.87 | Actor Loss: 18139.8011 | Critic Loss: 6383356.01254,  4.47s/it]
+                                                                                                 Trial 65 complete: 7233.96
+
+[I 2025-11-24 12:53:53,208] Trial 65 finished with value: 7233.956109184945 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 128}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  90%|▉| 9/10 [1:11:36<
+Trial 74:
+  lr=0.000300, alpha=0.10, tau=0.001000, batch_size=64
+                                                                                                 Ep 25/100 | Reward: 7552.91 | Actor Loss: 5901.8683 | Critic Loss: 431567.44754:21,  3.45s/it]
+                                                                                                 Ep 50/100 | Reward: 7121.30 | Actor Loss: 5720.7541 | Critic Loss: 152275.94352:51,  3.36s/it]
+                                                                                                 Ep 75/100 | Reward: 7236.04 | Actor Loss: 5672.5179 | Critic Loss: 1135004.6518:22,  3.17s/it]
+                                                                                                 Ep 100/100 | Reward: 7209.10 | Actor Loss: 5993.3381 | Critic Loss: 767718.4134:03,  3.12s/it]
+                                                                                                 Trial 74 complete: 7357.13
+
+[I 2025-11-24 12:59:34,543] Trial 74 finished with value: 7357.133114470412 and parameters: {'lr': 0.0003, 'alpha': 0.1, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7: 100%|█| 10/10 [1:17:18
+
+============================================================
+Starting Optuna optimization for SAC
+Trials: 10 | Episodes per trial: 100
+============================================================
+
+  0%|                                                                                             | 0/10 [00:00<?, ?it/s]
+Trial 5:
+  lr=0.001000, alpha=0.50, tau=0.001000, batch_size=128
+
+  Trial 5:   2%|█▍                                                                      | 2/100 [00:08<07:02,  4.31s/it]
+  Trial 5:  17%|████████████                                                           | 17/100 [01:11<05:40,
+  Trial 5:  18%|████████████▊                                                          | 18/100 [01:15<05:32,
+  Trial 5:  19%|█████████████▍                                                         | 19/100 [01:19<05:27,
+  Trial 5:  20%|██████████████▏                                                        | 20
+  Trial 5:  21%|██████████████▉                                                        | 21/100 [01:27<05:24,
+  Trial 5:  22%|███████████████▌                                                       | 22
+  Trial 5:  23%|████████████████▎                                                      | 23
+  Trial 5:  24%|█████████████  Ep 25/100 | Reward: 6365.96 | Actor Loss: 15194.1366 | Critic Loss: 6526846.16684.12s/it]
+
+  Trial 5:  25%|█████████████████▊                                                     | 25
+  Trial 5:  26%|██████████████████▍                                                    | 26
+  Trial 5:  27%|███████████████████▏                                                   | 27
+  Trial 5:  28%|███████████████████▉                                                   | 28
+  Trial 5:  29%|████████████████████▌                                                  | 29
+  Trial 5:  30%|█████████████████████▎                                                 | 30
+  Trial 5:  31%|██████████████████████                                                 | 31
+  Trial 5:  32%|██████████████████████▋                                                | 32
+  Trial 5:  33%|███████████████████████▍                                               | 33
+  Trial 5:  34%|████████████████████████▏                                              | 34
+  Trial 5:  35%|████████████████████████▊                                              | 35
+  Trial 5:  36%|█████████████████████████▌                                             | 36
+  Trial 5:  37%|██████████████████████████▎                                            | 37
+  Trial 5:  38%|██████████████████████████▉                                            | 38
+  Trial 5:  39%|███████████████████████████▋                                           | 39
+  Trial 5:  40%|████████████████████████████▍                                          | 40
+  Trial 5:  41%|█████████████████████████████                                          | 41
+  Trial 5:  42%|█████████████████████████████▊                                         | 42
+  Trial 5:  43%|██████████████████████████████▌                                        | 43
+  Trial 5:  44%|███████████████████████████████▏                                       | 44
+  Trial 5:  45%|███████████████████████████████▉                                       | 45
+  Trial 5:  46%|████████████████████████████████▋                                      | 46
+  Trial 5:  47%|█████████████████████████████████▎                                     | 47
+  Trial 5:  48%|██████████████████████████████████                                     | 48
+  Trial 5:  49%|█████████████  Ep 50/100 | Reward: 4081.69 | Actor Loss: 14776.2593 | Critic Loss: 4563824.41314.73s/it]
+
+  Trial 5:  50%|███████████████████████████████████▌                                   | 50
+  Trial 5:  51%|████████████████████████████████████▏                                  | 51
+  Trial 5:  52%|████████████████████████████████████▉                                  | 52
+  Trial 5:  53%|█████████████████████████████████████▋                                 | 53
+  Trial 5:  54%|██████████████████████████████████████▎                                | 54
+  Trial 5:  55%|███████████████████████████████████████                                | 55
+  Trial 5:  56%|███████████████████████████████████████▊                               | 56
+  Trial 5:  57%|████████████████████████████████████████▍                              | 57
+  Trial 5:  58%|█████████████████████████████████████████▏                             | 58
+  Trial 5:  59%|█████████████████████████████████████████▉                             | 59
+  Trial 5:  60%|██████████████████████████████████████████▌                            | 60
+  Trial 5:  61%|███████████████████████████████████████████▎                           | 61
+  Trial 5:  62%|████████████████████████████████████████████                           | 62
+  Trial 5:  63%|████████████████████████████████████████████▋                          | 63
+  Trial 5:  64%|█████████████████████████████████████████████▍                         | 64
+  Trial 5:  65%|██████████████████████████████████████████████▏                        | 65
+  Trial 5:  66%|██████████████████████████████████████████████▊                        | 66
+  Trial 5:  67%|███████████████████████████████████████████████▌                       | 67
+  Trial 5:  68%|████████████████████████████████████████████████▎                      | 68
+  Trial 5:  69%|████████████████████████████████████████████████▉                      | 69
+  Trial 5:  70%|█████████████████████████████████████████████████▋                     | 70
+  Trial 5:  71%|██████████████████████████████████████████████████▍                    | 71
+  Trial 5:  72%|███████████████████████████████████████████████████                    | 72
+  Trial 5:  73%|███████████████████████████████████████████████████▊                   | 73
+  Trial 5:  74%|█████████████  Ep 75/100 | Reward: 4239.95 | Actor Loss: 15453.4283 | Critic Loss: 3920224.43484.63s/it]
+
+  Trial 5:  75%|█████████████████████████████████████████████████████▎                 | 75
+  Trial 5:  76%|█████████████████████████████████████████████████████▉                 | 76
+  Trial 5:  77%|██████████████████████████████████████████████████████▋                | 77
+  Trial 5:  78%|███████████████████████████████████████████████████████▍               | 78
+  Trial 5:  79%|████████████████████████████████████████████████████████               | 79
+  Trial 5:  80%|████████████████████████████████████████████████████████▊              | 80
+  Trial 5:  81%|█████████████████████████████████████████████████████████▌             | 81
+  Trial 5:  82%|██████████████████████████████████████████████████████████▏            | 82
+  Trial 5:  83%|██████████████████████████████████████████████████████████▉            | 83
+  Trial 5:  84%|███████████████████████████████████████████████████████████▋           | 84
+  Trial 5:  85%|████████████████████████████████████████████████████████████▎          | 85
+  Trial 5:  86%|█████████████████████████████████████████████████████████████          | 86
+  Trial 5:  87%|█████████████████████████████████████████████████████████████▊         | 87
+  Trial 5:  88%|██████████████████████████████████████████████████████████████▍        | 88
+  Trial 5:  89%|███████████████████████████████████████████████████████████████▏       | 89
+  Trial 5:  90%|███████████████████████████████████████████████████████████████▉       | 90
+  Trial 5:  91%|████████████████████████████████████████████████████████████████▌      | 91
+  Trial 5:  92%|█████████████████████████████████████████████████████████████████▎     | 92
+  Trial 5:  93%|██████████████████████████████████████████████████████████████████     | 93
+  Trial 5:  94%|██████████████████████████████████████████████████████████████████▋    | 94
+  Trial 5:  95%|███████████████████████████████████████████████████████████████████▍   | 95
+  Trial 5:  96%|████████████████████████████████████████████████████████████████████▏  | 96
+  Trial 5:  97%|████████████████████████████████████████████████████████████████████▊  | 97
+  Trial 5:  98%|█████████████████████████████████████████████████████████████████████▌ | 98
+  Trial 5:  99%|█████████████  Ep 100/100 | Reward: 4230.11 | Actor Loss: 15569.2558 | Critic Loss: 3837345.5910.46s/it]
+
+  Trial 5: 100%|██████████████████████████████████████████████████████████████████████| 100
+                               Trial 5 complete: 3722.61
+
+                                                                                           [I 2025-11-24 11:50:22,041] Trial 5 finished with value: 3722.6094143447344 and parameters: {'lr': 0.001, 'alpha': 0.5, 'tau': 0.001, 'batch_size': 128}. Best is trial 5 with value: 3722.60941434473.
+  0%|                                                                                      Best trial: 7. Best value: 7044.71:   0%|                                                  Best trial: 7. Best value: 7044.71:  10%|████▌                                         | 1/10 [08:07<1:13:05, 487.26s/it]
+Trial 11:
+  lr=0.000100, alpha=0.10, tau=0.001000, batch_size=256
+                                                                                            Ep 25/100 | Reward: 4301.95 | Actor Loss: 13322.6316 | Critic Loss: 3541090.20506.37s/it]
+                                                                                            Ep 50/100 | Reward: 4227.79 | Actor Loss: 13828.4646 | Critic Loss: 2190486.29755.59s/it]
+                                                                                            Ep 75/100 | Reward: 4387.48 | Actor Loss: 13851.0578 | Critic Loss: 2672519.33636.00s/it]
+                                                                                            Ep 100/100 | Reward: 4363.35 | Actor Loss: 14050.3692 | Critic Loss: 3728284.4038.82s/it]
+                                                                                            Trial 11 complete: 3825.22
+
+                                                                                           [I 2025-11-24 12:00:14,755] Trial 11 finished with value: 3825.224265458384 and parameters: {'lr': 0.0001, 'alpha': 0.1, 'tau': 0.001, 'batch_size': 256}. Best is trial 10 with value: 7169.58404905512.
+Best trial: 7. Best value: 7044.71:  10%|████▌                                         | 1/Best trial: 10. Best value: 7169.58:  10%|████▌                                        | 1/Best trial: 10. Best value: 7169.58:  20%|█████████                                    | 2/10 [17:59<1:13:13, 549.19s/it]
+Trial 20:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 3983.05 | Actor Loss: -6028.2256 | Critic Loss: 545137.6880 3.75s/it]
+                                                                                            Ep 50/100 | Reward: 4081.78 | Actor Loss: -6002.6126 | Critic Loss: 1437609.36174.00s/it]
+                                                                                            Ep 75/100 | Reward: 4239.95 | Actor Loss: -6417.0916 | Critic Loss: 621519.3579 4.62s/it]
+                                                                                            Ep 100/100 | Reward: 4230.11 | Actor Loss: -6330.0149 | Critic Loss: 505976.40474.45s/it]
+                                                                                            Trial 20 complete: 3722.61
+
+                                                                                           [I 2025-11-24 12:07:26,746] Trial 20 finished with value: 3722.6094143447344 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 16 with value: 7339.2221940201.
+Best trial: 10. Best value: 7169.58:  20%|█████████                                    | 2/Best trial: 16. Best value: 8044.7:  20%|█████████▏                                    | 2/Best trial: 16. Best value: 8044.7:  30%|██████████████▍                                 | 3/10 [25:11<57:49, 495.60s/it]
+Trial 27:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 4305.07 | Actor Loss: 25430.5288 | Critic Loss: 11485636.7178.80s/it]
+                                                                                            Ep 50/100 | Reward: 4081.69 | Actor Loss: 25177.6427 | Critic Loss: 5694962.34334.71s/it]
+                                                                                            Ep 75/100 | Reward: 4239.95 | Actor Loss: 23913.5433 | Critic Loss: 9768629.59754.40s/it]
+                                                                                            Ep 100/100 | Reward: 4230.11 | Actor Loss: 24449.4188 | Critic Loss: 8077432.3729.39s/it]
+                                                                                            Trial 27 complete: 3722.61
+
+                                                                                           [I 2025-11-24 12:15:01,965] Trial 27 finished with value: 3722.6094143447344 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 16. Best value: 8044.7:  30%|██████████████▍                                 | Best trial: 21. Best value: 8044.7:  30%|██████████████▍                                 | Best trial: 21. Best value: 8044.7:  40%|███████████████████▏                            | 4/10 [32:46<47:56, 479.35s/it]
+Trial 35:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 4002.20 | Actor Loss: 6409.0904 | Critic Loss: 9587268.3831 4.53s/it]
+                                                                                            Ep 50/100 | Reward: 6621.02 | Actor Loss: 6440.0983 | Critic Loss: 817921.4703  4.94s/it]
+                                                                                            Ep 75/100 | Reward: 7441.35 | Actor Loss: 5993.4746 | Critic Loss: 489658.3637  5.03s/it]
+                                                                                            Ep 100/100 | Reward: 7276.55 | Actor Loss: 6692.3715 | Critic Loss: 11781812.1147.00s/it]
+                                                                                            Trial 35 complete: 7197.10
+
+                                                                                           [I 2025-11-24 12:23:01,228] Trial 35 finished with value: 7197.096708053707 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  40%|███████████████████▏                            | Best trial: 21. Best value: 8044.7:  40%|███████████████████▏                            | Best trial: 21. Best value: 8044.7:  50%|████████████████████████                        | 5/10 [40:45<39:56, 479.32s/it]
+Trial 43:
+  lr=0.000300, alpha=0.20, tau=0.003000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 4120.22 | Actor Loss: -1525.7993 | Critic Loss: 1742869.72785.05s/it]
+                                                                                            Ep 50/100 | Reward: 4227.79 | Actor Loss: -2356.3857 | Critic Loss: 1162935.01754.94s/it]
+                                                                                            Ep 75/100 | Reward: 4387.48 | Actor Loss: -2691.8253 | Critic Loss: 1130584.40134.56s/it]
+                                                                                            Ep 100/100 | Reward: 4363.35 | Actor Loss: -2981.8842 | Critic Loss: 327231.65224.20s/it]
+                                                                                            Trial 43 complete: 3825.22
+
+                                                                                           [I 2025-11-24 12:31:03,070] Trial 43 finished with value: 3825.224265458384 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  50%|████████████████████████                        | Best trial: 21. Best value: 8044.7:  50%|████████████████████████                        | Best trial: 21. Best value: 8044.7:  60%|████████████████████████████▊                   | 6/10 [48:47<32:00, 480.18s/it]
+Trial 51:
+  lr=0.001000, alpha=0.50, tau=0.003000, batch_size=256
+                                                                                            Ep 25/100 | Reward: 7355.63 | Actor Loss: 13900.8136 | Critic Loss: 1883991.70225.84s/it]
+                                                                                            Ep 50/100 | Reward: 7252.35 | Actor Loss: 13806.8534 | Critic Loss: 2208669.34475.89s/it]
+                                                                                            Ep 75/100 | Reward: 7371.46 | Actor Loss: 13674.7946 | Critic Loss: 2501615.92545.48s/it]
+                                                                                            Ep 100/100 | Reward: 7215.09 | Actor Loss: 13542.3005 | Critic Loss: 1688761.5153.67s/it]
+                                                                                            Trial 51 complete: 7164.02
+
+                                                                                           [I 2025-11-24 12:40:34,330] Trial 51 finished with value: 7164.021633357246 and parameters: {'lr': 0.001, 'alpha': 0.5, 'tau': 0.003, 'batch_size': 256}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  60%|████████████████████████████▊                   | Best trial: 21. Best value: 8044.7:  60%|████████████████████████████▊                   | Best trial: 21. Best value: 8044.7:  70%|█████████████████████████████████▌              | 7/10 [58:18<25:29, 509.96s/it]
+Trial 59:
+  lr=0.000100, alpha=0.40, tau=0.005000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 4282.94 | Actor Loss: 2020.1722 | Critic Loss: 1477001.7544 4.04s/it]
+                                                                                            Ep 50/100 | Reward: 4811.82 | Actor Loss: 3904.6352 | Critic Loss: 1028769.3141 3.87s/it]
+                                                                                            Ep 75/100 | Reward: 4179.45 | Actor Loss: 2982.2317 | Critic Loss: 836227.0384  4.13s/it]
+                                                                                            Ep 100/100 | Reward: 3954.98 | Actor Loss: 1517.6064 | Critic Loss: 1010672.36804.23s/it]
+                                                                                            Trial 59 complete: 3266.91
+
+                                                                                           [I 2025-11-24 12:47:19,236] Trial 59 finished with value: 3266.9088359755388 and parameters: {'lr': 0.0001, 'alpha': 0.4, 'tau': 0.005, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  70%|████████████████████████████████▏             | 7/Best trial: 21. Best value: 8044.7:  70%|████████████████████████████████▏             | 7/Best trial: 21. Best value: 8044.7:  80%|████████████████████████████████████▊         | 8/10 [1:05:03<15:53, 476.62s/it]
+Trial 67:
+  lr=0.000300, alpha=0.10, tau=0.001000, batch_size=128
+                                                                                            Ep 25/100 | Reward: 4140.27 | Actor Loss: 2172.5348 | Critic Loss: 932867.3591  4.61s/it]
+                                                                                            Ep 50/100 | Reward: 4451.96 | Actor Loss: 2084.4619 | Critic Loss: 360844.4328  4.79s/it]
+                                                                                            Ep 75/100 | Reward: 4434.37 | Actor Loss: 1988.1426 | Critic Loss: 661238.5291  4.54s/it]
+                                                                                            Ep 100/100 | Reward: 4417.67 | Actor Loss: 2166.7622 | Critic Loss: 725046.8231 3.94s/it]
+                                                                                            Trial 67 complete: 3886.87
+
+                                                                                           [I 2025-11-24 12:54:56,699] Trial 67 finished with value: 3886.8725724095398 and parameters: {'lr': 0.0003, 'alpha': 0.1, 'tau': 0.001, 'batch_size': 128}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  80%|████████████████████████████████████▊         | 8/Best trial: 21. Best value: 8044.7:  80%|████████████████████████████████████▊         | 8/Best trial: 21. Best value: 8044.7:  90%|█████████████████████████████████████████▍    | 9/10 [1:12:40<07:50, 470.52s/it]
+Trial 75:
+  lr=0.000300, alpha=0.40, tau=0.001000, batch_size=64
+                                                                                            Ep 25/100 | Reward: 7361.60 | Actor Loss: 12681.2506 | Critic Loss: 993298.2845 3.56s/it]
+                                                                                            Ep 50/100 | Reward: 7252.54 | Actor Loss: 12717.3057 | Critic Loss: 1102026.81303.28s/it]
+                                                                                            Ep 75/100 | Reward: 7371.99 | Actor Loss: 12774.0762 | Critic Loss: 1562866.94072.95s/it]
+                                                                                            Ep 100/100 | Reward: 7075.12 | Actor Loss: 12419.3074 | Critic Loss: 2663935.0108.60s/it]
+                                                                                            Trial 75 complete: 7029.28
+
+                                                                                           [I 2025-11-24 13:00:17,947] Trial 75 finished with value: 7029.276436814563 and parameters: {'lr': 0.0003, 'alpha': 0.4, 'tau': 0.001, 'batch_size': 64}. Best is trial 21 with value: 8044.69977207486.
+Best trial: 21. Best value: 8044.7:  90%|█████████████████████████████████████████▍    | 9/Best trial: 21. Best value: 8044.7:  90%|█████████████████████████████████████████▍    | 9/Best trial: 21. Best value: 8044.7: 100%|█████████████████████████████████████████████| 10/Best trial: 21. Best value: 8044.7: 100%|█████████████████████████████████████████████| 10/10 [1:18:02<00:00, 468.21s/it]
