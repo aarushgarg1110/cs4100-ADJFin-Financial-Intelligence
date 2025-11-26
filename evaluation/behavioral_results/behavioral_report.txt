@@ -1,279 +1,173 @@
 ================================================================================
-BEHAVIORAL ANALYSIS REPORT
+BEHAVIORAL ANALYSIS REPORT (Discrete Action Space)
 ================================================================================
 
-
-============================================================
-Agent: DQN
-============================================================
-
-Market Timing Score: 0.000
-  (Higher = better risk reduction in bear markets)
-
-Debt Priority Score: 0.693
-  (Higher = prioritizes high-interest credit card debt)
-
-Emergency Fund Priority: 1.000
-  (Target: 1.0 = $12k emergency fund in 20s)
-
-Average Actions by Market Regime:
-
-  NORMAL Market:
-    Stock Allocation: 1.000
-    Bond Allocation: 0.000
-    Real Estate Allocation: 1.000
-    Emergency Fund Contribution: 1.000
-    Credit Card Payment: 0.997
-    Student Loan Payment: 1.000
-
-  BULL Market:
-    Stock Allocation: 1.000
-    Bond Allocation: 0.000
-    Real Estate Allocation: 1.000
-    Emergency Fund Contribution: 1.000
-    Credit Card Payment: 1.000
-    Student Loan Payment: 1.000
-
-  BEAR Market:
-    Stock Allocation: 1.000
-    Bond Allocation: 0.000
-    Real Estate Allocation: 1.000
-    Emergency Fund Contribution: 1.000
-    Credit Card Payment: 1.000
-    Student Loan Payment: 1.000
-
-============================================================
-Agent: PPO
-============================================================
-
-Market Timing Score: 0.000
-  (Higher = better risk reduction in bear markets)
-
-Debt Priority Score: 1.662
-  (Higher = prioritizes high-interest credit card debt)
-
-Emergency Fund Priority: 1.000
-  (Target: 1.0 = $12k emergency fund in 20s)
-
-Average Actions by Market Regime:
-
-  NORMAL Market:
-    Stock Allocation: 0.962
-    Bond Allocation: 0.383
-    Real Estate Allocation: 0.497
-    Emergency Fund Contribution: 0.893
-    Credit Card Payment: 0.501
-    Student Loan Payment: 0.496
-
-  BULL Market:
-    Stock Allocation: 0.926
-    Bond Allocation: 0.379
-    Real Estate Allocation: 0.500
-    Emergency Fund Contribution: 0.913
-    Credit Card Payment: 0.500
-    Student Loan Payment: 0.499
-
-  BEAR Market:
-    Stock Allocation: 0.983
-    Bond Allocation: 0.409
-    Real Estate Allocation: 0.500
-    Emergency Fund Contribution: 0.919
-    Credit Card Payment: 0.500
-    Student Loan Payment: 0.500
-
-============================================================
-Agent: SAC
-============================================================
-
-Market Timing Score: 0.000
-  (Higher = better risk reduction in bear markets)
-
-Debt Priority Score: 100.000
-  (Higher = prioritizes high-interest credit card debt)
-
-Emergency Fund Priority: 0.744
-  (Target: 1.0 = $12k emergency fund in 20s)
-
-Average Actions by Market Regime:
-
-  NORMAL Market:
-    Stock Allocation: 0.268
-    Bond Allocation: 0.003
-    Real Estate Allocation: 1.000
-    Emergency Fund Contribution: 0.503
-    Credit Card Payment: 1.000
-    Student Loan Payment: 0.000
-
-  BULL Market:
-    Stock Allocation: 0.178
-    Bond Allocation: 0.000
-    Real Estate Allocation: 1.000
-    Emergency Fund Contribution: 0.423
-    Credit Card Payment: 1.000
-    Student Loan Payment: 0.000
-
-  BEAR Market:
-    Stock Allocation: 0.439
-    Bond Allocation: 0.000
-    Real Estate Allocation: 1.000
-    Emergency Fund Contribution: 0.334
-    Credit Card Payment: 1.000
-    Student Loan Payment: 0.000
 
 ============================================================
 Agent: 60_40
 ============================================================
 
-Market Timing Score: 0.000
-  (Higher = better risk reduction in bear markets)
+Market Timing Score: 0.0%
+  (Stock % reduction from bull to bear markets)
 
-Debt Priority Score: 0.500
-  (Higher = prioritizes high-interest credit card debt)
+Debt Priority Score: 20.0%
+  (Average % of income allocated to debt)
 
-Emergency Fund Priority: 0.249
-  (Target: 1.0 = $12k emergency fund in 20s)
+Top 5 Most Used Strategies:
+  1. Action 24 (100.0%): Balanced Classic + Classic 60/40
 
-Average Actions by Market Regime:
+Average Allocations by Market Regime:
 
   NORMAL Market:
-    Stock Allocation: 0.600
-    Bond Allocation: 0.400
-    Real Estate Allocation: 0.000
-    Emergency Fund Contribution: 0.020
-    Credit Card Payment: 0.010
-    Student Loan Payment: 0.010
+    Money: 60% invest, 20% debt, 20% emergency
+    Invest: 60% stocks, 40% bonds, 0% RE
 
   BULL Market:
-    Stock Allocation: 0.600
-    Bond Allocation: 0.400
-    Real Estate Allocation: 0.000
-    Emergency Fund Contribution: 0.020
-    Credit Card Payment: 0.010
-    Student Loan Payment: 0.010
+    Money: 60% invest, 20% debt, 20% emergency
+    Invest: 60% stocks, 40% bonds, 0% RE
 
   BEAR Market:
-    Stock Allocation: 0.600
-    Bond Allocation: 0.400
-    Real Estate Allocation: 0.000
-    Emergency Fund Contribution: 0.020
-    Credit Card Payment: 0.010
-    Student Loan Payment: 0.010
+    Money: 60% invest, 20% debt, 20% emergency
+    Invest: 60% stocks, 40% bonds, 0% RE
 
 ============================================================
 Agent: DEBT_AVALANCHE
 ============================================================
 
-Market Timing Score: 0.000
-  (Higher = better risk reduction in bear markets)
+Market Timing Score: 0.0%
+  (Stock % reduction from bull to bear markets)
 
-Debt Priority Score: 1.529
-  (Higher = prioritizes high-interest credit card debt)
+Debt Priority Score: 50.0%
+  (Average % of income allocated to debt)
 
-Emergency Fund Priority: 0.477
-  (Target: 1.0 = $12k emergency fund in 20s)
+Top 5 Most Used Strategies:
+  1. Action 58 (100.0%): Maximum Debt Reduction + Conservative Bonds
 
-Average Actions by Market Regime:
+Average Allocations by Market Regime:
 
   NORMAL Market:
-    Stock Allocation: 0.200
-    Bond Allocation: 0.600
-    Real Estate Allocation: 0.200
-    Emergency Fund Contribution: 0.022
-    Credit Card Payment: 0.002
-    Student Loan Payment: 0.099
+    Money: 30% invest, 50% debt, 20% emergency
+    Invest: 40% stocks, 50% bonds, 10% RE
 
   BULL Market:
-    Stock Allocation: 0.200
-    Bond Allocation: 0.600
-    Real Estate Allocation: 0.200
-    Emergency Fund Contribution: 0.023
-    Credit Card Payment: 0.002
-    Student Loan Payment: 0.099
+    Money: 30% invest, 50% debt, 20% emergency
+    Invest: 40% stocks, 50% bonds, 10% RE
 
   BEAR Market:
-    Stock Allocation: 0.200
-    Bond Allocation: 0.600
-    Real Estate Allocation: 0.200
-    Emergency Fund Contribution: 0.023
-    Credit Card Payment: 0.002
-    Student Loan Payment: 0.099
+    Money: 30% invest, 50% debt, 20% emergency
+    Invest: 40% stocks, 50% bonds, 10% RE
 
 ============================================================
 Agent: AGE_BASED
 ============================================================
 
-Market Timing Score: 0.000
-  (Higher = better risk reduction in bear markets)
+Market Timing Score: 1.1%
+  (Stock % reduction from bull to bear markets)
 
-Debt Priority Score: 0.667
-  (Higher = prioritizes high-interest credit card debt)
+Debt Priority Score: 18.3%
+  (Average % of income allocated to debt)
 
-Emergency Fund Priority: 0.361
-  (Target: 1.0 = $12k emergency fund in 20s)
+Top 5 Most Used Strategies:
+  1. Action 10 (33.3%): Aggressive Invest + Growth Stocks
+  2. Action 21 (26.7%): Balanced Classic + Balanced Portfolio
+  3. Action 20 (23.3%): Balanced Classic + Moderate Growth
+  4. Action 40 (16.7%): Moderate Safety-Focused + Conservative Bonds
 
-Average Actions by Market Regime:
+Average Allocations by Market Regime:
 
   NORMAL Market:
-    Stock Allocation: 0.593
-    Bond Allocation: 0.407
-    Real Estate Allocation: 0.000
-    Emergency Fund Contribution: 0.030
-    Credit Card Payment: 0.020
-    Student Loan Payment: 0.020
+    Money: 61% invest, 19% debt, 21% emergency
+    Invest: 56% stocks, 34% bonds, 10% RE
 
   BULL Market:
-    Stock Allocation: 0.610
-    Bond Allocation: 0.390
-    Real Estate Allocation: 0.000
-    Emergency Fund Contribution: 0.030
-    Credit Card Payment: 0.020
-    Student Loan Payment: 0.020
+    Money: 64% invest, 18% debt, 19% emergency
+    Invest: 60% stocks, 30% bonds, 10% RE
 
   BEAR Market:
-    Stock Allocation: 0.611
-    Bond Allocation: 0.389
-    Real Estate Allocation: 0.000
-    Emergency Fund Contribution: 0.030
-    Credit Card Payment: 0.020
-    Student Loan Payment: 0.020
+    Money: 62% invest, 18% debt, 20% emergency
+    Invest: 58% stocks, 32% bonds, 10% RE
 
 ============================================================
 Agent: MARKOWITZ
 ============================================================
 
-Market Timing Score: 0.400
-  (Higher = better risk reduction in bear markets)
+Market Timing Score: 40.0%
+  (Stock % reduction from bull to bear markets)
 
-Debt Priority Score: 0.667
-  (Higher = prioritizes high-interest credit card debt)
+Debt Priority Score: 18.8%
+  (Average % of income allocated to debt)
 
-Emergency Fund Priority: 0.361
-  (Target: 1.0 = $12k emergency fund in 20s)
+Top 5 Most Used Strategies:
+  1. Action 21 (57.8%): Balanced Classic + Balanced Portfolio
+  2. Action 10 (24.2%): Aggressive Invest + Growth Stocks
+  3. Action 44 (18.1%): Moderate Safety-Focused + Bond Heavy
 
-Average Actions by Market Regime:
+Average Allocations by Market Regime:
 
   NORMAL Market:
-    Stock Allocation: 0.500
-    Bond Allocation: 0.400
-    Real Estate Allocation: 0.100
-    Emergency Fund Contribution: 0.030
-    Credit Card Payment: 0.020
-    Student Loan Payment: 0.020
+    Money: 60% invest, 20% debt, 20% emergency
+    Invest: 50% stocks, 40% bonds, 10% RE
 
   BULL Market:
-    Stock Allocation: 0.700
-    Bond Allocation: 0.200
-    Real Estate Allocation: 0.100
-    Emergency Fund Contribution: 0.030
-    Credit Card Payment: 0.020
-    Student Loan Payment: 0.020
+    Money: 70% invest, 15% debt, 15% emergency
+    Invest: 70% stocks, 20% bonds, 10% RE
 
   BEAR Market:
-    Stock Allocation: 0.300
-    Bond Allocation: 0.600
-    Real Estate Allocation: 0.100
-    Emergency Fund Contribution: 0.030
-    Credit Card Payment: 0.020
-    Student Loan Payment: 0.020
+    Money: 50% invest, 20% debt, 30% emergency
+    Invest: 30% stocks, 60% bonds, 10% RE
+
+============================================================
+Agent: PPO
+============================================================
+
+Market Timing Score: 0.0%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 20.0%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 38 (100.0%): Moderate Safety-Focused + Moderate Growth
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 50% invest, 20% debt, 30% emergency
+    Invest: 60% stocks, 30% bonds, 10% RE
+
+  BULL Market:
+    Money: 50% invest, 20% debt, 30% emergency
+    Invest: 60% stocks, 30% bonds, 10% RE
+
+  BEAR Market:
+    Money: 50% invest, 20% debt, 30% emergency
+    Invest: 60% stocks, 30% bonds, 10% RE
+
+============================================================
+Agent: DQN
+============================================================
+
+Market Timing Score: 0.0%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 10.0%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 1 (100.0%): Very Aggressive Invest + Growth Stocks
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 80% invest, 10% debt, 10% emergency
+    Invest: 70% stocks, 20% bonds, 10% RE
+
+  BULL Market:
+    Money: 80% invest, 10% debt, 10% emergency
+    Invest: 70% stocks, 20% bonds, 10% RE
+
+  BEAR Market:
+    Money: 80% invest, 10% debt, 10% emergency
+    Invest: 70% stocks, 20% bonds, 10% RE
 
 ================================================================================

@@ -1,227 +1,139 @@
 ================================================================================
-ABLATION STUDY REPORT: Market Volatility Impact
+ABLATION STUDY REPORT: Market Volatility Impact (Discrete Actions)
 ================================================================================
 
-
-============================================================
-Agent: DQN
-============================================================
-
-Final Net Worth:
-  With Volatility:    $5,900,702 ± $90,044
-  Without Volatility: $6,969,063 ± $482,654
-  Impact: -15.3%
-
-Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.172
-  Max Drawdown:   18.5%
-  Volatility:     84.5%
-
-Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.174
-  Max Drawdown:   0.3%
-  Volatility:     85.0%
-
-============================================================
-Agent: PPO
-============================================================
-
-Final Net Worth:
-  With Volatility:    $5,580,636 ± $71,638
-  Without Volatility: $6,397,125 ± $421,789
-  Impact: -12.8%
-
-Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.407
-  Max Drawdown:   12.1%
-  Volatility:     61.0%
-
-Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.405
-  Max Drawdown:   0.4%
-  Volatility:     62.0%
-
-============================================================
-Agent: SAC
-============================================================
-
-Final Net Worth:
-  With Volatility:    $4,521,871 ± $817,040
-  Without Volatility: $3,759,906 ± $471,847
-  Impact: +20.3%
-
-Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.287
-  Max Drawdown:   19.6%
-  Volatility:     74.8%
-
-Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.272
-  Max Drawdown:   3.5%
-  Volatility:     76.3%
 
 ============================================================
 Agent: 60_40
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $3,778,795 ± $68,056
-  Without Volatility: $4,654,515 ± $392,323
-  Impact: -18.8%
+  With Volatility:    $2,001,150 ± $44,943
+  Without Volatility: $3,292,159 ± $237,936
+  Impact: -39.2%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.482
-  Max Drawdown:   15.5%
-  Volatility:     66.6%
+  Sharpe Ratio:   0.083
+  Max Drawdown:   13.0%
+  Volatility:     1109.9%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.504
-  Max Drawdown:   3.6%
-  Volatility:     66.9%
+  Sharpe Ratio:   0.160
+  Max Drawdown:   8.9%
+  Volatility:     400.9%
 
 ============================================================
 Agent: AGE_BASED
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $3,848,702 ± $72,731
-  Without Volatility: $5,006,492 ± $454,311
-  Impact: -23.1%
+  With Volatility:    $2,137,332 ± $51,020
+  Without Volatility: $3,725,009 ± $311,345
+  Impact: -42.6%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.454
-  Max Drawdown:   17.1%
-  Volatility:     68.2%
+  Sharpe Ratio:   0.064
+  Max Drawdown:   14.4%
+  Volatility:     735.4%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.478
-  Max Drawdown:   3.3%
-  Volatility:     72.4%
+  Sharpe Ratio:   0.163
+  Max Drawdown:   8.4%
+  Volatility:     449.2%
 
 ============================================================
 Agent: MARKOWITZ
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $3,807,426 ± $66,409
-  Without Volatility: $4,441,724 ± $364,845
-  Impact: -14.3%
+  With Volatility:    $2,044,825 ± $44,305
+  Without Volatility: $3,161,601 ± $223,271
+  Impact: -35.3%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.460
-  Max Drawdown:   13.4%
-  Volatility:     68.1%
+  Sharpe Ratio:   0.013
+  Max Drawdown:   11.8%
+  Volatility:     16847.3%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.470
-  Max Drawdown:   3.5%
-  Volatility:     72.4%
+  Sharpe Ratio:   0.159
+  Max Drawdown:   8.9%
+  Volatility:     390.3%
 
 ============================================================
 Agent: DEBT_AVALANCHE
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $3,662,314 ± $61,203
-  Without Volatility: $3,355,142 ± $239,192
-  Impact: +9.2%
+  With Volatility:    $1,159,941 ± $30,192
+  Without Volatility: $1,660,786 ± $116,506
+  Impact: -30.2%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.409
-  Max Drawdown:   16.2%
-  Volatility:     276.8%
+  Sharpe Ratio:   0.196
+  Max Drawdown:   9.2%
+  Volatility:     256.0%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.410
-  Max Drawdown:   3.6%
-  Volatility:     159.8%
+  Sharpe Ratio:   0.245
+  Max Drawdown:   13.7%
+  Volatility:     166.4%
 
 ============================================================
 Agent: EQUAL_WEIGHT
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $3,807,274 ± $69,568
-  Without Volatility: $4,147,837 ± $329,047
-  Impact: -8.2%
+  With Volatility:    $2,029,897 ± $45,841
+  Without Volatility: $2,989,308 ± $203,770
+  Impact: -32.1%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.481
-  Max Drawdown:   23.5%
-  Volatility:     66.7%
+  Sharpe Ratio:   0.085
+  Max Drawdown:   20.5%
+  Volatility:     308.6%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.495
-  Max Drawdown:   3.7%
-  Volatility:     66.9%
+  Sharpe Ratio:   0.008
+  Max Drawdown:   9.1%
+  Volatility:     7780.6%
 
 ============================================================
-Agent: ALL_STOCKS
+Agent: PPO
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $4,160,209 ± $81,428
-  Without Volatility: $6,489,030 ± $586,150
-  Impact: -35.9%
+  With Volatility:    $1,819,475 ± $41,197
+  Without Volatility: $3,053,556 ± $215,393
+  Impact: -40.4%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.420
-  Max Drawdown:   21.6%
-  Volatility:     74.6%
+  Sharpe Ratio:   0.079
+  Max Drawdown:   11.1%
+  Volatility:     450.3%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.466
-  Max Drawdown:   2.8%
-  Volatility:     84.6%
+  Sharpe Ratio:   0.158
+  Max Drawdown:   9.0%
+  Volatility:     389.7%
 
 ============================================================
-Agent: CASH_HOARDER
+Agent: DQN
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $4,692,112 ± $39,234
-  Without Volatility: $4,288,069 ± $179,570
-  Impact: +9.4%
+  With Volatility:    $2,418,040 ± $56,069
+  Without Volatility: $4,562,607 ± $350,081
+  Impact: -47.0%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.368
-  Max Drawdown:   0.0%
-  Volatility:     56.0%
+  Sharpe Ratio:   0.096
+  Max Drawdown:   16.1%
+  Volatility:     662.5%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.354
-  Max Drawdown:   0.4%
-  Volatility:     56.7%
-
-============================================================
-Agent: DEBT_IGNORER
-============================================================
-
-Final Net Worth:
-  With Volatility:    $3,732,604 ± $67,935
-  Without Volatility: $4,602,476 ± $389,934
-  Impact: -18.9%
-
-Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.510
-  Max Drawdown:   15.9%
-  Volatility:     71.5%
-
-Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.543
-  Max Drawdown:   3.9%
-  Volatility:     66.3%
-
-================================================================================
-KEY FINDINGS
-================================================================================
-
-RL Advantage (vs Expert Baselines):
-  With Volatility:    +41.1%
-  Without Volatility: +32.1%
-  Advantage Loss:     9.0 percentage points
-
-CONCLUSION:
-  RL agents' advantage comes PRIMARILY from market timing ability
+  Sharpe Ratio:   0.166
+  Max Drawdown:   8.3%
+  Volatility:     411.4%
 
 ================================================================================
