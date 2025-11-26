@@ -80,34 +80,41 @@ def main():
     parser.add_argument('--agent', type=str, choices=['dqn', 'ppo'], required=True, help='Agent to train')
     parser.add_argument('--episodes', type=int, default=1000, help='Number of episodes')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
+    parser.add_argument('--save-path', type=str, default=None, help='Path to save model (default: models/discrete_{agent}_model.pth)')
     
     # DQN hyperparameters
     parser.add_argument('--lr', type=float, default=1e-5, help='Learning rate')
+    parser.add_argument('--gamma', type=float, default=0.99, help='Discount factor')
     parser.add_argument('--batch-size', type=int, default=64, help='Batch size (DQN only)')
     parser.add_argument('--epsilon-decay', type=float, default=0.995, help='Epsilon decay (DQN only)')
     parser.add_argument('--target-update-freq', type=int, default=10, help='Target update frequency (DQN only)')
     
     # PPO hyperparameters
-    parser.add_argument('--gamma', type=float, default=0.99, help='Discount factor (PPO only)')
     parser.add_argument('--clip-epsilon', type=float, default=0.2, help='PPO clip epsilon')
     parser.add_argument('--epochs', type=int, default=10, help='PPO epochs per update')
     
     args = parser.parse_args()
     
+    # Set default save path if not provided
+    if args.save_path is None:
+        args.save_path = f'models/discrete_{args.agent}_model.pth'
+    
     print(f"Training {args.agent.upper()} for {args.episodes} episodes...")
+    print(f"Model will be saved to: {args.save_path}")
     
     env = FinanceEnv()
     
     if args.agent == 'dqn':
-        print(f"Hyperparameters: lr={args.lr}, batch_size={args.batch_size}, epsilon_decay={args.epsilon_decay}, target_update_freq={args.target_update_freq}")
+        print(f"Hyperparameters: lr={args.lr}, gamma={args.gamma}, batch_size={args.batch_size}, epsilon_decay={args.epsilon_decay}, target_update_freq={args.target_update_freq}")
         agent = DiscreteDQNAgent(
             lr=args.lr,
+            gamma=args.gamma,
             batch_size=args.batch_size,
             epsilon_decay=args.epsilon_decay,
             target_update_freq=args.target_update_freq
         )
         rewards, losses = agent.train(env, num_episodes=args.episodes, seed=args.seed, 
-                                      save_path='models/discrete_dqn_model.pth')
+                                      save_path=args.save_path)
         plot_dqn_training(rewards, losses)
         
     elif args.agent == 'ppo':
@@ -119,7 +126,7 @@ def main():
             epochs=args.epochs
         )
         rewards, policy_losses, value_losses = agent.train(env, num_episodes=args.episodes, seed=args.seed,
-                                                           save_path='models/discrete_ppo_model.pth')
+                                                           save_path=args.save_path)
         plot_ppo_training(rewards, policy_losses, value_losses)
     
     print(f"\n✓ Training complete! Final avg reward: {np.mean(rewards[-100:]):.2f}")

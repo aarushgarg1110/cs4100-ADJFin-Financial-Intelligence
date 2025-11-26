@@ -116,7 +116,7 @@ def main():
     print(f'- This means: diversification provides NO risk reduction')
     
     print("\n" + "="*60)
-    print("Files saved to project root directory")
+    print("Files saved")
     print("="*60)
 
 

@@ -363,10 +363,10 @@ class FinanceEnv(gym.Env):
         debt_free_bonus = self.DEBT_FREE_BONUS if (self.credit_card_debt + self.student_loan) == 0 else 0
         
         # === HYBRID REWARD ===
-        # 70% wealth accumulation + 30% risk-adjusted returns
+        # 50% wealth accumulation + 50% risk-adjusted returns
         total_reward = (
-            0.7 * wealth_reward +
-            0.3 * sharpe_reward +
+            0.5 * wealth_reward +
+            0.5 * sharpe_reward +
             bankruptcy_penalty +
             debt_interest_penalty +
             emergency_bonus +
