@@ -1,5 +1,6 @@
 import numpy as np
 import gymnasium as gym
+from collections import deque
 from .market_data import MarketDataManager
 
 # ===== DISCRETE ACTION SPACE DEFINITIONS =====
@@ -143,6 +144,10 @@ class FinanceEnv(gym.Env):
         # Initialize market regime and macro data
         self.current_regime = 0
         self.inflation, self.rates = self.market_data.simulate_macro_factors()
+        
+        # Sharpe ratio tracking
+        self.portfolio_returns = deque(maxlen=12)  # Last 12 months
+        self.prev_net_worth = None
         
         return self._get_state(), {}
     
@@ -306,47 +311,66 @@ class FinanceEnv(gym.Env):
     
     def _calculate_reward(self):
         """
-        Calculate reward based on distance to $2M target, with bonuses and penalties.
+        Hybrid reward: 70% wealth accumulation + 30% Sharpe ratio (risk-adjusted return)
         
-        Reward components (proportional):
-        - Distance to target: [0, 1] (55% of positive reward)
-        - Exceed bonus: [0, 0.3] (17%)
-        - Emergency bonus: [0, 0.2] (11%)
-        - Debt-free bonus: [0, 0.3] (17%)
-        - Bankruptcy penalty: -5
-        - Debt interest penalty: [-0.5, 0]
-        
-        Total range: [-5, 1.8]
+        Components:
+        - Wealth reward: net_worth / $1M (encourages getting rich)
+        - Sharpe ratio: (return - risk_free) / volatility (encourages smart risk-taking)
+        - Penalties: bankruptcy, debt interest
+        - Bonuses: emergency fund, debt-free
         """
         # Calculate net worth
         net_worth = (self.stocks + self.bonds + self.real_estate + 
                      self.emergency_fund - self.credit_card_debt - self.student_loan)
         
-        # Primary: Maximize net worth (scaled by $1M for reasonable range)
-        wealth_reward = net_worth / 1_000_000  # $1M = 1.0, $2M = 2.0, etc.
+        # === WEALTH REWARD ===
+        wealth_reward = net_worth / 1_000_000  # $1M = 1.0, $2M = 2.0
         
-        # Penalties
+        # === SHARPE RATIO REWARD ===
+        if self.prev_net_worth is None or self.prev_net_worth <= 0:
+            # First step or bankruptcy: no Sharpe calculation
+            self.prev_net_worth = max(net_worth, 1)
+            portfolio_return = 0
+            sharpe_reward = 0
+        else:
+            # Calculate portfolio return
+            portfolio_return = (net_worth - self.prev_net_worth) / self.prev_net_worth
+            self.portfolio_returns.append(portfolio_return)
+            
+            # Calculate Sharpe ratio
+            if len(self.portfolio_returns) > 1:
+                volatility = np.std(self.portfolio_returns)
+                risk_free_rate = 0.02 / 12  # 2% annual = 0.00167 monthly
+                sharpe_reward = (portfolio_return - risk_free_rate) / (volatility + 1e-6)
+            else:
+                # Not enough data yet
+                sharpe_reward = 0
+            
+            # Update for next step
+            self.prev_net_worth = net_worth
+        
+        # === PENALTIES ===
         bankruptcy_penalty = self.BANKRUPTCY_PENALTY if net_worth < self.BANKRUPTCY_THRESHOLD else 0
         
-        # Debt interest cost (monthly penalty)
         debt_interest_penalty = 0
         if self.credit_card_debt > 0:
             debt_interest_penalty -= (self.credit_card_debt * self.params['credit_card_apr'] / 12) / 1000
         if self.student_loan > 0:
             debt_interest_penalty -= (self.student_loan * self.params['student_loan_apr'] / 12) / 1000
-        # Range: [-0.5, 0] for typical debt levels
         
-        # Bonuses
+        # === BONUSES ===
         emergency_bonus = self.EMERGENCY_BONUS if self.emergency_fund >= self.EMERGENCY_TARGET else 0
         debt_free_bonus = self.DEBT_FREE_BONUS if (self.credit_card_debt + self.student_loan) == 0 else 0
         
-        # Total reward
+        # === HYBRID REWARD ===
+        # 70% wealth accumulation + 30% risk-adjusted returns
         total_reward = (
-            wealth_reward +
+            0.7 * wealth_reward +
+            0.3 * sharpe_reward +
             bankruptcy_penalty +
             debt_interest_penalty +
             emergency_bonus +
             debt_free_bonus
         )
         
-        return np.clip(total_reward, -5, 10)  # Increased upper bound for higher net worth
+        return np.clip(total_reward, -5, 10)

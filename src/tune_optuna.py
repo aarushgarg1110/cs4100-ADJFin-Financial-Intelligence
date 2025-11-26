@@ -22,12 +22,13 @@ def train_trial(agent_type, config, env, num_episodes, trial_num, print_freq=50)
     
     # Create agent based on type
     if agent_type == 'dqn':
-        print(f"  lr={config['lr']:.6f}, batch_size={config['batch_size']}, epsilon_decay={config['epsilon_decay']:.4f}, target_update_freq={config['target_update_freq']}")
+        print(f"  lr={config['lr']:.6f}, batch_size={config['batch_size']}, epsilon_decay={config['epsilon_decay']:.4f}, target_update_freq={config['target_update_freq']}, gamma={config['gamma']:.2f}")
         agent = DiscreteDQNAgent(
             lr=config['lr'],
             batch_size=config['batch_size'],
             epsilon_decay=config['epsilon_decay'],
-            target_update_freq=config['target_update_freq']
+            target_update_freq=config['target_update_freq'],
+            gamma=config['gamma']
         )
     
     elif agent_type == 'ppo':
@@ -59,10 +60,11 @@ def train_trial(agent_type, config, env, num_episodes, trial_num, print_freq=50)
 def objective_dqn(trial, env, num_episodes, print_freq):
     """Optuna objective for DQN"""
     config = {
-        'lr': trial.suggest_categorical('lr', [1e-6, 3e-6, 1e-5, 3e-5, 1e-4]),
-        'batch_size': trial.suggest_categorical('batch_size', [32, 64, 128]),
-        'epsilon_decay': trial.suggest_categorical('epsilon_decay', [0.990, 0.995, 0.998, 0.999]),
-        'target_update_freq': trial.suggest_categorical('target_update_freq', [1, 2, 5, 10])
+        'lr': trial.suggest_categorical('lr', [3e-06, 1e-05, 3e-05]),
+        'batch_size': trial.suggest_categorical('batch_size', [64, 128, 256]),
+        'epsilon_decay': trial.suggest_categorical('epsilon_decay', [0.990, 0.995, 0.998]),
+        'target_update_freq': trial.suggest_categorical('target_update_freq', [2, 5, 10]),
+        'gamma': trial.suggest_categorical('gamma', [0.95, 0.98, 0.99, 1.0])
     }
     return train_trial('dqn', config, env, num_episodes, trial.number, print_freq)
 
