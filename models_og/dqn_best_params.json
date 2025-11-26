@@ -1,0 +1,7 @@
+{
+  "lr": 0.001,
+  "batch_size": 128,
+  "tau": 0.001,
+  "noise_std": 0.25,
+  "noise_decay": 0.998
+}

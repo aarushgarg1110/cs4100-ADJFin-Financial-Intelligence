@@ -42,7 +42,7 @@ class BaseFinancialAgent(ABC):
     def _parse_state(self, state):
         """Helper to parse state array into meaningful variables"""
         return {
-            'cash': state[0],
+            'net_worth': state[0],
             'stocks': state[1], 
             'bonds': state[2],
             'real_estate': state[3],
@@ -53,8 +53,6 @@ class BaseFinancialAgent(ABC):
             'emergency_fund': state[8],
             'stock_return_1m': state[9],
             'market_regime': state[10],
-            'inflation': state[11],
-            'interest_rate': state[12],
-            'recent_event': state[13],
-            'months_unemployed': state[14]
+            'recent_event': state[11],
+            'months_unemployed': state[12]
         }

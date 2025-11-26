@@ -67,7 +67,7 @@ class ReplayBuffer:
 class ContinuousDQNAgent(BaseFinancialAgent):
     """Continuous DQN using actor-critic architecture"""
     
-    def __init__(self, lr=1e-4, gamma=0.99, tau=0.001, noise_std=0.15, name="Continuous_DQN"):
+    def __init__(self, lr=1e-4, gamma=0.99, tau=0.001, noise_std=0.15, noise_decay=0.999, name="Continuous_DQN"):
         super().__init__(name)
         
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -90,7 +90,7 @@ class ContinuousDQNAgent(BaseFinancialAgent):
         self.gamma = gamma
         self.tau = tau
         self.noise_std = noise_std
-        self.noise_decay = 0.999  # updated
+        self.noise_decay = noise_decay
         
         # Experience replay
         self.replay_buffer = ReplayBuffer()
@@ -169,7 +169,7 @@ class ContinuousDQNAgent(BaseFinancialAgent):
         self.actor.load_state_dict(checkpoint['actor_state_dict'])
         self.critic.load_state_dict(checkpoint['critic_state_dict'])
     
-    def train(self, env, num_episodes=1000, seed=None):
+    def train(self, env, num_episodes=1000, seed=None, print_freq=25, save_path='models/dqn_model.pth'):
         """Train Continuous DQN agent"""
         episode_rewards = []
         actor_losses = []
@@ -201,18 +201,19 @@ class ContinuousDQNAgent(BaseFinancialAgent):
             
             episode_rewards.append(episode_reward)
             
-            # Decay exploration noise (slower decay, higher minimum)
-            self.noise_std = max(0.05, self.noise_std * 0.999)
+            # Decay exploration noise
+            self.noise_std = max(0.05, self.noise_std * self.noise_decay)
             
-            if (episode + 1) % 25 == 0 or (episode + 1) == num_episodes:
-                avg_reward = np.mean(episode_rewards[-25:])
-                avg_actor = np.mean(actor_losses[-25:]) if len(actor_losses) >= 25 else 0
-                avg_critic = np.mean(critic_losses[-25:]) if len(critic_losses) >= 25 else 0
+            if (episode + 1) % print_freq == 0 or (episode + 1) == num_episodes:
+                avg_reward = np.mean(episode_rewards[-print_freq:]) if len(episode_rewards) >= print_freq else np.mean(episode_rewards)
+                avg_actor = np.mean(actor_losses[-print_freq:]) if len(actor_losses) >= print_freq else 0
+                avg_critic = np.mean(critic_losses[-print_freq:]) if len(critic_losses) >= print_freq else 0
                 tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Actor Loss: {avg_actor:.4f} | Critic Loss: {avg_critic:.4f}")
         
-        # Save model
-        import os
-        os.makedirs('models', exist_ok=True)
-        self.save('models/dqn_model.pth')
+        # Save model if path provided
+        if save_path:
+            import os
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            self.save(save_path)
         
         return episode_rewards, actor_losses, critic_losses

@@ -237,7 +237,7 @@ class SACAgent(BaseFinancialAgent):
         if "log_alpha" in checkpoint:
             self.log_alpha.data.copy_(checkpoint["log_alpha"].to(self.device))
 
-    def train(self, env, num_episodes=1000, seed=None):
+    def train(self, env, num_episodes=1000, seed=None, print_freq=25, save_path='models/sac_model.pth'):
         """Self-contained training loop (mirrors other agents)"""
         episode_rewards = []
         actor_losses = []
@@ -271,15 +271,16 @@ class SACAgent(BaseFinancialAgent):
 
             episode_rewards.append(total_reward)
 
-            if (episode + 1) % 25 == 0 or (episode + 1) == num_episodes:
-                avg_reward = np.mean(episode_rewards[-25:])
-                avg_actor = np.mean(actor_losses[-25:]) if len(actor_losses) >= 25 else 0
-                avg_critic = np.mean(critic_losses[-25:]) if len(critic_losses) >= 25 else 0
+            if (episode + 1) % print_freq == 0 or (episode + 1) == num_episodes:
+                avg_reward = np.mean(episode_rewards[-print_freq:]) if len(episode_rewards) >= print_freq else np.mean(episode_rewards)
+                avg_actor = np.mean(actor_losses[-print_freq:]) if len(actor_losses) >= print_freq else 0
+                avg_critic = np.mean(critic_losses[-print_freq:]) if len(critic_losses) >= print_freq else 0
                 tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Actor Loss: {avg_actor:.4f} | Critic Loss: {avg_critic:.4f}")
 
-        # Persist models
-        import os
-        os.makedirs("models", exist_ok=True)
-        self.save("models/sac_model.pth")
+        # Save model if path provided
+        if save_path:
+            import os
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            self.save(save_path)
 
         return episode_rewards, actor_losses, critic_losses

@@ -60,7 +60,7 @@ class ValueNetwork(nn.Module):
 class PPOAgent(BaseFinancialAgent):
     """PPO agent for continuous financial control"""
     
-    def __init__(self, lr=3e-4, gamma=0.995, eps_clip=0.2, name="PPO_Agent"):
+    def __init__(self, lr=3e-4, gamma=0.995, eps_clip=0.2, update_freq=20, name="PPO_Agent"):
         super().__init__(name)
         
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -76,10 +76,10 @@ class PPOAgent(BaseFinancialAgent):
         # Hyperparameters
         self.gamma = gamma
         self.eps_clip = eps_clip
+        self.update_freq = update_freq
         
         # Training mode
         self.training = True
-        self.update_freq = 30
         
     def get_action(self, state):
         """Get action for given state"""
@@ -179,7 +179,7 @@ class PPOAgent(BaseFinancialAgent):
         self.policy_net.load_state_dict(checkpoint['policy_state_dict'])
         self.value_net.load_state_dict(checkpoint['value_state_dict'])
     
-    def train(self, env, num_episodes=1000, seed=None):
+    def train(self, env, num_episodes=1000, seed=None, print_freq=25, save_path='models/ppo_model.pth'):
         """Train PPO agent"""
         episode_rewards = []
         policy_losses = []
@@ -193,7 +193,6 @@ class PPOAgent(BaseFinancialAgent):
             
             states, actions, rewards = [], [], []
             step_count = 0
-            update_frequency = 30  # Update every 30 steps
             
             while not done:
                 action = self.get_action(state)
@@ -205,8 +204,8 @@ class PPOAgent(BaseFinancialAgent):
                 
                 step_count += 1
                 
-                # Update every 30 steps
-                if step_count % update_frequency == 0 and len(states) > 0:
+                # Update every update_freq steps
+                if step_count % self.update_freq == 0 and len(states) > 0:
                     policy_loss, value_loss = self.learn_from_experience(states, actions, rewards, [], [])
                     policy_losses.append(policy_loss)
                     value_losses.append(value_loss)
@@ -223,15 +222,16 @@ class PPOAgent(BaseFinancialAgent):
             
             episode_rewards.append(episode_reward)
             
-            if (episode + 1) % 25 == 0 or (episode + 1) == num_episodes:
-                avg_reward = np.mean(episode_rewards[-25:])
-                avg_actor = np.mean(policy_losses[-25:]) if len(policy_losses) >= 25 else 0
-                avg_critic = np.mean(value_losses[-25:]) if len(value_losses) >= 25 else 0
-                tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Policy Loss: {avg_actor:.4f} | Value Loss: {avg_critic:.4f}")
+            if (episode + 1) % print_freq == 0 or (episode + 1) == num_episodes:
+                avg_reward = np.mean(episode_rewards[-print_freq:]) if len(episode_rewards) >= print_freq else np.mean(episode_rewards)
+                avg_policy = np.mean(policy_losses[-print_freq:]) if len(policy_losses) >= print_freq else 0
+                avg_value = np.mean(value_losses[-print_freq:]) if len(value_losses) >= print_freq else 0
+                tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Policy Loss: {avg_policy:.4f} | Value Loss: {avg_value:.4f}")
         
-        # Save model
-        import os
-        os.makedirs('models', exist_ok=True)
-        self.save('models/ppo_model.pth')
+        # Save model if path provided
+        if save_path:
+            import os
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            self.save(save_path)
         
         return episode_rewards, policy_losses, value_losses

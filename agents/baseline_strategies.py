@@ -2,10 +2,15 @@
 Rule-based financial strategies for baseline comparison
 All inherit from BaseFinancialAgent for consistent evaluation
 
-Expert Strategies + Naive Strategies
+Adapted for discrete action space
+Action = money_idx * len(INVEST_ALLOC) + invest_idx
 """
 
 import numpy as np
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
+from environment.finance_env import MONEY_ALLOC, INVEST_ALLOC
 from .base_agent import BaseFinancialAgent
 
 class SixtyFortyAgent(BaseFinancialAgent):
@@ -15,7 +20,11 @@ class SixtyFortyAgent(BaseFinancialAgent):
         super().__init__("60/40 Rule")
     
     def get_action(self, state):
-        return np.array([0.6, 0.4, 0.0, 0.02, 0.01, 0.01])
+        # Money: Balanced Classic [60% invest, 20% debt, 20% emergency]
+        # Invest: Classic 60/40 [60% stocks, 40% bonds, 0% RE]
+        money_idx = 2  # Balanced Classic
+        invest_idx = 6  # Classic 60/40
+        return money_idx * len(INVEST_ALLOC) + invest_idx
 
 class DebtAvalancheAgent(BaseFinancialAgent):
     """Pay highest interest debt first, conservative investing"""
@@ -24,25 +33,11 @@ class DebtAvalancheAgent(BaseFinancialAgent):
         super().__init__("Debt Avalanche")
     
     def get_action(self, state):
-        s = self._parse_state(state)
-        
-        # Conservative allocation while paying debt
-        stock_alloc = 0.2
-        bond_alloc = 0.6
-        re_alloc = 0.2
-        
-        # Emergency fund priority
-        emergency_contrib = 0.05 if s['emergency_fund'] < 6000 else 0.02
-        
-        # Aggressive debt payments
-        if s['credit_card_debt'] > 0:
-            cc_payment = 0.15  # Focus on high-interest debt
-            student_payment = 0.02
-        else:
-            cc_payment = 0.0
-            student_payment = 0.10  # Then focus on student loans
-        
-        return np.array([stock_alloc, bond_alloc, re_alloc, emergency_contrib, cc_payment, student_payment])
+        # Money: Maximum Debt Reduction [30% invest, 50% debt, 20% emergency]
+        # Invest: Conservative Bonds [40% stocks, 50% bonds, 10% RE]
+        money_idx = 6  # Maximum Debt Reduction
+        invest_idx = 4  # Conservative Bonds
+        return money_idx * len(INVEST_ALLOC) + invest_idx
 
 class EqualWeightAgent(BaseFinancialAgent):
     """Equal allocation across all asset classes"""
@@ -51,10 +46,14 @@ class EqualWeightAgent(BaseFinancialAgent):
         super().__init__("Equal Weight")
     
     def get_action(self, state):
-        return np.array([1/3, 1/3, 1/3, 0.02, 0.01, 0.01])
+        # Money: Balanced Classic [60% invest, 20% debt, 20% emergency]
+        # Invest: Equal Weight [33% stocks, 33% bonds, 33% RE]
+        money_idx = 2  # Balanced Classic
+        invest_idx = 7  # Equal Weight
+        return money_idx * len(INVEST_ALLOC) + invest_idx
 
 class AgeBasedAgent(BaseFinancialAgent):
-    """Age-based allocation: (100-age)% stocks, age% bonds"""
+    """Age-based allocation: younger = more stocks (100-age rule, rounded to nearest 10%)"""
     
     def __init__(self):
         super().__init__("Age-Based")
@@ -62,20 +61,28 @@ class AgeBasedAgent(BaseFinancialAgent):
     def get_action(self, state):
         s = self._parse_state(state)
         
-        # Classic "100 minus age" rule
-        stock_alloc = max(0.2, min(0.9, (100 - s['age']) / 100))
-        bond_alloc = 1 - stock_alloc
-        re_alloc = 0.0
+        # 100-age rule with 4 brackets
+        if s['age'] < 35:
+            # Young (25-34): ~70% stocks
+            money_idx = 1  # Aggressive Invest [70, 15, 15]
+            invest_idx = 1  # Growth Stocks [70, 20, 10]
+        elif s['age'] < 42:
+            # Mid-young (35-41): ~60% stocks
+            money_idx = 2  # Balanced Classic [60, 20, 20]
+            invest_idx = 2  # Moderate Growth [60, 30, 10]
+        elif s['age'] < 50:
+            # Mid-old (42-49): ~50% stocks
+            money_idx = 2  # Balanced Classic [60, 20, 20]
+            invest_idx = 3  # Balanced Portfolio [50, 40, 10]
+        else:
+            # Older (50+): ~40% stocks
+            money_idx = 4  # Moderate Safety-Focused [50, 20, 30]
+            invest_idx = 4  # Conservative Bonds [40, 50, 10]
         
-        # Standard contributions
-        emergency_contrib = 0.03
-        cc_payment = 0.02
-        student_payment = 0.02
-        
-        return np.array([stock_alloc, bond_alloc, re_alloc, emergency_contrib, cc_payment, student_payment])
+        return money_idx * len(INVEST_ALLOC) + invest_idx
 
 class MarkowitzAgent(BaseFinancialAgent):
-    """Mean-variance optimization (simplified)"""
+    """Mean-variance optimization based on market regime"""
     
     def __init__(self):
         super().__init__("Markowitz")
@@ -83,49 +90,17 @@ class MarkowitzAgent(BaseFinancialAgent):
     def get_action(self, state):
         s = self._parse_state(state)
         
-        # Simplified mean-variance: adjust based on market regime
         if s['market_regime'] == 2:  # Bear market
-            stock_alloc = 0.3
-            bond_alloc = 0.6
-            re_alloc = 0.1
+            # Conservative: Moderate Safety + Bond Heavy [30% stocks, 60% bonds]
+            money_idx = 4  # Moderate Safety-Focused
+            invest_idx = 8  # Bond Heavy
         elif s['market_regime'] == 1:  # Bull market
-            stock_alloc = 0.7
-            bond_alloc = 0.2
-            re_alloc = 0.1
+            # Aggressive: Aggressive Invest + Growth Stocks [70% stocks, 20% bonds]
+            money_idx = 1  # Aggressive Invest
+            invest_idx = 1  # Growth Stocks
         else:  # Normal market
-            stock_alloc = 0.5
-            bond_alloc = 0.4
-            re_alloc = 0.1
+            # Balanced: Balanced Classic + Balanced Portfolio [50% stocks, 40% bonds]
+            money_idx = 2  # Balanced Classic
+            invest_idx = 3  # Balanced Portfolio
         
-        return np.array([stock_alloc, bond_alloc, re_alloc, 0.03, 0.02, 0.02])
-
-"""
-Simple/naive financial strategies for comparison
-"""
-
-class AllStocksAgent(BaseFinancialAgent):
-    """Naive: Put everything in stocks (high risk)"""
-    
-    def __init__(self):
-        super().__init__("All Stocks")
-    
-    def get_action(self, state):
-        return np.array([1.0, 0.0, 0.0, 0.1, 0.0, 0.0])  # 100% stocks, minimal emergency
-
-class CashHoarderAgent(BaseFinancialAgent):
-    """Naive: Keep everything in emergency fund (no growth)"""
-    
-    def __init__(self):
-        super().__init__("Cash Hoarder")
-    
-    def get_action(self, state):
-        return np.array([0.0, 0.0, 0.0, 1.0, 0.0, 0.0])  # All to emergency fund
-
-class DebtIgnorerAgent(BaseFinancialAgent):
-    """Bad: Ignore debt, invest everything"""
-    
-    def __init__(self):
-        super().__init__("Debt Ignorer")
-    
-    def get_action(self, state):
-        return np.array([0.6, 0.4, 0.0, 0.0, 0.0, 0.0])  # Invest, ignore debt
+        return money_idx * len(INVEST_ALLOC) + invest_idx

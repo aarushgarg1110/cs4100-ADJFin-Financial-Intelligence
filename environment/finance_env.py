@@ -2,25 +2,65 @@ import numpy as np
 import gymnasium as gym
 from .market_data import MarketDataManager
 
+# ===== DISCRETE ACTION SPACE DEFINITIONS =====
+# 60 total actions: 10 money allocation strategies × 9 investment allocations
+
+# Part 1: Money Allocation ([% invest, % debt, % emergency], description)
+MONEY_ALLOC = [
+    ([80, 10, 10], "Very Aggressive Invest"),
+    ([70, 15, 15], "Aggressive Invest"), # Baseline Strats: AgeBased-Young, Markowitz-Bull
+    ([60, 20, 20], "Balanced Classic"), # Baseline Strats: 60/40, EqualWeight, AgeBased-Mid, Markowitz-Normal
+    ([50, 30, 20], "Moderate Debt-Focused"),
+    ([50, 20, 30], "Moderate Safety-Focused"), # Baseline Strats: AgeBased-Old, Markowitz-Bear
+    ([40, 40, 20], "Debt-Heavy"),
+    ([30, 50, 20], "Maximum Debt Reduction"), # Baseline Strats: DebtAvalanche
+    ([30, 20, 50], "Maximum Safety"),
+    ([20, 35, 45], "Conservative Both"),
+    ([40, 10, 50], "Income Protection"),
+]
+
+# Part 2: Investment Allocation ([% stocks, % bonds, % real estate], description)
+INVEST_ALLOC = [
+    ([80, 15, 5], "Very Aggressive Stocks"),
+    ([70, 20, 10], "Growth Stocks"), # Baseline Strats: AgeBased-Young, Markowitz-Bull
+    ([60, 30, 10], "Moderate Growth"), # Baseline Strats: AgeBased-Mid
+    ([50, 40, 10], "Balanced Portfolio"), # Baseline Strats: AgeBased-Mid, Markowitz-Normal
+    ([40, 50, 10], "Conservative Bonds"), # Baseline Strats: Debt Avalanche, AgeBased-Old
+    ([30, 30, 40], "Real Estate Focus"),
+    ([60, 40, 0], "Classic 60/40"),  # Baseline Strats: 60/40
+    ([33, 33, 33], "Equal Weight"),  # Baseline Strats: EqualWeight
+    ([30, 60, 10], "Bond Heavy"), # Baseline Strats: Markowitz-Bear
+]
+
+NUM_ACTIONS = len(MONEY_ALLOC) * len(INVEST_ALLOC)
+
+# Generate action descriptions for all 60 combinations
+ACTION_DESCRIPTIONS = {}
+for money_idx in range(len(MONEY_ALLOC)):
+    for invest_idx in range(len(INVEST_ALLOC)):
+        action_idx = money_idx * len(INVEST_ALLOC) + invest_idx
+        money_desc = MONEY_ALLOC[money_idx][1]
+        invest_desc = INVEST_ALLOC[invest_idx][1]
+        ACTION_DESCRIPTIONS[action_idx] = f"{money_desc} + {invest_desc}"
+
 class FinanceEnv(gym.Env):
     """
     Enhanced personal finance environment for 30-year lifecycle simulation.
     
-    State: 15 variables including assets, debts, income, market conditions, life events
-    Action: 6 decisions for asset allocation and debt payments
+    State: 13 variables including net worth, assets, debts, income, market conditions, life events
+    Action: 90 discrete strategies (10 money allocations × 9 investment allocations)
     """
     
     # Class-level market data (shared across all instances)
     _market_data = None
     
-    def __init__(self):
+    def __init__(self, seed=42):
         super().__init__()
+        self.seed = seed
+        self.action_space = gym.spaces.Discrete(NUM_ACTIONS)
         
-        # Action space: [stock_alloc, bond_alloc, re_alloc, emergency_contrib, cc_payment, student_payment]
-        self.action_space = gym.spaces.Box(low=0, high=1, shape=(6,))
-        
-        # State space: 15 variables
-        self.observation_space = gym.spaces.Box(low=0, high=np.inf, shape=(15,))
+        # State space: 13 variables
+        self.observation_space = gym.spaces.Box(low=0, high=np.inf, shape=(13,))
         
         # Initialize market data manager (only once)
         if FinanceEnv._market_data is None:
@@ -46,25 +86,17 @@ class FinanceEnv(gym.Env):
         self.CAREER_PLATEAU_AGE = 50  # Age when income growth slows
         self.LATE_CAREER_VARIATION = (0.98, 1.01)  # Income variation after plateau
         
-        # Debt Payments
-        self.CC_MIN_PAYMENT = 25  # Minimum credit card payment
-        self.CC_MIN_PAYMENT_PCT = 0.02  # 2% of balance
-        self.STUDENT_MIN_PAYMENT = 50  # Minimum student loan payment
-        self.STUDENT_MIN_PAYMENT_PCT = 0.01  # 1% of balance
-        
         # Reward Parameters
-        self.NET_WORTH_SCALE = 100000  # Divisor for net worth reward
-        self.BANKRUPTCY_THRESHOLD = -10000  # Net worth bankruptcy level
-        self.BANKRUPTCY_PENALTY = 100  # Penalty for bankruptcy
-        self.EXCESSIVE_DEBT_THRESHOLD = 15000  # Credit card debt threshold
-        self.DEBT_PENALTY_SCALE = 100  # Divisor for debt penalty (reduced from 1000)
-        self.EMERGENCY_FUND_MONTHS = 6  # Months of expenses for emergency fund
-        self.EMERGENCY_FUND_BONUS = 5  # Reward for adequate emergency fund (increased from 2)
-        self.DEBT_FREE_BONUS = 10  # Reward for being debt-free (increased from 4)
+        self.TARGET_NET_WORTH = 2_000_000  # $2M retirement goal
+        self.BANKRUPTCY_THRESHOLD = -10_000  # Net worth bankruptcy level
+        self.BANKRUPTCY_PENALTY = -5  # Penalty for bankruptcy
+        self.EMERGENCY_TARGET = 12_000  # 6 months of base expenses
+        self.EMERGENCY_BONUS = 0.2  # Bonus for adequate emergency fund
+        self.DEBT_FREE_BONUS = 0.3  # Bonus for being debt-free
+        self.EXCEED_BONUS_MAX = 0.3  # Max bonus for exceeding target
         
         # Simulation Parameters
         self.STARTING_AGE = 25
-        self.SIMULATION_YEARS = 30
         self.SIMULATION_MONTHS = 360  # 30 years
         
         # Financial parameters (realistic 2024 values)
@@ -83,14 +115,13 @@ class FinanceEnv(gym.Env):
         # Initialize current regime
         self.current_regime = 0  # start in Normal (0 = normal, 1 = bull, 2 = bear)
 
-        self.reset()
+        self.reset(seed=seed)
     
     def reset(self, seed=None, options=None):
         if seed is not None:
             np.random.seed(seed)
             
         # Initialize financial state
-        self.cash = np.random.uniform(1000, 5000)
         self.stocks = np.random.uniform(0, 10000)
         self.bonds = np.random.uniform(0, 5000)
         self.real_estate = 0
@@ -116,33 +147,51 @@ class FinanceEnv(gym.Env):
         return self._get_state(), {}
     
     def _get_state(self):
+        # Calculate net worth (primary metric for reward)
+        net_worth = (self.stocks + self.bonds + self.real_estate + 
+                     self.emergency_fund - self.credit_card_debt - self.student_loan)
+        
         return np.array([
-            self.cash,
-            self.stocks,
-            self.bonds,
-            self.real_estate,
-            self.credit_card_debt,
-            self.student_loan,
-            self.monthly_income,
-            self.age,
-            self.emergency_fund,
-            self.stock_return_1m,
-            self.current_regime,
-            self.inflation[self.month],
-            self.rates[self.month],
-            self.recent_event,
-            self.months_unemployed
+            net_worth,              # 0: Primary goal metric
+            self.stocks,            # 1: Asset breakdown
+            self.bonds,             # 2
+            self.real_estate,       # 3
+            self.credit_card_debt,  # 4: Debt levels
+            self.student_loan,      # 5
+            self.monthly_income,    # 6: Resources
+            self.age,               # 7: Time/lifecycle signal
+            self.emergency_fund,    # 8: Safety buffer
+            self.stock_return_1m,   # 9: Market signal
+            self.current_regime,    # 10: Market condition (0=normal, 1=bull, 2=bear)
+            self.recent_event,      # 11: Life event (0=none, 1=job_loss, 2=medical, 3=raise)
+            self.months_unemployed  # 12: Unemployment duration
         ])
     
-    def step(self, action):
-        stock_alloc, bond_alloc, re_alloc, emergency_contrib, cc_payment, student_payment = action
+    def step(self, action_idx):
+        """
+        Execute one timestep with discrete action.
         
-        # Normalize allocations
-        total_alloc = stock_alloc + bond_alloc + re_alloc
-        if total_alloc > 0:
-            stock_alloc /= total_alloc
-            bond_alloc /= total_alloc  
-            re_alloc /= total_alloc
+        Args:
+            action_idx: Integer 0-59 representing chosen strategy
+        
+        Returns:
+            state, reward, done, truncated, info
+        """
+        # Decode discrete action into money and investment allocations
+        money_idx = action_idx // len(INVEST_ALLOC)
+        invest_idx = action_idx % len(INVEST_ALLOC)
+        
+        # Get allocation percentages
+        invest_pct, debt_pct, emergency_pct = MONEY_ALLOC[money_idx][0]
+        stock_pct, bond_pct, re_pct = INVEST_ALLOC[invest_idx][0]
+        
+        # Convert to decimals
+        invest_pct /= 100
+        debt_pct /= 100
+        emergency_pct /= 100
+        stock_pct /= 100
+        bond_pct /= 100
+        re_pct /= 100
         
         # Generate market returns
         self._update_market()
@@ -150,48 +199,42 @@ class FinanceEnv(gym.Env):
         # Apply life events (affects income)
         self._apply_life_events()
         
-        # Apply macroeconomic effects
+        # Calculate expenses (with inflation)
         inflation = self.inflation[self.month]
-        
-        # Hybrid expense model: base living costs + lifestyle scaling
-        # Lower earners spend higher %, higher earners save more %
         base_expenses = self.BASE_MONTHLY_EXPENSES * (1 + inflation) + self.LIFESTYLE_SCALING_FACTOR * self.monthly_income
         available_money = max(0, self.monthly_income - base_expenses)
         
-        # Calculate debt payments first (from available money)
-        cc_min = max(self.CC_MIN_PAYMENT, self.credit_card_debt * self.CC_MIN_PAYMENT_PCT)
-        student_min = max(self.STUDENT_MIN_PAYMENT, self.student_loan * self.STUDENT_MIN_PAYMENT_PCT)
+        # Apply money allocation
+        debt_amount = available_money * debt_pct
+        emergency_amount = available_money * emergency_pct
+        invest_amount = available_money * invest_pct
         
-        total_cc_payment = min(cc_min + cc_payment * available_money, self.credit_card_debt, available_money)
-        total_student_payment = min(student_min + student_payment * available_money, self.student_loan, available_money - total_cc_payment)
+        # Pay debts (prioritize high-interest CC over student loan)
+        if self.credit_card_debt > 0 and self.student_loan > 0:
+            # Split debt payment: 70% to CC (22% APR), 30% to student (6.5% APR)
+            cc_payment = min(debt_amount * 0.7, self.credit_card_debt)
+            student_payment = min(debt_amount * 0.3, self.student_loan)
+        elif self.credit_card_debt > 0:
+            cc_payment = min(debt_amount, self.credit_card_debt)
+            student_payment = 0
+        else:
+            cc_payment = 0
+            student_payment = min(debt_amount, self.student_loan)
         
-        # Reduce debt
-        self.credit_card_debt = max(0, self.credit_card_debt - total_cc_payment)
-        self.student_loan = max(0, self.student_loan - total_student_payment)
+        self.credit_card_debt -= cc_payment
+        self.student_loan -= student_payment
         
-        # Money left after debt payments
-        money_after_debt = available_money - total_cc_payment - total_student_payment
+        # Add to emergency fund
+        self.emergency_fund += emergency_amount
         
-        # Emergency fund contribution (from remaining money)
-        emergency_contribution = min(emergency_contrib * money_after_debt, money_after_debt)
-        self.emergency_fund += emergency_contribution
+        # Invest according to investment allocation
+        self.stocks += invest_amount * stock_pct
+        self.bonds += invest_amount * bond_pct
+        self.real_estate += invest_amount * re_pct
         
-        # Money left for investments
-        money_for_investments = money_after_debt - emergency_contribution
-        
-        # Asset allocation
-        if money_for_investments > 0:
-            self.stocks += stock_alloc * money_for_investments
-            self.bonds += bond_alloc * money_for_investments
-            self.real_estate += re_alloc * money_for_investments
-            self.cash += (1 - stock_alloc - bond_alloc - re_alloc) * money_for_investments
-        
-        # Apply interest to cash
-        self.cash *= (1 + self.params['savings_apy']/12)
-        
-        # Apply interest on remaining debt (ONCE per month)
-        self.credit_card_debt *= (1 + self.params['credit_card_apr']/12)
-        self.student_loan *= (1 + self.params['student_loan_apr']/12)
+        # Apply interest on remaining debt
+        self.credit_card_debt *= (1 + self.params['credit_card_apr'] / 12)
+        self.student_loan *= (1 + self.params['student_loan_apr'] / 12)
         
         # Update time
         self.month += 1
@@ -200,8 +243,8 @@ class FinanceEnv(gym.Env):
         # Calculate reward
         reward = self._calculate_reward()
         
-        # Check if done (30 years = 360 months)
-        done = self.month >= self.SIMULATION_MONTHS - 1
+        # Check if done
+        done = self.month >= self.SIMULATION_MONTHS
         
         return self._get_state(), reward, done, False, {}
     
@@ -251,8 +294,10 @@ class FinanceEnv(gym.Env):
             if self.emergency_fund >= cost:
                 self.emergency_fund -= cost
             else:
-                self.cash -= (cost - self.emergency_fund)
+                # If emergency fund insufficient, remaining cost goes to credit card debt
+                remaining_cost = cost - self.emergency_fund
                 self.emergency_fund = 0
+                self.credit_card_debt += remaining_cost
         
         # Occasional promotion/bonus (5% annual chance for 10-15% bump)
         if np.random.rand() < self.params['raise_prob']:
@@ -260,41 +305,48 @@ class FinanceEnv(gym.Env):
             self.monthly_income *= np.random.uniform(1.02, 1.07)
     
     def _calculate_reward(self):
-        # Net worth
-        net_worth = (self.cash + self.stocks + self.bonds + self.real_estate + 
-                    self.emergency_fund - self.credit_card_debt - self.student_loan)
+        """
+        Calculate reward based on distance to $2M target, with bonuses and penalties.
         
-        # Base reward: net worth growth
-        reward = net_worth / self.NET_WORTH_SCALE
+        Reward components (proportional):
+        - Distance to target: [0, 1] (55% of positive reward)
+        - Exceed bonus: [0, 0.3] (17%)
+        - Emergency bonus: [0, 0.2] (11%)
+        - Debt-free bonus: [0, 0.3] (17%)
+        - Bankruptcy penalty: -5
+        - Debt interest penalty: [-0.5, 0]
+        
+        Total range: [-5, 1.8]
+        """
+        # Calculate net worth
+        net_worth = (self.stocks + self.bonds + self.real_estate + 
+                     self.emergency_fund - self.credit_card_debt - self.student_loan)
+        
+        # Primary: Maximize net worth (scaled by $1M for reasonable range)
+        wealth_reward = net_worth / 1_000_000  # $1M = 1.0, $2M = 2.0, etc.
         
         # Penalties
-        if net_worth < self.BANKRUPTCY_THRESHOLD:
-            reward -= self.BANKRUPTCY_PENALTY
-            
-        # Continuous debt penalty (penalize by monthly interest cost)
-        if self.credit_card_debt > 0:
-            monthly_cc_interest = self.credit_card_debt * (self.params['credit_card_apr'] / 12)
-            reward -= monthly_cc_interest / self.DEBT_PENALTY_SCALE
-            
-        if self.student_loan > 0:
-            monthly_student_interest = self.student_loan * (self.params['student_loan_apr'] / 12)
-            reward -= monthly_student_interest / self.DEBT_PENALTY_SCALE
-            
-        # Extra penalty for excessive CC debt
-        if self.credit_card_debt > self.EXCESSIVE_DEBT_THRESHOLD:
-            reward -= (self.credit_card_debt - self.EXCESSIVE_DEBT_THRESHOLD) / self.DEBT_PENALTY_SCALE
-            
-        # Calculate emergency fund threshold based on BASE expenses only
-        # (grows slowly with inflation, not income - more learnable for RL)
-        inflation = self.inflation[self.month]
-        base_monthly_expenses = self.BASE_MONTHLY_EXPENSES * (1 + inflation)
-        emergency_threshold = base_monthly_expenses * self.EMERGENCY_FUND_MONTHS
+        bankruptcy_penalty = self.BANKRUPTCY_PENALTY if net_worth < self.BANKRUPTCY_THRESHOLD else 0
         
-        # Bonuses (scaled to be meaningful)
-        if self.emergency_fund >= emergency_threshold:
-            reward += self.EMERGENCY_FUND_BONUS
-            
-        if self.credit_card_debt == 0:
-            reward += self.DEBT_FREE_BONUS
-            
-        return reward
+        # Debt interest cost (monthly penalty)
+        debt_interest_penalty = 0
+        if self.credit_card_debt > 0:
+            debt_interest_penalty -= (self.credit_card_debt * self.params['credit_card_apr'] / 12) / 1000
+        if self.student_loan > 0:
+            debt_interest_penalty -= (self.student_loan * self.params['student_loan_apr'] / 12) / 1000
+        # Range: [-0.5, 0] for typical debt levels
+        
+        # Bonuses
+        emergency_bonus = self.EMERGENCY_BONUS if self.emergency_fund >= self.EMERGENCY_TARGET else 0
+        debt_free_bonus = self.DEBT_FREE_BONUS if (self.credit_card_debt + self.student_loan) == 0 else 0
+        
+        # Total reward
+        total_reward = (
+            wealth_reward +
+            bankruptcy_penalty +
+            debt_interest_penalty +
+            emergency_bonus +
+            debt_free_bonus
+        )
+        
+        return np.clip(total_reward, -5, 10)  # Increased upper bound for higher net worth
