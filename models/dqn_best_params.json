@@ -1,6 +1,7 @@
 {
   "lr": 3e-05,
-  "batch_size": 64,
-  "epsilon_decay": 0.995,
-  "target_update_freq": 10
+  "batch_size": 128,
+  "epsilon_decay": 0.998,
+  "target_update_freq": 5,
+  "gamma": 1.0
 }
