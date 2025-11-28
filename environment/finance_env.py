@@ -49,15 +49,17 @@ class FinanceEnv(gym.Env):
     Enhanced personal finance environment for 30-year lifecycle simulation.
     
     State: 13 variables including net worth, assets, debts, income, market conditions, life events
-    Action: 90 discrete strategies (10 money allocations × 9 investment allocations)
+    Action: 90 discrete strategies (10 money allocations x 9 investment allocations)
     """
     
     # Class-level market data (shared across all instances)
     _market_data = None
     
-    def __init__(self, seed=42):
+    def __init__(self, seed=42, sharpe_ratio=0.5):
         super().__init__()
         self.seed = seed
+        self.sharpe_ratio = sharpe_ratio
+        print(f"Initializing FinanceEnv with sharpe_ratio weight: {self.sharpe_ratio}")
         self.action_space = gym.spaces.Discrete(NUM_ACTIONS)
         
         # State space: 13 variables
@@ -311,7 +313,7 @@ class FinanceEnv(gym.Env):
     
     def _calculate_reward(self):
         """
-        Hybrid reward: 70% wealth accumulation + 30% Sharpe ratio (risk-adjusted return)
+        Hybrid reward: 50% wealth accumulation + 50% Sharpe ratio (risk-adjusted return)
         
         Components:
         - Wealth reward: net_worth / $1M (encourages getting rich)
@@ -363,10 +365,9 @@ class FinanceEnv(gym.Env):
         debt_free_bonus = self.DEBT_FREE_BONUS if (self.credit_card_debt + self.student_loan) == 0 else 0
         
         # === HYBRID REWARD ===
-        # 50% wealth accumulation + 50% risk-adjusted returns
         total_reward = (
-            0.5 * wealth_reward +
-            0.5 * sharpe_reward +
+            (1 - self.sharpe_ratio) * wealth_reward +
+            self.sharpe_ratio * sharpe_reward +
             bankruptcy_penalty +
             debt_interest_penalty +
             emergency_bonus +

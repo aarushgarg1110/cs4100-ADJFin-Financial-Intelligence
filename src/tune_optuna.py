@@ -63,8 +63,8 @@ def objective_dqn(trial, env, num_episodes, print_freq):
         'lr': trial.suggest_categorical('lr', [3e-06, 1e-05, 3e-05]),
         'batch_size': trial.suggest_categorical('batch_size', [64, 128, 256]),
         'epsilon_decay': trial.suggest_categorical('epsilon_decay', [0.990, 0.995, 0.998]),
-        'target_update_freq': trial.suggest_categorical('target_update_freq', [2, 5, 10]),
-        'gamma': trial.suggest_categorical('gamma', [0.95, 0.98, 0.99, 1.0])
+        'target_update_freq': trial.suggest_categorical('target_update_freq', [250, 500, 1000]),
+        'gamma': trial.suggest_categorical('gamma', [0.95, 0.98, 0.99])
     }
     return train_trial('dqn', config, env, num_episodes, trial.number, print_freq)
 

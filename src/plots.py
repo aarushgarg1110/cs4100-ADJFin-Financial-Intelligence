@@ -122,7 +122,7 @@ def plot_action_heatmap(action_history, agent_name, output_dir='visualization'):
     ages = sorted(action_history.keys())
     
     # Create matrix: rows = actions (0-59), cols = ages
-    matrix = np.zeros((60, len(ages)))
+    matrix = np.zeros((90, len(ages)))
     
     for age_idx, age in enumerate(ages):
         actions = action_history[age]
@@ -135,7 +135,7 @@ def plot_action_heatmap(action_history, agent_name, output_dir='visualization'):
     fig = go.Figure(data=go.Heatmap(
         z=matrix,
         x=ages,
-        y=list(range(60)),
+        y=list(range(90)),
         colorscale='YlOrRd',
         hovertemplate='Age: %{x}<br>' +
                      'Action: %{y}<br>' +
@@ -392,4 +392,238 @@ def plot_metrics_comparison(all_results, output_dir='visualization'):
     fig.write_html(f'{output_dir}/metrics_comparison.html')
     fig.show()
     print(f"✓ Saved: {output_dir}/metrics_comparison.html")
+    return fig
+
+
+
+def plot_q_policy_heatmap(q_policy_results, output_dir='visualization'):
+    """
+    Heatmap showing which action each model chooses in each scenario.
+    
+    Args:
+        q_policy_results: List of dicts with keys:
+            - 'model_name': str
+            - 'scenarios': List of 9 dicts with keys:
+                - 'name': str (e.g., "Young, Bull Market, High Debt")
+                - 'best_action': int
+                - 'q_value': float
+                - 'action_desc': str
+    """
+    from environment.finance_env import MONEY_ALLOC, INVEST_ALLOC
+    
+    # Define action categories based on money allocation
+    def get_action_category(action_num):
+        money_idx = action_num // 9
+        if money_idx in [0, 1]:  # Very Aggressive, Aggressive
+            return 'Aggressive'
+        elif money_idx in [2, 3, 4]:  # Balanced, Moderate
+            return 'Balanced'
+        elif money_idx in [5, 6]:  # Debt-Heavy, Max Debt
+            return 'Debt-Focused'
+        elif money_idx in [7, 8]:  # Max Safety, Conservative
+            return 'Conservative'
+        else:  # Income Protection
+            return 'Safety-Focused'
+    
+    # Category colors
+    category_colors = {
+        'Aggressive': '#d62728',      # Red
+        'Balanced': '#ff7f0e',         # Orange
+        'Debt-Focused': '#2ca02c',    # Green
+        'Conservative': '#1f77b4',    # Blue
+        'Safety-Focused': '#9467bd'   # Purple
+    }
+    
+    # Build data matrix
+    model_names = [r['model_name'] for r in q_policy_results]
+    scenario_names = [s['name'] for s in q_policy_results[0]['scenarios']]
+    
+    # Create matrix of actions
+    action_matrix = []
+    hover_text = []
+    colors = []
+    
+    for result in q_policy_results:
+        row_actions = []
+        row_hover = []
+        row_colors = []
+        
+        for scenario in result['scenarios']:
+            action = scenario['best_action']
+            q_val = scenario['q_value']
+            desc = scenario['action_desc']
+            category = get_action_category(action)
+            
+            row_actions.append(action)
+            row_hover.append(
+                f"<b>{result['model_name']}</b><br>"
+                f"{scenario['name']}<br>"
+                f"Action {action}: {desc}<br>"
+                f"Q-value: {q_val:.0f}<br>"
+                f"Category: {category}"
+            )
+            row_colors.append(category_colors[category])
+        
+        action_matrix.append(row_actions)
+        hover_text.append(row_hover)
+        colors.append(row_colors)
+    
+    # Create heatmap
+    fig = go.Figure()
+    
+    # Add colored rectangles for each cell
+    for i, model in enumerate(model_names):
+        for j, scenario in enumerate(scenario_names):
+            fig.add_trace(go.Scatter(
+                x=[j],
+                y=[i],
+                mode='markers+text',
+                marker=dict(
+                    size=80,
+                    color=colors[i][j],
+                    symbol='square',
+                    line=dict(color='white', width=2)
+                ),
+                text=str(action_matrix[i][j]),
+                textfont=dict(size=14, color='white', family='Arial Black'),
+                hovertext=hover_text[i][j],
+                hoverinfo='text',
+                showlegend=False
+            ))
+    
+    # Add legend for categories
+    for category, color in category_colors.items():
+        fig.add_trace(go.Scatter(
+            x=[None], y=[None],
+            mode='markers',
+            marker=dict(size=10, color=color, symbol='square'),
+            name=category,
+            showlegend=True
+        ))
+    
+    fig.update_layout(
+        title='Q-Policy Action Selection Across Scenarios',
+        xaxis=dict(
+            tickmode='array',
+            tickvals=list(range(len(scenario_names))),
+            ticktext=[s.replace(', ', '<br>') for s in scenario_names],
+            tickangle=0,
+            side='bottom'
+        ),
+        yaxis=dict(
+            tickmode='array',
+            tickvals=list(range(len(model_names))),
+            ticktext=model_names,
+            autorange='reversed'
+        ),
+        template='plotly_white',
+        height=400 + len(model_names) * 80,
+        width=1400,
+        hovermode='closest',
+        legend=dict(
+            title='Action Category',
+            orientation='v',
+            x=1.02,
+            y=1
+        )
+    )
+    
+    os.makedirs(output_dir, exist_ok=True)
+    fig.write_html(f'{output_dir}/q_policy_heatmap.html')
+    print(f"✓ Saved: {output_dir}/q_policy_heatmap.html")
+    return fig
+
+
+
+def plot_strategy_profile(q_policy_results, output_dir='visualization'):
+    """
+    Stacked bar chart showing % of scenarios using each strategy type per model.
+    
+    Args:
+        q_policy_results: List of dicts with keys:
+            - 'model_name': str
+            - 'scenarios': List of 9 dicts with 'best_action': int
+    """
+    # Define action categories
+    def get_action_category(action_num):
+        money_idx = action_num // 9
+        if money_idx in [0, 1]:  # Very Aggressive, Aggressive
+            return 'Aggressive'
+        elif money_idx in [2, 3, 4]:  # Balanced, Moderate
+            return 'Balanced'
+        elif money_idx in [5, 6]:  # Debt-Heavy, Max Debt
+            return 'Debt-Focused'
+        elif money_idx in [7, 8]:  # Max Safety, Conservative
+            return 'Conservative'
+        else:  # Income Protection
+            return 'Safety-Focused'
+    
+    # Count categories for each model
+    model_names = []
+    category_counts = {
+        'Aggressive': [],
+        'Balanced': [],
+        'Debt-Focused': [],
+        'Conservative': [],
+        'Safety-Focused': []
+    }
+    
+    for result in q_policy_results:
+        model_names.append(result['model_name'])
+        
+        # Count categories
+        counts = {'Aggressive': 0, 'Balanced': 0, 'Debt-Focused': 0, 
+                 'Conservative': 0, 'Safety-Focused': 0}
+        
+        for scenario in result['scenarios']:
+            category = get_action_category(scenario['best_action'])
+            counts[category] += 1
+        
+        # Convert to percentages
+        total = len(result['scenarios'])
+        for cat in category_counts.keys():
+            category_counts[cat].append(counts[cat] / total * 100)
+    
+    # Create stacked bar chart
+    fig = go.Figure()
+    
+    colors = {
+        'Aggressive': '#d62728',
+        'Balanced': '#ff7f0e',
+        'Debt-Focused': '#2ca02c',
+        'Conservative': '#1f77b4',
+        'Safety-Focused': '#9467bd'
+    }
+    
+    for category, color in colors.items():
+        fig.add_trace(go.Bar(
+            name=category,
+            x=model_names,
+            y=category_counts[category],
+            marker_color=color,
+            hovertemplate='<b>%{x}</b><br>' +
+                         f'{category}: %{{y:.1f}}%<br>' +
+                         '<extra></extra>'
+        ))
+    
+    fig.update_layout(
+        title='Strategy Profile: Action Category Distribution by Model',
+        xaxis_title='Model',
+        yaxis_title='% of Scenarios',
+        barmode='stack',
+        template='plotly_white',
+        height=500,
+        width=800,
+        legend=dict(
+            title='Action Category',
+            orientation='v',
+            x=1.02,
+            y=1
+        ),
+        yaxis=dict(range=[0, 100])
+    )
+    
+    os.makedirs(output_dir, exist_ok=True)
+    fig.write_html(f'{output_dir}/strategy_profile.html')
+    print(f"✓ Saved: {output_dir}/strategy_profile.html")
     return fig

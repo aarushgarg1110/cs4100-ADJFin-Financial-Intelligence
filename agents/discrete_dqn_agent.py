@@ -60,18 +60,21 @@ class DiscreteDQNAgent(BaseFinancialAgent):
     Args:
         state_dim: Dimension of state space (default: 13)
         num_actions: Number of discrete actions (default: 90)
-        lr: Learning rate (default: 1e-4)
-        gamma: Discount factor (default: 1.0)
+        lr: Learning rate (default: 3e-05)
+        gamma: Discount factor (default: 0.98)
         epsilon_start: Initial exploration rate (default: 1.0)
         epsilon_end: Final exploration rate (default: 0.05)
-        epsilon_decay: Epsilon decay rate per episode (default: 0.995)
-        batch_size: Batch size for training (default: 64)
-        target_update_freq: Frequency to update target network (default: 10)
+        epsilon_decay: Epsilon decay rate per episode (default: 0.9927)
+        batch_size: Batch size for training (default: 128)
+        target_update_freq: Frequency to update target network in gradient steps (default: 500)
+        update_freq: Steps between gradient updates (default: 10)
+        min_buffer_size: Minimum samples before learning starts (default: 7200)
     """
     
-    def __init__(self, state_dim=13, num_actions=90, lr=1e-4, gamma=1.0,
-                 epsilon_start=1.0, epsilon_end=0.05, epsilon_decay=0.995,
-                 batch_size=64, target_update_freq=10, name="Discrete_DQN"):
+    def __init__(self, state_dim=13, num_actions=90, lr=3e-05, gamma=0.98,
+                 epsilon_start=1.0, epsilon_end=0.05, epsilon_decay=0.9927,
+                 batch_size=128, target_update_freq=500, update_freq=10, 
+                 min_buffer_size=7200, name="Discrete_DQN"):
         super().__init__(name)
         
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -91,6 +94,8 @@ class DiscreteDQNAgent(BaseFinancialAgent):
         self.epsilon_decay = epsilon_decay
         self.batch_size = batch_size
         self.target_update_freq = target_update_freq
+        self.update_freq = update_freq
+        self.min_buffer_size = min_buffer_size
         
         # Replay buffer
         self.replay_buffer = ReplayBuffer()
@@ -131,7 +136,7 @@ class DiscreteDQNAgent(BaseFinancialAgent):
         Returns:
             loss: Float loss value, or None if not enough samples
         """
-        if len(self.replay_buffer) < self.batch_size:
+        if len(self.replay_buffer) < self.min_buffer_size:
             return None
         
         # Sample batch
@@ -196,9 +201,14 @@ class DiscreteDQNAgent(BaseFinancialAgent):
     def train(self, env, num_episodes=1000, seed=None, print_freq=25, save_path='models/discrete_dqn_model.pth'):
         """Train Discrete DQN agent"""
         from tqdm import tqdm
+        from collections import deque, Counter
         
         episode_rewards = []
         q_losses = []
+        
+        # Diversity tracking
+        recent_actions = deque(maxlen=360)  # Track last episode worth of actions
+        action_counts = Counter()
         
         for episode in tqdm(range(num_episodes), desc="Training Discrete DQN"):
             episode_seed = seed + episode if seed is not None else None
@@ -211,12 +221,16 @@ class DiscreteDQNAgent(BaseFinancialAgent):
                 action = self.get_action(state)
                 next_state, reward, done, truncated, _ = env.step(action)
                 
+                # Track action for diversity metrics
+                recent_actions.append(action)
+                action_counts[action] += 1
+                
                 self.store_experience(state, action, reward, next_state, done or truncated)
                 
                 step_count += 1
                 
-                # Update every 30 steps
-                if step_count % 30 == 0:
+                # Update every self.update_freq steps
+                if step_count % self.update_freq == 0:
                     loss = self.update()
                     if loss is not None:
                         q_losses.append(loss)
@@ -232,7 +246,17 @@ class DiscreteDQNAgent(BaseFinancialAgent):
             if (episode + 1) % print_freq == 0 or (episode + 1) == num_episodes:
                 avg_reward = np.mean(episode_rewards[-print_freq:]) if len(episode_rewards) >= print_freq else np.mean(episode_rewards)
                 avg_loss = np.mean(q_losses[-print_freq:]) if len(q_losses) >= print_freq else 0
-                tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Q Loss: {avg_loss:.4f} | Epsilon: {self.epsilon:.3f}")
+                
+                # Calculate diversity metrics
+                unique_actions = len(set(recent_actions))
+                if len(action_counts) > 1:
+                    probs = np.array(list(action_counts.values())) / sum(action_counts.values())
+                    entropy = -np.sum(probs * np.log(probs + 1e-10))
+                else:
+                    entropy = 0.0
+                
+                tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Q Loss: {avg_loss:.4f} | "
+                          f"Eps: {self.epsilon:.3f} | Actions: {unique_actions}/90 | H: {entropy:.2f}")
         
         # Save model if path provided
         if save_path:

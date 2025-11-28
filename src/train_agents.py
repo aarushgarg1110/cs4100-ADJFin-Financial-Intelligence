@@ -81,6 +81,7 @@ def main():
     parser.add_argument('--episodes', type=int, default=1000, help='Number of episodes')
     parser.add_argument('--seed', type=int, default=42, help='Random seed')
     parser.add_argument('--save-path', type=str, default=None, help='Path to save model (default: models/discrete_{agent}_model.pth)')
+    parser.add_argument('--sharpe-ratio', type=float, default=0.5, help='Sharpe ratio weight for reward calculation')
     
     # DQN hyperparameters
     parser.add_argument('--lr', type=float, default=1e-5, help='Learning rate')
@@ -102,7 +103,7 @@ def main():
     print(f"Training {args.agent.upper()} for {args.episodes} episodes...")
     print(f"Model will be saved to: {args.save_path}")
     
-    env = FinanceEnv()
+    env = FinanceEnv(sharpe_ratio=args.sharpe_ratio)
     
     if args.agent == 'dqn':
         print(f"Hyperparameters: lr={args.lr}, gamma={args.gamma}, batch_size={args.batch_size}, epsilon_decay={args.epsilon_decay}, target_update_freq={args.target_update_freq}")

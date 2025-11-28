@@ -196,7 +196,79 @@ def evaluate_agent(agent, env, num_episodes=100):
         'debt_history': debt_history,
     }
 
-def generate_plots(all_results):
+
+
+def analyze_q_policies_for_comparison(agents, env):
+    """
+    Analyze Q-policies for multiple agents across 9 scenarios.
+    Returns data structure for plotting.
+    
+    Args:
+        agents: List of agent objects
+        env: FinanceEnv instance
+    
+    Returns:
+        List of dicts with 'model_name' and 'scenarios' keys
+    """
+    import torch
+    
+    # Define test scenarios (same as utils/visualize_q_policy.py)
+    test_scenarios = [
+        ('Young, Bull Market, High Debt', 42, 1),
+        ('Young, Bear Market, High Debt', 43, 2),
+        ('Young, Normal Market, Low Debt', 44, 0),
+        ('Middle Age, Bull Market, Med Debt', 45, 1),
+        ('Middle Age, Bear Market, Med Debt', 46, 2),
+        ('Middle Age, Normal Market, No Debt', 47, 0),
+        ('Old, Bull Market, No Debt', 48, 1),
+        ('Old, Bear Market, No Debt', 49, 2),
+        ('Old, Normal Market, High Wealth', 50, 0),
+    ]
+    
+    all_results = []
+    
+    for agent in agents:
+        # Skip non-RL agents
+        if not hasattr(agent, 'q_network'):
+            continue
+        
+        model_results = {
+            'model_name': agent.name,
+            'scenarios': []
+        }
+        
+        for name, seed, target_regime in test_scenarios:
+            state, _ = env.reset(seed=seed)
+            
+            # Force regime for testing
+            env.current_regime = target_regime
+            state[10] = target_regime
+            
+            # Get Q-values
+            state_tensor = torch.FloatTensor(state).unsqueeze(0).to(agent.device)
+            with torch.no_grad():
+                q_values = agent.q_network(state_tensor).squeeze().cpu().numpy()
+            
+            # Find best action
+            best_action = q_values.argmax()
+            best_q = q_values[best_action]
+            
+            # Get action description
+            action_desc = ACTION_DESCRIPTIONS.get(best_action, f"Action {best_action}")
+            
+            model_results['scenarios'].append({
+                'name': name,
+                'best_action': int(best_action),
+                'q_value': float(best_q),
+                'action_desc': action_desc
+            })
+        
+        all_results.append(model_results)
+    
+    return all_results
+
+
+def generate_plots(all_results, agents=None, env=None):
     """Generate interactive Plotly visualizations"""
     os.makedirs('visualization', exist_ok=True)
     
@@ -227,8 +299,7 @@ def generate_plots(all_results):
     plot_investment_allocation_evolution(all_results)
     
     # Agent-specific plots (only for RL agents with diverse actions)
-    rl_agents = ['Discrete_DQN', 'Discrete_PPO']
-    rl_results = [r for r in all_results if r['agent_name'] in rl_agents]
+    rl_results = [r for r in all_results if ('dqn' in r['agent_name'].lower() or 'ppo' in r['agent_name'].lower())]
     
     if rl_results:
         print("\n=== RL AGENT-SPECIFIC VISUALIZATIONS ===")
@@ -238,6 +309,21 @@ def generate_plots(all_results):
             # Action heatmap (only meaningful for RL agents)
             print(f"Creating action heatmap for {agent_name}...")
             plot_action_heatmap(result['action_history'], agent_name)
+    
+    # Q-policy comparison (if agents and env provided)
+    if agents and env:
+        print("\n=== Q-POLICY COMPARISON ===")
+        print("Analyzing Q-policies across scenarios...")
+        q_policy_data = analyze_q_policies_for_comparison(agents, env)
+        
+        if q_policy_data:
+            from plots import plot_q_policy_heatmap, plot_strategy_profile
+            
+            print("Creating Q-policy heatmap...")
+            plot_q_policy_heatmap(q_policy_data)
+            
+            print("Creating strategy profile chart...")
+            plot_strategy_profile(q_policy_data)
     
     print("\n✓ All visualizations saved to visualization/ directory")
 
@@ -255,13 +341,20 @@ def main():
     
     # Map agent names
     agent_map = {
-        'dqn': ('models/dqn_best_model.pth', DiscreteDQNAgent),
-        'ppo': ('models/ppo_best_model.pth', DiscretePPOAgent),
-        '60/40': (None, SixtyFortyAgent),
-        'debt': (None, DebtAvalancheAgent),
-        'equal': (None, EqualWeightAgent),
-        'age': (None, AgeBasedAgent),
-        'markowitz': (None, MarkowitzAgent),
+        'dqn80': ('models/dqn_sharpe80.pth', DiscreteDQNAgent),
+        'dqn70': ('models/dqn_sharpe70.pth', DiscreteDQNAgent),
+        'dqn60': ('models/dqn_sharpe60.pth', DiscreteDQNAgent),
+        'dqn50': ('models/dqn_sharpe50.pth', DiscreteDQNAgent),
+        'dqn40': ('models/dqn_sharpe40.pth', DiscreteDQNAgent),
+        'dqn30': ('models/dqn_sharpe30.pth', DiscreteDQNAgent),
+        'dqn20': ('models/dqn_sharpe20.pth', DiscreteDQNAgent),
+        'dqn10': ('models/dqn_sharpe10.pth', DiscreteDQNAgent),
+        # 'ppo': ('models/ppo_best_model.pth', DiscretePPOAgent),
+        # '60/40': (None, SixtyFortyAgent),
+        # 'debt': (None, DebtAvalancheAgent),
+        # 'equal': (None, EqualWeightAgent),
+        # 'age': (None, AgeBasedAgent),
+        # 'markowitz': (None, MarkowitzAgent),
     }
     
     # Select agents
@@ -276,7 +369,7 @@ def main():
         
         if model_path:  # RL agent
             if os.path.exists(model_path):
-                agent = agent_class()
+                agent = agent_class(name=model_path)
                 agent.load(model_path)
                 agents.append(agent)
                 print(f"Loaded {agent.name}")
@@ -305,7 +398,7 @@ def main():
         print(f"Action Diversity: {results['action_diversity']:.1%} of action space used")
     
     # Generate visualizations
-    generate_plots(all_results)
+    generate_plots(all_results, agents=agents, env=env)
     
     # Final rankings
     print(f"\n=== FINAL RANKINGS ===")
