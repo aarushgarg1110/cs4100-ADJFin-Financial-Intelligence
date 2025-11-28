@@ -1,37 +1,65 @@
 #!/usr/bin/env python3
 """
-Unified evaluation script for all financial agents (RL and rule-based)
-All agents use the same interface: get_action(state) -> continuous_action
+Evaluation script for discrete action space financial agents
+Supports discrete RL agents and baseline strategies
 """
 
 import numpy as np
-import matplotlib.pyplot as plt
 from tqdm import tqdm
-import sys
+import argparse
 import os
+import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from environment.finance_env import FinanceEnv
+from environment.finance_env import FinanceEnv, MONEY_ALLOC, INVEST_ALLOC, ACTION_DESCRIPTIONS
 from agents import (
+    DiscreteDQNAgent,
+    DiscretePPOAgent,
     SixtyFortyAgent,
     DebtAvalancheAgent,
     EqualWeightAgent,
     AgeBasedAgent,
     MarkowitzAgent,
-    PPOAgent,
-    ContinuousDQNAgent,
-    AllStocksAgent,
-    CashHoarderAgent,
-    DebtIgnorerAgent,
-    SACAgent,
+)
+from plots import (
+    plot_net_worth_trajectories,
+    plot_final_net_worth_comparison,
+    plot_action_heatmap,
+    plot_allocation_evolution,
+    plot_investment_allocation_evolution,
+    plot_debt_timeline,
+    plot_portfolio_snapshots,
+    plot_metrics_comparison,
 )
 
 def calculate_net_worth(state):
-    """Calculate net worth from state"""
-    return state[0] + state[1] + state[2] + state[3] + state[8] - state[4] - state[5]
+    """Calculate net worth from state (now at index 0 in new state structure)"""
+    return state[0]  # Net worth is first element in 13D state
+
+def decode_discrete_action(action_idx):
+    """
+    Decode discrete action index into money and investment allocations.
+    
+    Args:
+        action_idx: Integer 0-89 (90 total actions)
+    
+    Returns:
+        dict with 'money' and 'investment' allocation percentages
+    """
+    money_idx = action_idx // len(INVEST_ALLOC)
+    invest_idx = action_idx % len(INVEST_ALLOC)
+    
+    invest_pct, debt_pct, emergency_pct = MONEY_ALLOC[money_idx][0]
+    stock_pct, bond_pct, re_pct = INVEST_ALLOC[invest_idx][0]
+    
+    return {
+        'money': {'invest': invest_pct, 'debt': debt_pct, 'emergency': emergency_pct},
+        'investment': {'stocks': stock_pct, 'bonds': bond_pct, 'real_estate': re_pct},
+        'description': ACTION_DESCRIPTIONS[action_idx]
+    }
 
 def evaluate_agent(agent, env, num_episodes=100):
-    """Evaluate any agent using unified interface"""
+    """Evaluate discrete action agent"""
     
     print(f"Evaluating {agent.name} over {num_episodes} episodes...")
     
@@ -40,25 +68,77 @@ def evaluate_agent(agent, env, num_episodes=100):
     bankruptcy_count = 0
     debt_free_count = 0
     
-    # Track net worth trajectory (average across episodes)
+    # Track net worth trajectory
     monthly_net_worths = []
+    
+    # Track portfolio snapshots at years 0, 10, 20, 30
+    snapshot_months = [0, 120, 240, 359]
+    portfolio_snapshots = {month: [] for month in snapshot_months}
+    
+    # Track actions and allocations
+    action_history = {age: [] for age in range(25, 56)}
+    allocation_history = {age: {'invest': [], 'debt': [], 'emergency': []} for age in range(25, 56)}
+    investment_history = {age: {'stocks': [], 'bonds': [], 'real_estate': []} for age in range(25, 56)}
+    debt_history = {age: {'cc_debt': [], 'student_loan': []} for age in range(25, 56)}
+    
+    # Track all actions
+    all_actions = []
     
     # Set agent to evaluation mode if it's an RL agent
     if hasattr(agent, 'training'):
         agent.training = False
     
     for episode in tqdm(range(num_episodes)):
-        state, _ = env.reset(seed=42 + episode)
+        state, _ = env.reset(seed=env.seed + episode)
         total_reward = 0
         episode_net_worths = []
         
-        for step in range(359):  # 30 years * 12 months - 1
+        # Capture initial state (Year 0)
+        portfolio_snapshots[0].append({
+            'stocks': state[1],
+            'bonds': state[2],
+            'real_estate': state[3],
+            'cc_debt': state[4],
+            'student_loan': state[5],
+            'emergency_fund': state[8]
+        })
+        
+        for step in range(359):
             action = agent.get_action(state)
+            all_actions.append(action)
+            
+            current_age = int(state[7])
+            
+            # Track action and decode allocations
+            action_history[current_age].append(action)
+            decoded = decode_discrete_action(action)
+            allocation_history[current_age]['invest'].append(decoded['money']['invest'])
+            allocation_history[current_age]['debt'].append(decoded['money']['debt'])
+            allocation_history[current_age]['emergency'].append(decoded['money']['emergency'])
+            investment_history[current_age]['stocks'].append(decoded['investment']['stocks'])
+            investment_history[current_age]['bonds'].append(decoded['investment']['bonds'])
+            investment_history[current_age]['real_estate'].append(decoded['investment']['real_estate'])
+            
+            # Track debt levels
+            debt_history[current_age]['cc_debt'].append(state[4])
+            debt_history[current_age]['student_loan'].append(state[5])
+            
             state, reward, terminated, truncated, _ = env.step(action)
             total_reward += reward
             
             # Track net worth at each month
             episode_net_worths.append(calculate_net_worth(state))
+            
+            # Capture snapshots at specific months (fix state indices)
+            if step + 1 in snapshot_months:
+                portfolio_snapshots[step + 1].append({
+                    'stocks': state[1],
+                    'bonds': state[2],
+                    'real_estate': state[3],
+                    'cc_debt': state[4],
+                    'student_loan': state[5],
+                    'emergency_fund': state[8]
+                })
             
             if terminated or truncated:
                 break
@@ -81,135 +161,232 @@ def evaluate_agent(agent, env, num_episodes=100):
     avg_monthly_trajectory = np.mean(monthly_net_worths, axis=0)
     std_monthly_trajectory = np.std(monthly_net_worths, axis=0)
     
+    # Calculate average portfolio snapshots
+    avg_snapshots = {}
+    for month in snapshot_months:
+        avg_snapshots[month] = {
+            'stocks': np.mean([s['stocks'] for s in portfolio_snapshots[month]]),
+            'bonds': np.mean([s['bonds'] for s in portfolio_snapshots[month]]),
+            'real_estate': np.mean([s['real_estate'] for s in portfolio_snapshots[month]]),
+            'cc_debt': np.mean([s['cc_debt'] for s in portfolio_snapshots[month]]),
+            'student_loan': np.mean([s['student_loan'] for s in portfolio_snapshots[month]]),
+            'emergency_fund': np.mean([s['emergency_fund'] for s in portfolio_snapshots[month]])
+        }
+    
+    # Calculate action diversity
+    unique_actions = len(set(all_actions))
+    action_diversity = unique_actions / len(INVEST_ALLOC) / len(MONEY_ALLOC)  # Percentage of action space used
+    
     return {
         'agent_name': agent.name,
-        'avg_trajectory': avg_monthly_trajectory,  # Average net worth growth over 30 years
-        'std_trajectory': std_monthly_trajectory,  # Standard deviation for error bars
-        'final_net_worths': final_net_worths,  # Episode-by-episode final values
+        'avg_trajectory': avg_monthly_trajectory,
+        'std_trajectory': std_monthly_trajectory,
+        'final_net_worths': final_net_worths,
         'avg_reward': np.mean(rewards),
         'avg_net_worth': np.mean(final_net_worths),
         'bankruptcy_rate': bankruptcy_count / num_episodes,
         'debt_free_rate': debt_free_count / num_episodes,
         'min_net_worth': np.min(final_net_worths),
         'max_net_worth': np.max(final_net_worths),
+        'portfolio_snapshots': avg_snapshots,
+        'action_diversity': action_diversity,
+        'action_history': action_history,
+        'allocation_history': allocation_history,
+        'investment_history': investment_history,
+        'debt_history': debt_history,
     }
 
-def plot_results(all_results):
-    """Create comparison plots"""
-    
-    fig, ((ax1, ax2), (ax3, ax4)) = plt.subplots(2, 2, figsize=(15, 10))
-    
-    agent_names = [r['agent_name'] for r in all_results]
-    
-    # 1. Net Worth Growth Trajectories Over 30 Years
-    colors = ['blue', 'red', 'green', 'orange', 'purple', 'brown', 'pink', 'gray', 'olive', 'cyan']
-    
-    months = range(len(all_results[0]['avg_trajectory']))
-    years = [m/12 for m in months]
-    
-    for i, result in enumerate(all_results):
-        color = colors[i % len(colors)]
-        trajectory = result['avg_trajectory']
-        
-        # Plot average trajectory
-        ax1.plot(years, trajectory, color=color, linewidth=2, label=result['agent_name'])
-    
-    ax1.set_title('Net Worth Growth Over 30 Years')
-    ax1.set_xlabel('Years')
-    ax1.set_ylabel('Net Worth ($)')
-    ax1.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
-    ax1.grid(True, alpha=0.3)
-    
-    # 2. Final Net Worth Comparison (Bar Chart with Error Bars)
-    avg_net_worths = [r['avg_net_worth'] for r in all_results]
-    std_net_worths = [np.std(r['final_net_worths']) for r in all_results]
-    
-    bars = ax2.bar(agent_names, avg_net_worths, color=colors[:len(agent_names)], 
-                   yerr=std_net_worths, capsize=5)
-    ax2.set_title('Average Final Net Worth')
-    ax2.set_ylabel('Net Worth ($)')
-    ax2.tick_params(axis='x', rotation=45)
-    
-    # Add value labels on bars
-    for bar, value in zip(bars, avg_net_worths):
-        ax2.text(bar.get_x() + bar.get_width()/2, bar.get_height() + max(avg_net_worths)*0.01,
-                f'${value:,.0f}', ha='center', va='bottom', fontsize=9)
-    
-    # 3. Average Reward Comparison
-    avg_rewards = [r['avg_reward'] for r in all_results]
-    ax3.bar(agent_names, avg_rewards, color=colors[:len(agent_names)])
-    ax3.set_title('Average Episode Reward')
-    ax3.set_ylabel('Reward')
-    ax3.tick_params(axis='x', rotation=45)
-    
-    # 4. Risk Metrics
-    bankruptcy_rates = [r['bankruptcy_rate'] * 100 for r in all_results]
-    debt_free_rates = [r['debt_free_rate'] * 100 for r in all_results]
-    
-    x = np.arange(len(agent_names))
-    width = 0.35
-    
-    ax4.bar(x - width/2, bankruptcy_rates, width, label='Bankruptcy Rate', color='red', alpha=0.7)
-    ax4.bar(x + width/2, debt_free_rates, width, label='Debt-Free Rate', color='green', alpha=0.7)
-    
-    ax4.set_title('Risk Metrics')
-    ax4.set_ylabel('Percentage (%)')
-    ax4.set_xticks(x)
-    ax4.set_xticklabels(agent_names, rotation=45)
-    ax4.legend()
-    
-    plt.tight_layout()
-    
-    # Save to visualization directory
-    import os
-    os.makedirs('visualization', exist_ok=True)
-    plt.savefig('visualization/agent_comparison_results.png', dpi=300, bbox_inches='tight')
-    print("Results saved to visualization/agent_comparison_results.png")
-    plt.show()
 
-def main():
-    print("=== UNIFIED AGENT EVALUATION ===")
-    print("All agents use continuous actions for fair comparison\n")
+
+def analyze_q_policies_for_comparison(agents, env):
+    """
+    Analyze Q-policies for multiple agents across 9 scenarios.
+    Returns data structure for plotting.
     
-    # Create environment (single instance for all agents)
-    env = FinanceEnv()
+    Args:
+        agents: List of agent objects
+        env: FinanceEnv instance
     
-    # Initialize all agents
-    agents = [
-        # Simple/naive strategies
-        AllStocksAgent(),
-        CashHoarderAgent(), 
-        DebtIgnorerAgent(),
-        
-        # Expert rule-based strategies
-        SixtyFortyAgent(),
-        DebtAvalancheAgent(),
-        EqualWeightAgent(),
-        AgeBasedAgent(),
-        MarkowitzAgent(),
+    Returns:
+        List of dicts with 'model_name' and 'scenarios' keys
+    """
+    import torch
+    
+    # Define test scenarios (same as utils/visualize_q_policy.py)
+    test_scenarios = [
+        ('Young, Bull Market, High Debt', 42, 1),
+        ('Young, Bear Market, High Debt', 43, 2),
+        ('Young, Normal Market, Low Debt', 44, 0),
+        ('Middle Age, Bull Market, Med Debt', 45, 1),
+        ('Middle Age, Bear Market, Med Debt', 46, 2),
+        ('Middle Age, Normal Market, No Debt', 47, 0),
+        ('Old, Bull Market, No Debt', 48, 1),
+        ('Old, Bear Market, No Debt', 49, 2),
+        ('Old, Normal Market, High Wealth', 50, 0),
     ]
     
-    # Add trained RL agents if models exist
-    if os.path.exists('models/ppo_model.pth'):
-        ppo_agent = PPOAgent()
-        ppo_agent.load('models/ppo_model.pth')
-        agents.append(ppo_agent)
+    all_results = []
     
-    if os.path.exists('models/dqn_model.pth'):
-        dqn_agent = ContinuousDQNAgent()
-        dqn_agent.load('models/dqn_model.pth')
-        agents.append(dqn_agent)
+    for agent in agents:
+        # Skip non-RL agents
+        if not hasattr(agent, 'q_network'):
+            continue
+        
+        model_results = {
+            'model_name': agent.name,
+            'scenarios': []
+        }
+        
+        for name, seed, target_regime in test_scenarios:
+            state, _ = env.reset(seed=seed)
+            
+            # Force regime for testing
+            env.current_regime = target_regime
+            state[10] = target_regime
+            
+            # Get Q-values
+            state_tensor = torch.FloatTensor(state).unsqueeze(0).to(agent.device)
+            with torch.no_grad():
+                q_values = agent.q_network(state_tensor).squeeze().cpu().numpy()
+            
+            # Find best action
+            best_action = q_values.argmax()
+            best_q = q_values[best_action]
+            
+            # Get action description
+            action_desc = ACTION_DESCRIPTIONS.get(best_action, f"Action {best_action}")
+            
+            model_results['scenarios'].append({
+                'name': name,
+                'best_action': int(best_action),
+                'q_value': float(best_q),
+                'action_desc': action_desc
+            })
+        
+        all_results.append(model_results)
+    
+    return all_results
 
-    if os.path.exists('models/sac_model.pth'):
-        sac_agent = SACAgent()
-        sac_agent.load('models/sac_model.pth')
-        agents.append(sac_agent)
+
+def generate_plots(all_results, agents=None, env=None):
+    """Generate interactive Plotly visualizations"""
+    os.makedirs('visualization', exist_ok=True)
     
-    # Evaluate each agent
+    print("\n=== GENERATING VISUALIZATIONS ===")
+    
+    # 1. Net worth trajectories (all agents)
+    print("Creating net worth trajectories plot...")
+    plot_net_worth_trajectories(all_results)
+    
+    # 2. Final net worth comparison (all agents)
+    print("Creating final net worth comparison...")
+    plot_final_net_worth_comparison(all_results)
+    
+    # 3. Portfolio snapshots (all agents)
+    print("Creating portfolio snapshots...")
+    plot_portfolio_snapshots(all_results)
+    
+    # 4. Debt timeline (all agents combined)
+    print("Creating combined debt timeline...")
+    plot_debt_timeline(all_results)
+    
+    # 5. Allocation evolution (all agents combined)
+    print("Creating combined allocation evolution...")
+    plot_allocation_evolution(all_results)
+    
+    # 6. Investment allocation (all agents combined)
+    print("Creating combined investment allocation...")
+    plot_investment_allocation_evolution(all_results)
+    
+    # Agent-specific plots (only for RL agents with diverse actions)
+    rl_results = [r for r in all_results if ('dqn' in r['agent_name'].lower() or 'ppo' in r['agent_name'].lower())]
+    
+    if rl_results:
+        print("\n=== RL AGENT-SPECIFIC VISUALIZATIONS ===")
+        for result in rl_results:
+            agent_name = result['agent_name']
+            
+            # Action heatmap (only meaningful for RL agents)
+            print(f"Creating action heatmap for {agent_name}...")
+            plot_action_heatmap(result['action_history'], agent_name)
+    
+    # Q-policy comparison (if agents and env provided)
+    if agents and env:
+        print("\n=== Q-POLICY COMPARISON ===")
+        print("Analyzing Q-policies across scenarios...")
+        q_policy_data = analyze_q_policies_for_comparison(agents, env)
+        
+        if q_policy_data:
+            from plots import plot_q_policy_heatmap, plot_strategy_profile
+            
+            print("Creating Q-policy heatmap...")
+            plot_q_policy_heatmap(q_policy_data)
+            
+            print("Creating strategy profile chart...")
+            plot_strategy_profile(q_policy_data)
+    
+    print("\n✓ All visualizations saved to visualization/ directory")
+
+def main():
+    parser = argparse.ArgumentParser(description='Evaluate discrete financial agents')
+    parser.add_argument('--agents', nargs='+', choices=['dqn', 'ppo', '60/40', 'debt', 'equal', 'age', 'markowitz', 'all'],
+                        default=['all'], help='Agents to evaluate')
+    parser.add_argument('--episodes', type=int, default=100, help='Number of evaluation episodes')
+    args = parser.parse_args()
+    
+    print("=== DISCRETE AGENT EVALUATION ===\n")
+    
+    env = FinanceEnv()
+    agents = []
+    
+    # Map agent names
+    agent_map = {
+        'dqn80': ('models/dqn_sharpe80.pth', DiscreteDQNAgent),
+        'dqn70': ('models/dqn_sharpe70.pth', DiscreteDQNAgent),
+        'dqn60': ('models/dqn_sharpe60.pth', DiscreteDQNAgent),
+        'dqn50': ('models/dqn_sharpe50.pth', DiscreteDQNAgent),
+        'dqn40': ('models/dqn_sharpe40.pth', DiscreteDQNAgent),
+        'dqn30': ('models/dqn_sharpe30.pth', DiscreteDQNAgent),
+        'dqn20': ('models/dqn_sharpe20.pth', DiscreteDQNAgent),
+        'dqn10': ('models/dqn_sharpe10.pth', DiscreteDQNAgent),
+        # 'ppo': ('models/ppo_best_model.pth', DiscretePPOAgent),
+        # '60/40': (None, SixtyFortyAgent),
+        # 'debt': (None, DebtAvalancheAgent),
+        # 'equal': (None, EqualWeightAgent),
+        # 'age': (None, AgeBasedAgent),
+        # 'markowitz': (None, MarkowitzAgent),
+    }
+    
+    # Select agents
+    if 'all' in args.agents:
+        selected = agent_map.keys()
+    else:
+        selected = args.agents
+    
+    # Load agents
+    for name in selected:
+        model_path, agent_class = agent_map[name]
+        
+        if model_path:  # RL agent
+            if os.path.exists(model_path):
+                agent = agent_class(name=model_path)
+                agent.load(model_path)
+                agents.append(agent)
+                print(f"Loaded {agent.name}")
+            else:
+                print(f"Model not found: {model_path}")
+        else:  # Baseline agent
+            agents.append(agent_class())
+            print(f"Loaded {agent_class().name}")
+    
+    if not agents:
+        print("No agents to evaluate")
+        return
+    
+    # Evaluate agents
     all_results = []
     for agent in agents:
-        num_episodes = int(sys.argv[1]) if len(sys.argv) > 1 else 1000
-        results = evaluate_agent(agent, env, num_episodes)
+        results = evaluate_agent(agent, env, args.episodes)
         all_results.append(results)
         
         print(f"\n=== {results['agent_name']} RESULTS ===")
@@ -218,9 +395,10 @@ def main():
         print(f"Bankruptcy Rate: {results['bankruptcy_rate']:.1%}")
         print(f"Debt-Free Rate: {results['debt_free_rate']:.1%}")
         print(f"Net Worth Range: ${results['min_net_worth']:,.0f} to ${results['max_net_worth']:,.0f}")
+        print(f"Action Diversity: {results['action_diversity']:.1%} of action space used")
     
-    # Create visualizations
-    plot_results(all_results)
+    # Generate visualizations
+    generate_plots(all_results, agents=agents, env=env)
     
     # Final rankings
     print(f"\n=== FINAL RANKINGS ===")
@@ -228,7 +406,7 @@ def main():
     for i, result in enumerate(sorted_results, 1):
         print(f"{i}. {result['agent_name']}: ${result['avg_net_worth']:,.0f}")
     
-    print(f"\nSUCCESS: Unified evaluation complete!")
+    print(f"\nEvaluation complete!")
 
 if __name__ == "__main__":
     main()

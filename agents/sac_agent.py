@@ -99,12 +99,12 @@ class SACAgent(BaseFinancialAgent):
 
     def __init__(
         self,
-        lr=3e-4,
+        lr=3e-4,  # will update below
         gamma=0.995,
-        tau=0.005,
-        alpha=0.2,
+        tau=0.001,  # updated
+        alpha=0.4,  # updated
         target_entropy=None,
-        batch_size=64,
+        batch_size=64,  # already best
         name="SAC_Agent",
     ):
         super().__init__(name)
@@ -237,7 +237,7 @@ class SACAgent(BaseFinancialAgent):
         if "log_alpha" in checkpoint:
             self.log_alpha.data.copy_(checkpoint["log_alpha"].to(self.device))
 
-    def train(self, env, num_episodes=1000):
+    def train(self, env, num_episodes=1000, seed=None, print_freq=25, save_path='models/sac_model.pth'):
         """Self-contained training loop (mirrors other agents)"""
         episode_rewards = []
         actor_losses = []
@@ -245,9 +245,11 @@ class SACAgent(BaseFinancialAgent):
 
         progress = tqdm(range(num_episodes), desc="Training SAC")
         for episode in progress:
-            state, _ = env.reset()
+            episode_seed = seed + episode if seed is not None else None
+            state, _ = env.reset(seed=episode_seed)
             done = False
             total_reward = 0.0
+            step_count = 0
 
             while not done:
                 action = self.get_action(state)
@@ -256,24 +258,29 @@ class SACAgent(BaseFinancialAgent):
 
                 self.replay_buffer.push(state, action, reward, next_state, float(done))
 
+                step_count += 1
+                
+                # Update every 30 steps
+                if step_count % 30 == 0 and len(self.replay_buffer) >= self.batch_size:
+                    actor_loss, critic_loss = self._update_networks()
+                    actor_losses.append(actor_loss)
+                    critic_losses.append(critic_loss)
+
                 state = next_state
                 total_reward += reward
 
-            # Update once per episode (instead of every step)
-            if len(self.replay_buffer) >= self.batch_size:
-                actor_loss, critic_loss = self._update_networks()
-                actor_losses.append(actor_loss)
-                critic_losses.append(critic_loss)
-
             episode_rewards.append(total_reward)
 
-            if (episode + 1) % 100 == 0:
-                avg_reward = np.mean(episode_rewards[-100:])
-                tqdm.write(f"[SAC] Episode {episode + 1}, Avg Reward (last 100): {avg_reward:.2f}")
+            if (episode + 1) % print_freq == 0 or (episode + 1) == num_episodes:
+                avg_reward = np.mean(episode_rewards[-print_freq:]) if len(episode_rewards) >= print_freq else np.mean(episode_rewards)
+                avg_actor = np.mean(actor_losses[-print_freq:]) if len(actor_losses) >= print_freq else 0
+                avg_critic = np.mean(critic_losses[-print_freq:]) if len(critic_losses) >= print_freq else 0
+                tqdm.write(f"Ep {episode+1}/{num_episodes} | Reward: {avg_reward:.2f} | Actor Loss: {avg_actor:.4f} | Critic Loss: {avg_critic:.4f}")
 
-        # Persist models
-        import os
-        os.makedirs("models", exist_ok=True)
-        self.save("models/sac_model.pth")
+        # Save model if path provided
+        if save_path:
+            import os
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            self.save(save_path)
 
         return episode_rewards, actor_losses, critic_losses

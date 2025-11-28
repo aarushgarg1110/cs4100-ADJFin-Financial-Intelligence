@@ -1,130 +1,136 @@
 #!/usr/bin/env python3
 """
-Training script for RL agents with learning curve visualization
+Training script for discrete RL agents with loss visualization
 """
 
 import argparse
 import os
+import torch
 import numpy as np
 import matplotlib.pyplot as plt
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 from environment.finance_env import FinanceEnv
-from agents.ppo_agent import PPOAgent
-from agents.continuous_dqn_agent import ContinuousDQNAgent
-from agents.sac_agent import SACAgent
+from agents import DiscreteDQNAgent, DiscretePPOAgent
 
-def plot_training_curves(ppo_data=None, dqn_data=None, sac_data=None):
-    """Plot training progress with rewards and losses"""
-    fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+def plot_dqn_training(rewards, losses):
+    """Plot DQN training curves"""
+    fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 5))
     
-    # Plot 1: Episode Rewards
-    ax = axes[0]
-    if ppo_data:
-        rewards, _, _ = ppo_data
-        ax.plot(rewards, linewidth=0.5, color='lightblue', alpha=0.5)
-        running_avg = [sum(rewards[:i+1])/(i+1) for i in range(len(rewards))]
-        ax.plot(running_avg, linewidth=2, color='blue', label='PPO')
+    # Rewards
+    ax1.plot(rewards, linewidth=0.5, color='lightcoral', alpha=0.5)
+    running_avg = np.convolve(rewards, np.ones(25)/25, mode='valid')
+    ax1.plot(range(24, len(rewards)), running_avg, linewidth=2, color='red', label='Running Avg (25 eps)')
+    ax1.set_title('Episode Rewards', fontweight='bold')
+    ax1.set_xlabel('Episode')
+    ax1.set_ylabel('Total Reward')
+    ax1.grid(True, alpha=0.3)
+    ax1.legend()
     
-    if dqn_data:
-        rewards, _, _ = dqn_data
-        ax.plot(rewards, linewidth=0.5, color='lightcoral', alpha=0.5)
-        running_avg = [sum(rewards[:i+1])/(i+1) for i in range(len(rewards))]
-        ax.plot(running_avg, linewidth=2, color='red', label='DQN')
-
-    if sac_data:
-        rewards, _, _ = sac_data
-        ax.plot(rewards, linewidth=0.5, color='lightgreen', alpha=0.5)
-        running_avg = [sum(rewards[:i+1])/(i+1) for i in range(len(rewards))]
-        ax.plot(running_avg, linewidth=2, color='green', label='SAC')
-    
-    ax.set_title('Episode Rewards', fontsize=14, fontweight='bold')
-    ax.set_xlabel('Episode')
-    ax.set_ylabel('Total Reward')
-    ax.grid(True, alpha=0.3)
-    ax.legend()
-    
-    # Plot 2: Actor/Policy Loss
-    ax = axes[1]
-    if ppo_data:
-        _, policy_losses, _ = ppo_data
-        ax.plot(policy_losses, linewidth=1, color='blue', label='PPO Policy Loss')
-    
-    if dqn_data:
-        _, actor_losses, _ = dqn_data
-        ax.plot(actor_losses, linewidth=1, color='red', label='DQN Actor Loss')
-
-    if sac_data:
-        _, actor_losses, _ = sac_data
-        ax.plot(actor_losses, linewidth=1, color='green', label='SAC Actor Loss')
-    
-    ax.set_title('Actor/Policy Loss', fontsize=14, fontweight='bold')
-    ax.set_xlabel('Episode')
-    ax.set_ylabel('Loss')
-    ax.grid(True, alpha=0.3)
-    ax.legend()
-    
-    # Plot 3: Critic/Value Loss
-    ax = axes[2]
-    if ppo_data:
-        _, _, value_losses = ppo_data
-        ax.plot(value_losses, linewidth=1, color='blue', label='PPO Value Loss')
-    
-    if dqn_data:
-        _, _, critic_losses = dqn_data
-        ax.plot(critic_losses, linewidth=1, color='red', label='DQN Critic Loss')
-
-    if sac_data:
-        _, _, critic_losses = sac_data
-        ax.plot(critic_losses, linewidth=1, color='green', label='SAC Critic Loss')
-    
-    ax.set_title('Critic/Value Loss', fontsize=14, fontweight='bold')
-    ax.set_xlabel('Episode')
-    ax.set_ylabel('Loss')
-    ax.grid(True, alpha=0.3)
-    ax.legend()
+    # Q-Loss
+    ax2.plot(losses, linewidth=1, color='red')
+    ax2.set_title('Q-Loss', fontweight='bold')
+    ax2.set_xlabel('Update Step')
+    ax2.set_ylabel('Loss')
+    ax2.grid(True, alpha=0.3)
     
     plt.tight_layout()
     os.makedirs('visualization', exist_ok=True)
-    plt.savefig('visualization/training_curves.png', dpi=300, bbox_inches='tight')
+    plt.savefig('visualization/dqn_training.png', dpi=300)
+    print("✓ Training curves saved to visualization/dqn_training.png")
+    plt.show()
+
+def plot_ppo_training(rewards, policy_losses, value_losses):
+    """Plot PPO training curves"""
+    fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(18, 5))
+    
+    # Rewards
+    ax1.plot(rewards, linewidth=0.5, color='lightblue', alpha=0.5)
+    running_avg = np.convolve(rewards, np.ones(25)/25, mode='valid')
+    ax1.plot(range(24, len(rewards)), running_avg, linewidth=2, color='blue', label='Running Avg (25 eps)')
+    ax1.set_title('Episode Rewards', fontweight='bold')
+    ax1.set_xlabel('Episode')
+    ax1.set_ylabel('Total Reward')
+    ax1.grid(True, alpha=0.3)
+    ax1.legend()
+    
+    # Policy Loss
+    ax2.plot(policy_losses, linewidth=1, color='blue')
+    ax2.set_title('Policy Loss', fontweight='bold')
+    ax2.set_xlabel('Update Step')
+    ax2.set_ylabel('Loss')
+    ax2.grid(True, alpha=0.3)
+    
+    # Value Loss
+    ax3.plot(value_losses, linewidth=1, color='darkblue')
+    ax3.set_title('Value Loss', fontweight='bold')
+    ax3.set_xlabel('Update Step')
+    ax3.set_ylabel('Loss')
+    ax3.grid(True, alpha=0.3)
+    
+    plt.tight_layout()
+    os.makedirs('visualization', exist_ok=True)
+    plt.savefig('visualization/ppo_training.png', dpi=300)
+    print("✓ Training curves saved to visualization/ppo_training.png")
     plt.show()
 
 def main():
-    parser = argparse.ArgumentParser(description='Train RL agents for financial planning')
-    parser.add_argument('--agents', nargs='+', choices=['ppo', 'dqn', 'sac', 'all'], 
-                        default=['all'], help='Agents to train (default: all)')
-    parser.add_argument('--episodes', type=int, default=1000, 
-                        help='Number of training episodes (default: 1000)')
+    parser = argparse.ArgumentParser(description='Train discrete RL agents')
+    parser.add_argument('--agent', type=str, choices=['dqn', 'ppo'], required=True, help='Agent to train')
+    parser.add_argument('--episodes', type=int, default=1000, help='Number of episodes')
+    parser.add_argument('--seed', type=int, default=42, help='Random seed')
+    parser.add_argument('--save-path', type=str, default=None, help='Path to save model (default: models/discrete_{agent}_model.pth)')
+    parser.add_argument('--sharpe-ratio', type=float, default=0.5, help='Sharpe ratio weight for reward calculation')
+    
+    # DQN hyperparameters
+    parser.add_argument('--lr', type=float, default=1e-5, help='Learning rate')
+    parser.add_argument('--gamma', type=float, default=0.99, help='Discount factor')
+    parser.add_argument('--batch-size', type=int, default=64, help='Batch size (DQN only)')
+    parser.add_argument('--epsilon-decay', type=float, default=0.995, help='Epsilon decay (DQN only)')
+    parser.add_argument('--target-update-freq', type=int, default=10, help='Target update frequency (DQN only)')
+    
+    # PPO hyperparameters
+    parser.add_argument('--clip-epsilon', type=float, default=0.2, help='PPO clip epsilon')
+    parser.add_argument('--epochs', type=int, default=10, help='PPO epochs per update')
+    
     args = parser.parse_args()
     
-    agents_to_train = ['ppo', 'dqn', 'sac'] if 'all' in args.agents else args.agents
-    print(f"Training {', '.join(agents_to_train).upper()} for {args.episodes} episodes...")
+    # Set default save path if not provided
+    if args.save_path is None:
+        args.save_path = f'models/discrete_{args.agent}_model.pth'
     
-    env = FinanceEnv()
-    ppo_data = dqn_data = sac_data = None
+    print(f"Training {args.agent.upper()} for {args.episodes} episodes...")
+    print(f"Model will be saved to: {args.save_path}")
     
-    if 'ppo' in agents_to_train:
-        print("=== Training PPO Agent ===")
-        ppo_agent = PPOAgent()
-        ppo_data = ppo_agent.train(env, num_episodes=args.episodes)
-        print(f"PPO training complete. Final avg reward: {np.mean(ppo_data[0][-100:]):.2f}")
+    env = FinanceEnv(sharpe_ratio=args.sharpe_ratio)
     
-    if 'dqn' in agents_to_train:
-        print("\n=== Training DQN Agent ===")
-        dqn_agent = ContinuousDQNAgent()
-        dqn_data = dqn_agent.train(env, num_episodes=args.episodes)
-        print(f"DQN training complete. Final avg reward: {np.mean(dqn_data[0][-100:]):.2f}")
-
-    if 'sac' in agents_to_train:
-        print("\n=== Training SAC Agent ===")
-        sac_agent = SACAgent()
-        sac_data = sac_agent.train(env, num_episodes=args.episodes)
-        tail = sac_data[0][-100:] if len(sac_data[0]) >= 100 else sac_data[0]
-        print(f"SAC training complete. Final avg reward: {np.mean(tail):.2f}")
+    if args.agent == 'dqn':
+        print(f"Hyperparameters: lr={args.lr}, gamma={args.gamma}, batch_size={args.batch_size}, epsilon_decay={args.epsilon_decay}, target_update_freq={args.target_update_freq}")
+        agent = DiscreteDQNAgent(
+            lr=args.lr,
+            gamma=args.gamma,
+            batch_size=args.batch_size,
+            epsilon_decay=args.epsilon_decay,
+            target_update_freq=args.target_update_freq
+        )
+        rewards, losses = agent.train(env, num_episodes=args.episodes, seed=args.seed, 
+                                      save_path=args.save_path)
+        plot_dqn_training(rewards, losses)
+        
+    elif args.agent == 'ppo':
+        print(f"Hyperparameters: lr={args.lr}, gamma={args.gamma}, clip_epsilon={args.clip_epsilon}, epochs={args.epochs}")
+        agent = DiscretePPOAgent(
+            lr=args.lr,
+            gamma=args.gamma,
+            clip_epsilon=args.clip_epsilon,
+            epochs=args.epochs
+        )
+        rewards, policy_losses, value_losses = agent.train(env, num_episodes=args.episodes, seed=args.seed,
+                                                           save_path=args.save_path)
+        plot_ppo_training(rewards, policy_losses, value_losses)
     
-    plot_training_curves(ppo_data, dqn_data, sac_data)
-    print("Training curves saved to visualization/training_curves.png")
+    print(f"\n✓ Training complete! Final avg reward: {np.mean(rewards[-100:]):.2f}")
 
 if __name__ == "__main__":
     main()

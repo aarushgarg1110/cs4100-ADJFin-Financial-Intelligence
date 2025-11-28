@@ -1,31 +1,27 @@
 """
-Ablation Study Script for ADJFin RL Project
+Ablation Study Script for ADJFin RL Project (DISCRETE ACTION SPACE)
 Tests impact of market volatility on RL performance
-Includes stable market environment and financial metrics
 """
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn as sns
 from pathlib import Path
-from typing import Dict, List, Tuple
+from typing import Dict, List
 import sys
 import os
 sys.path.append('..')
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'environment'))
 
 from environment.finance_env import FinanceEnv
 from agents import (
     SixtyFortyAgent, AgeBasedAgent, MarkowitzAgent,
-    PPOAgent, ContinuousDQNAgent, DebtAvalancheAgent, EqualWeightAgent
+    DebtAvalancheAgent, EqualWeightAgent
 )
-from agents.sac_agent import SACAgent
 
 
 def calculate_net_worth(state):
-    """Calculate net worth from state"""
-    return state[0] + state[1] + state[2] + state[3] + state[8] - state[4] - state[5]
+    """Calculate net worth from state (now at index 0)"""
+    return state[0]
 
 
 class StableMarketEnvironment(FinanceEnv):
@@ -33,7 +29,6 @@ class StableMarketEnvironment(FinanceEnv):
     
     def _update_market(self):
         """Override with constant average returns (no volatility)"""
-        # Use constant average returns instead of regime-based sampling
         # Historical averages: stocks ~10% annual, bonds ~4% annual, RE ~7% annual
         self.stock_return_1m = 0.008  # ~10% annual
         self.bond_return_1m = 0.003   # ~4% annual
@@ -57,12 +52,12 @@ class FinancialMetrics:
         if len(returns) == 0 or np.std(returns) == 0:
             return 0.0
         
-        excess_returns = returns - (risk_free_rate / 12)  # Monthly risk-free rate
+        excess_returns = returns - (risk_free_rate / 12)
         return np.mean(excess_returns) / np.std(returns) * np.sqrt(12)
     
     @staticmethod
     def max_drawdown(net_worths: np.ndarray) -> float:
-        """Calculate maximum drawdown (worst peak-to-trough decline)"""
+        """Calculate maximum drawdown"""
         if len(net_worths) == 0:
             return 0.0
         
@@ -72,7 +67,6 @@ class FinancialMetrics:
         for value in net_worths:
             if value > peak:
                 peak = value
-            
             dd = (peak - value) / peak if peak > 0 else 0
             max_dd = max(max_dd, dd)
         
@@ -90,15 +84,24 @@ class FinancialMetrics:
         """Calculate all financial metrics from net worth trajectory"""
         net_worths = np.array(net_worths)
         
+        if len(net_worths) == 0:
+            return {
+                'sharpe_ratio': 0.0,
+                'max_drawdown': 0.0,
+                'volatility': 0.0,
+                'final_net_worth': 0.0,
+                'total_return': 0.0
+            }
+        
         # Calculate returns
-        returns = np.diff(net_worths) / (net_worths[:-1] + 1e-6)  # Avoid division by zero
+        returns = np.diff(net_worths) / (net_worths[:-1] + 1e-6)
         
         return {
             'sharpe_ratio': FinancialMetrics.sharpe_ratio(returns),
             'max_drawdown': FinancialMetrics.max_drawdown(net_worths),
             'volatility': FinancialMetrics.volatility(returns),
-            'final_net_worth': net_worths[-1] if len(net_worths) > 0 else 0,
-            'total_return': (net_worths[-1] - net_worths[0]) / (net_worths[0] + 1e-6) if len(net_worths) > 0 else 0
+            'final_net_worth': net_worths[-1],
+            'total_return': (net_worths[-1] - net_worths[0]) / (net_worths[0] + 1e-6)
         }
 
 
@@ -116,50 +119,42 @@ class AblationStudy:
     
     def _get_agent(self, agent_name: str):
         """Load or create agent"""
-        from agents.baseline_strategies import AllStocksAgent, CashHoarderAgent, DebtIgnorerAgent
-        
         agent_map = {
             '60_40': SixtyFortyAgent(),
             'age_based': AgeBasedAgent(),
             'markowitz': MarkowitzAgent(),
             'debt_avalanche': DebtAvalancheAgent(),
-            'equal_weight': EqualWeightAgent(),
-            'all_stocks': AllStocksAgent(),
-            'cash_hoarder': CashHoarderAgent(),
-            'debt_ignorer': DebtIgnorerAgent()
+            'equal_weight': EqualWeightAgent()
         }
         
-        # RL agents
         if agent_name == 'ppo':
-            agent = PPOAgent()
-            if os.path.exists('../models/ppo_model.pth'):
-                agent.load('../models/ppo_model.pth')
+            from agents.discrete_ppo_agent import DiscretePPOAgent
+            agent = DiscretePPOAgent()
+            if os.path.exists('../models/ppo_best_model.pth'):
+                agent.load('../models/ppo_best_model.pth')
                 agent.training = False
+                print(f"Loaded discrete PPO model")
+            else:
+                print(f"No discrete PPO model found")
             return agent
+    
         elif agent_name == 'dqn':
-            agent = ContinuousDQNAgent()
-            if os.path.exists('../models/dqn_model.pth'):
-                agent.load('../models/dqn_model.pth')
+            from agents.discrete_dqn_agent import DiscreteDQNAgent
+            agent = DiscreteDQNAgent()
+            if os.path.exists('../models/dqn_best_model.pth'):
+                agent.load('../models/dqn_best_model.pth')
                 agent.training = False
+                print(f"Loaded discrete DQN model")
+            else:
+                print(f"No discrete DQN model found")
             return agent
-        elif agent_name == 'sac':
-            agent = SACAgent()
-            if os.path.exists('../models/sac_model.pth'):
-                agent.load('../models/sac_model.pth')
-                agent.training = False
-            return agent
-        
+
         return agent_map.get(agent_name)
     
     def run_ablation_experiment(self, n_seeds: int = 5):
         """Run agents in both normal and stable market conditions"""
         
-        agents = [
-            'dqn', 'ppo', 'sac',  # RL agents
-            '60_40', 'age_based', 'markowitz',  # Traditional
-            'debt_avalanche', 'equal_weight',  # Expert
-            'all_stocks', 'cash_hoarder', 'debt_ignorer'  # Naive
-        ]
+        agents = ['60_40', 'age_based', 'markowitz', 'debt_avalanche', 'equal_weight', 'ppo', 'dqn']
         
         print("="*60)
         print("ABLATION STUDY: Market Volatility Impact")
@@ -194,28 +189,30 @@ class AblationStudy:
         for seed in range(n_seeds):
             # Create environment
             if stable:
-                env = StableMarketEnvironment()
+                env = StableMarketEnvironment(seed=10000 + seed)
             else:
-                env = FinanceEnv()
+                env = FinanceEnv(seed=10000 + seed)
             
             # Load agent
             agent = self._get_agent(agent_name)
             
             # Run episode
-            state, _ = env.reset(seed=42 + seed)
+            state, _ = env.reset(seed=10000 + seed)
             done = False
             total_reward = 0
             net_worths = []
+            step = 0
             
-            while not done:
+            while not done and step < 360:
                 action = agent.get_action(state)
                 next_state, reward, terminated, truncated, _ = env.step(action)
                 
-                net_worths.append(calculate_net_worth(state))
+                net_worths.append(state[0])  # Net worth at index 0
                 
                 total_reward += reward
                 state = next_state
                 done = terminated or truncated
+                step += 1
             
             # Calculate metrics
             metrics = FinancialMetrics.calculate_all_metrics(net_worths)
@@ -245,31 +242,31 @@ class AblationStudy:
             stable_means.append(stable_mean)
             improvements.append(((normal_mean - stable_mean) / stable_mean) * 100)
         
-        # Create figure with subplots
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(18, 7))
+        # Create figure
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
         
-        # Plot 1: Absolute performance comparison
+        # Plot 1: Absolute performance
         x = np.arange(len(agents))
         width = 0.35
         
-        bars1 = ax1.bar(x - width/2, normal_means, width, 
-                       label='With Volatility', color='#2E86AB', alpha=0.7)
-        bars2 = ax1.bar(x + width/2, stable_means, width,
-                       label='Without Volatility', color='#A23B72', alpha=0.7)
+        ax1.bar(x - width/2, normal_means, width, 
+               label='With Volatility', color='#2E86AB', alpha=0.7)
+        ax1.bar(x + width/2, stable_means, width,
+               label='Without Volatility', color='#A23B72', alpha=0.7)
         
         ax1.set_xlabel('Agent', fontsize=12, fontweight='bold')
         ax1.set_ylabel('Final Net Worth ($)', fontsize=12, fontweight='bold')
         ax1.set_title('Performance: Normal vs Stable Markets', 
                      fontsize=14, fontweight='bold')
         ax1.set_xticks(x)
-        ax1.set_xticklabels(agents, rotation=45, ha='right', fontsize=10)
+        ax1.set_xticklabels(agents)
         ax1.legend()
         ax1.grid(axis='y', alpha=0.3)
         ax1.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x/1e6:.1f}M'))
         
         # Plot 2: Relative improvement
         colors = ['#2E86AB' if imp > 0 else '#C73E1D' for imp in improvements]
-        bars = ax2.barh(agents, improvements, color=colors, alpha=0.7, edgecolor='black')
+        ax2.barh(agents, improvements, color=colors, alpha=0.7, edgecolor='black')
         
         ax2.set_xlabel('Performance Change (%)', fontsize=12, fontweight='bold')
         ax2.set_ylabel('Agent', fontsize=12, fontweight='bold')
@@ -277,18 +274,13 @@ class AblationStudy:
         ax2.axvline(x=0, color='black', linestyle='--', linewidth=1)
         ax2.grid(axis='x', alpha=0.3)
         
-        # Add value labels with better positioning to avoid overlap
-        x_range = max(improvements) - min(improvements) if improvements else 1
-        offset = max(0.02 * x_range, 0.5)  # Dynamic offset based on data range
+        # Add value labels
+        for i, (val) in enumerate(improvements):
+            ax2.text(val + (1 if val > 0 else -1), i, f'{val:+.1f}%', 
+                    va='center', ha='left' if val > 0 else 'right',
+                    fontweight='bold')
         
-        for i, (bar, val) in enumerate(zip(bars, improvements)):
-            # Position label outside the bar
-            x_pos = val + offset if val >= 0 else val - offset
-            ax2.text(x_pos, i, f'{val:+.1f}%', 
-                    va='center', ha='left' if val >= 0 else 'right',
-                    fontweight='bold', fontsize=9)
-        
-        plt.tight_layout(pad=3.0)
+        plt.tight_layout()
         plt.savefig(self.output_dir / "ablation_comparison.png", dpi=300)
         print("\nAblation comparison plot saved!")
         plt.close()
@@ -346,7 +338,7 @@ class AblationStudy:
         
         report = []
         report.append("="*80)
-        report.append("ABLATION STUDY REPORT: Market Volatility Impact")
+        report.append("ABLATION STUDY REPORT: Market Volatility Impact (Discrete Actions)")
         report.append("="*80)
         report.append("")
         
@@ -381,51 +373,6 @@ class AblationStudy:
             report.append(f"  Volatility:     {np.mean([r['volatility'] for r in stable_results]):.1%}")
         
         report.append("\n" + "="*80)
-        report.append("KEY FINDINGS")
-        report.append("="*80)
-        
-        # Calculate RL advantage
-        rl_agents = ['dqn', 'ppo', 'sac']
-        baseline_agents = ['60_40', 'age_based', 'markowitz', 'debt_avalanche', 'equal_weight']
-        
-        rl_agents_present = [a for a in rl_agents if a in self.results['normal_market']]
-        baseline_agents_present = [a for a in baseline_agents if a in self.results['normal_market']]
-        
-        if rl_agents_present and baseline_agents_present: 
-            rl_normal_avg = np.mean([np.mean([r['final_net_worth'] 
-                                              for r in self.results['normal_market'][a]]) 
-                                    for a in rl_agents_present])
-            rl_stable_avg = np.mean([np.mean([r['final_net_worth'] 
-                                              for r in self.results['stable_market'][a]]) 
-                                    for a in rl_agents_present if a in self.results['stable_market']])
-            
-            baseline_normal_avg = np.mean([np.mean([r['final_net_worth'] 
-                                                     for r in self.results['normal_market'][a]]) 
-                                           for a in baseline_agents_present])
-            baseline_stable_avg = np.mean([np.mean([r['final_net_worth'] 
-                                                     for r in self.results['stable_market'][a]]) 
-                                           for a in baseline_agents_present if a in self.results['stable_market']])
-            
-            rl_advantage_normal = ((rl_normal_avg - baseline_normal_avg) / baseline_normal_avg) * 100
-            rl_advantage_stable = ((rl_stable_avg - baseline_stable_avg) / baseline_stable_avg) * 100
-            
-            report.append(f"\nRL Advantage (vs Expert Baselines):")
-            report.append(f"  With Volatility:    {rl_advantage_normal:+.1f}%")
-            report.append(f"  Without Volatility: {rl_advantage_stable:+.1f}%")
-            report.append(f"  Advantage Loss:     {rl_advantage_normal - rl_advantage_stable:.1f} percentage points")
-            
-            report.append("\nCONCLUSION:")
-            if rl_advantage_normal - rl_advantage_stable > 5:
-                report.append("  RL agents' advantage comes PRIMARILY from market timing ability")
-            elif rl_advantage_stable > 10:
-                report.append("  RL agents maintain strong advantage even without volatility")
-                report.append("  suggesting superior long-term strategic planning")
-            else:
-                report.append("  RL agents show modest advantage over traditional strategies")
-        else:
-            report.append("\nRL Advantage: Cannot calculate (missing RL or baseline agents)")
-        
-        report.append("\n" + "="*80)
         
         # Save report
         with open(self.output_dir / "ablation_report.txt", 'w') as f:
@@ -438,7 +385,7 @@ class AblationStudy:
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description='Ablation study for ADJFin')
+    parser = argparse.ArgumentParser(description='Ablation study for ADJFin (discrete)')
     parser.add_argument('--seeds', type=int, default=5, 
                        help='Number of seeds per condition')
     
@@ -447,7 +394,7 @@ if __name__ == "__main__":
     study = AblationStudy()
     
     print("="*60)
-    print("ABLATION STUDY: MARKET VOLATILITY IMPACT")
+    print("ABLATION STUDY: MARKET VOLATILITY IMPACT (Discrete Actions)")
     print("="*60)
     
     study.run_ablation_experiment(n_seeds=args.seeds)

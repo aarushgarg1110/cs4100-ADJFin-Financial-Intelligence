@@ -8,14 +8,16 @@ from .baseline_strategies import (
     DebtAvalancheAgent,
     EqualWeightAgent,
     AgeBasedAgent,
-    MarkowitzAgent,
-    AllStocksAgent,
-    CashHoarderAgent,
-    DebtIgnorerAgent,
+    MarkowitzAgent
 )
+# Continuous RL agents (original)
 from .ppo_agent import PPOAgent
 from .continuous_dqn_agent import ContinuousDQNAgent
 from .sac_agent import SACAgent
+
+# Discrete RL agents (new - for 60 discrete actions)
+from .discrete_dqn_agent import DiscreteDQNAgent
+from .discrete_ppo_agent import DiscretePPOAgent
 
 __all__ = [
     'BaseFinancialAgent',
@@ -24,10 +26,9 @@ __all__ = [
     'EqualWeightAgent', 
     'AgeBasedAgent',
     'MarkowitzAgent',
-    'AllStocksAgent',
-    'CashHoarderAgent',
-    'DebtIgnorerAgent',
     'PPOAgent',
     'ContinuousDQNAgent',
     'SACAgent',
+    'DiscreteDQNAgent',
+    'DiscretePPOAgent',
 ]

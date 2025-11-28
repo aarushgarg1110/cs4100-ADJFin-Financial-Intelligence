@@ -1,6 +1,7 @@
 """
-Behavioral Analysis Script for ADJFin RL Project
+Behavioral Analysis Script for ADJFin RL Project (DISCRETE ACTION SPACE)
 Analyzes agent decision-making patterns across market regimes
+Tracks which of the 90 discrete strategies agents prefer
 """
 
 import numpy as np
@@ -12,34 +13,45 @@ from typing import Dict, List
 import sys
 import os
 sys.path.append('..')
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', 'environment'))
 
-from environment.finance_env import FinanceEnv
+from environment.finance_env import FinanceEnv, MONEY_ALLOC, INVEST_ALLOC, ACTION_DESCRIPTIONS
 from agents import (
     SixtyFortyAgent, DebtAvalancheAgent, EqualWeightAgent,
-    AgeBasedAgent, MarkowitzAgent, PPOAgent, ContinuousDQNAgent
+    AgeBasedAgent, MarkowitzAgent
 )
-from agents.sac_agent import SACAgent
 
 
 def calculate_net_worth(state):
-    """Calculate net worth from state"""
-    return state[0] + state[1] + state[2] + state[3] + state[8] - state[4] - state[5]
+    """Calculate net worth from state (at index 0)"""
+    return state[0]
+
+
+def decode_action(action_idx):
+    """Decode discrete action into money and investment allocations"""
+    money_idx = action_idx // len(INVEST_ALLOC)
+    invest_idx = action_idx % len(INVEST_ALLOC)
+    
+    money_alloc = MONEY_ALLOC[money_idx][0]  # [invest%, debt%, emergency%]
+    invest_alloc = INVEST_ALLOC[invest_idx][0]  # [stock%, bond%, re%]
+    
+    return {
+        'action_idx': action_idx,
+        'money_idx': money_idx,
+        'invest_idx': invest_idx,
+        'invest_pct': money_alloc[0],
+        'debt_pct': money_alloc[1],
+        'emergency_pct': money_alloc[2],
+        'stock_pct': invest_alloc[0],
+        'bond_pct': invest_alloc[1],
+        're_pct': invest_alloc[2],
+        'description': ACTION_DESCRIPTIONS[action_idx]
+    }
 
 
 class BehavioralAnalyzer:
     def __init__(self, output_dir: str = "behavioral_results"):
         self.output_dir = Path(output_dir)
         self.output_dir.mkdir(exist_ok=True)
-        
-        self.action_labels = [
-            'Stock Allocation',
-            'Bond Allocation', 
-            'Real Estate Allocation',
-            'Emergency Fund Contribution',
-            'Credit Card Payment',
-            'Student Loan Payment'
-        ]
         
         self.behavioral_data = {}
     
@@ -53,26 +65,28 @@ class BehavioralAnalyzer:
             'markowitz': MarkowitzAgent()
         }
         
-        # RL agents
         if agent_name == 'ppo':
-            agent = PPOAgent()
-            if os.path.exists('../models/ppo_model.pth'):
-                agent.load('../models/ppo_model.pth')
+            from agents.discrete_ppo_agent import DiscretePPOAgent
+            agent = DiscretePPOAgent()
+            if os.path.exists('../models/ppo_best_model.pth'):
+                agent.load('../models/ppo_best_model.pth')
                 agent.training = False
+                print(f"Loaded discrete PPO model")
+            else:
+                print(f"No discrete PPO model found")
             return agent
+    
         elif agent_name == 'dqn':
-            agent = ContinuousDQNAgent()
-            if os.path.exists('../models/dqn_model.pth'):
-                agent.load('../models/dqn_model.pth')
+            from agents.discrete_dqn_agent import DiscreteDQNAgent
+            agent = DiscreteDQNAgent()
+            if os.path.exists('../models/dqn_best_model.pth'):
+                agent.load('../models/dqn_best_model.pth')
                 agent.training = False
+                print(f"Loaded discrete DQN model")
+            else:
+                print(f"No discrete DQN model found")
             return agent
-        elif agent_name == 'sac':
-            agent = SACAgent()
-            if os.path.exists('../models/sac_model.pth'):
-                agent.load('../models/sac_model.pth')
-                agent.training = False
-            return agent
-        
+
         return agent_map.get(agent_name)
     
     def run_agent_analysis(self, agent_name: str, n_episodes: int = 5):
@@ -83,32 +97,44 @@ class BehavioralAnalyzer:
         
         agent_behavior = {
             'actions_by_regime': {0: [], 1: [], 2: []},  # Normal, Bull, Bear
+            'action_counts': {},  # Count of each action taken
+            'decoded_actions_by_regime': {0: [], 1: [], 2: []},
             'allocations_by_age': {},
-            'action_sequences': [],
             'market_timing_score': 0,
             'debt_priority_score': 0,
             'emergency_fund_priority': 0
         }
         
         for episode in range(n_episodes):
-            env = FinanceEnv()
-            state, _ = env.reset(seed=42 + episode)
+            env = FinanceEnv(seed=10000 + episode)
+            state, _ = env.reset(seed=10000 + episode)
             
             done = False
-            episode_data = []
+            step = 0
             
-            while not done:
-                action = agent.get_action(state)
-                next_state, reward, terminated, truncated, _ = env.step(action)
+            while not done and step < 360:
+                action_idx = agent.get_action(state)
+                next_state, reward, terminated, truncated, _ = env.step(action_idx)
+                
+                # Decode action
+                decoded = decode_action(action_idx)
                 
                 # Parse state
                 regime = int(state[10])  # Market regime
                 age = int(state[7])
                 
-                # Record action by regime
-                agent_behavior['actions_by_regime'][regime].append(action)
+                # Record raw action by regime
+                agent_behavior['actions_by_regime'][regime].append(action_idx)
                 
-                # Record allocation by age decade
+                # Record decoded action by regime
+                agent_behavior['decoded_actions_by_regime'][regime].append(decoded)
+                
+                # Count action usage
+                if action_idx not in agent_behavior['action_counts']:
+                    agent_behavior['action_counts'][action_idx] = 0
+                agent_behavior['action_counts'][action_idx] += 1
+                
+                # Record by age
                 age_bucket = (age // 10) * 10
                 if age_bucket not in agent_behavior['allocations_by_age']:
                     agent_behavior['allocations_by_age'][age_bucket] = []
@@ -119,270 +145,175 @@ class BehavioralAnalyzer:
                     'bonds': state[2],
                     'cc_debt': state[4],
                     'student_debt': state[5],
-                    'action': action
-                })
-                
-                episode_data.append({
-                    'action': action.copy(),
-                    'regime': regime,
-                    'age': age,
-                    'state': state.copy()
+                    'action_idx': action_idx,
+                    'decoded': decoded
                 })
                 
                 state = next_state
                 done = terminated or truncated
-            
-            agent_behavior['action_sequences'].append(episode_data)
+                step += 1
         
         # Calculate behavioral scores
         agent_behavior['market_timing_score'] = self._calculate_market_timing_score(
-            agent_behavior['actions_by_regime']
+            agent_behavior['decoded_actions_by_regime']
         )
         agent_behavior['debt_priority_score'] = self._calculate_debt_priority_score(
-            agent_behavior['action_sequences']
-        )
-        agent_behavior['emergency_fund_priority'] = self._calculate_emergency_priority(
-            agent_behavior['allocations_by_age']
+            agent_behavior['decoded_actions_by_regime']
         )
         
         self.behavioral_data[agent_name] = agent_behavior
         return agent_behavior
     
-    def _calculate_market_timing_score(self, actions_by_regime: Dict) -> float:
-        """
-        Score how well agent times the market
-        Higher score = more risk reduction in bear markets
-        """
-        if not actions_by_regime[2]:  # No bear market data
+    def _calculate_market_timing_score(self, decoded_actions_by_regime: Dict) -> float:
+        """Score how well agent times the market (higher = reduces stocks in bear markets)"""
+        if not decoded_actions_by_regime[2]:  # No bear market data
             return 0.0
         
-        # Calculate average stock allocation by regime
-        def avg_stock_allocation(actions):
+        # Average stock % in each regime
+        def avg_stock_pct(actions):
             if not actions:
                 return 0.0
-            stock_allocs = [a[0] for a in actions]  # First action is stock allocation
-            return np.mean(stock_allocs)
+            return np.mean([a['stock_pct'] for a in actions])
         
-        bull_stocks = avg_stock_allocation(actions_by_regime[1])
-        bear_stocks = avg_stock_allocation(actions_by_regime[2])
+        bull_stocks = avg_stock_pct(decoded_actions_by_regime[1])
+        bear_stocks = avg_stock_pct(decoded_actions_by_regime[2])
         
         # Good market timing = reduce stocks in bear markets
         return max(0, bull_stocks - bear_stocks)
     
-    def _calculate_debt_priority_score(self, action_sequences: List) -> float:
-        """
-        Score how well agent prioritizes high-interest debt
-        """
-        cc_focus = []
-        student_focus = []
+    def _calculate_debt_priority_score(self, decoded_actions_by_regime: Dict) -> float:
+        """Score how well agent prioritizes debt repayment"""
+        all_decoded = []
+        for regime in [0, 1, 2]:
+            all_decoded.extend(decoded_actions_by_regime[regime])
         
-        for sequence in action_sequences:
-            for step in sequence:
-                state = step['state']
-                action = step['action']
-                
-                # When has credit card debt, how much does agent pay?
-                if state[4] > 100:  # Has credit card debt
-                    cc_focus.append(action[4])  # CC payment action
-                
-                # When has student debt, how much does agent pay?
-                if state[5] > 100:  # Has student debt
-                    student_focus.append(action[5])  # Student payment action
-        
-        # Higher score = prioritizes credit card debt (higher interest)
-        cc_priority = np.mean(cc_focus) if cc_focus else 0
-        student_priority = np.mean(student_focus) if student_focus else 0
-        
-        return cc_priority / (student_priority + 0.01)  # Avoid division by zero
-    
-    def _calculate_emergency_priority(self, allocations_by_age: Dict) -> float:
-        """
-        Score how well agent builds emergency fund early
-        """
-        if 20 not in allocations_by_age:
+        if not all_decoded:
             return 0.0
         
-        early_allocations = allocations_by_age[20]
-        avg_emergency = np.mean([a['emergency'] for a in early_allocations])
-        
-        # Normalize by typical emergency fund target (6 months expenses = ~12k)
-        return min(1.0, avg_emergency / 12000)
+        avg_debt_pct = np.mean([a['debt_pct'] for a in all_decoded])
+        return avg_debt_pct  # Higher = more focus on debt
     
-    def plot_action_heatmap(self):
-        """Create heatmap showing action preferences by agent and regime"""
-        agents_to_plot = ['dqn', 'ppo', 'sac', '60_40', 'age_based', 'markowitz']
+    def plot_action_frequency_heatmap(self):
+        """Plot heatmap of action usage (10 money × 9 investment grid)"""
+        agents_to_plot = ['60_40', 'age_based', 'markowitz', 'debt_avalanche']
         agents_in_data = [a for a in agents_to_plot if a in self.behavioral_data]
         
         if not agents_in_data:
-            print("No agents with behavioral data to plot")
+            print("No agents with behavioral data")
             return
         
-        # Prepare data - average actions by regime
-        data_matrix = []
-        agent_labels = []
+        fig, axes = plt.subplots(len(agents_in_data), 1, figsize=(14, 4*len(agents_in_data)))
+        if len(agents_in_data) == 1:
+            axes = [axes]
         
-        for agent_name in agents_in_data:
-            agent_labels.append(agent_name)
-            actions_by_regime = self.behavioral_data[agent_name]['actions_by_regime']
+        for idx, agent_name in enumerate(agents_in_data):
+            ax = axes[idx]
             
-            row = []
-            for regime in [0, 1, 2]:  # Normal, Bull, Bear
-                actions = actions_by_regime[regime]
-                if not actions:
-                    row.extend([0] * 6)
+            # Create 10×9 grid (money allocation × investment allocation)
+            grid = np.zeros((len(MONEY_ALLOC), len(INVEST_ALLOC)))
+            
+            action_counts = self.behavioral_data[agent_name]['action_counts']
+            total_actions = sum(action_counts.values())
+            
+            for action_idx, count in action_counts.items():
+                money_idx = action_idx // len(INVEST_ALLOC)
+                invest_idx = action_idx % len(INVEST_ALLOC)
+                grid[money_idx, invest_idx] = (count / total_actions) * 100
+            
+            # Plot heatmap
+            sns.heatmap(grid, ax=ax, cmap='YlOrRd', annot=True, fmt='.1f',
+                       xticklabels=[desc for _, desc in INVEST_ALLOC],
+                       yticklabels=[desc for _, desc in MONEY_ALLOC],
+                       cbar_kws={'label': 'Usage %'})
+            
+            ax.set_title(f'{agent_name.upper()} Action Usage Heatmap', fontweight='bold')
+            ax.set_xlabel('Investment Allocation')
+            ax.set_ylabel('Money Allocation')
+        
+        plt.tight_layout()
+        plt.savefig(self.output_dir / "action_usage_heatmap.png", dpi=300)
+        print("Action usage heatmap saved!")
+        plt.close()
+    
+    def plot_regime_preferences(self):
+        """Plot how agents change strategies by market regime"""
+        agents_to_plot = ['60_40', 'age_based', 'markowitz']
+        agents_in_data = [a for a in agents_to_plot if a in self.behavioral_data]
+        
+        fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+        regime_names = ['Normal', 'Bull', 'Bear']
+        
+        for regime_idx, (regime, regime_name) in enumerate([(0, 'Normal'), (1, 'Bull'), (2, 'Bear')]):
+            ax = axes[regime_idx]
+            
+            for agent_name in agents_in_data:
+                decoded_actions = self.behavioral_data[agent_name]['decoded_actions_by_regime'][regime]
+                
+                if not decoded_actions:
                     continue
                 
-                # Average each action dimension
-                avg_actions = np.mean(actions, axis=0)
-                row.extend(avg_actions)
-            
-            data_matrix.append(row)
-        
-        # Create heatmap
-        fig, ax = plt.subplots(figsize=(16, 10))
-        
-        heatmap_data = np.array(data_matrix)
-        
-        # Column labels
-        col_labels = []
-        for regime in ['Normal', 'Bull', 'Bear']:
-            for action in self.action_labels:
-                col_labels.append(f"{regime[:4]}_{action.split()[0]}")
-        
-        sns.heatmap(heatmap_data, 
-                   xticklabels=col_labels,
-                   yticklabels=agent_labels,
-                   cmap='YlOrRd',
-                   annot=True,
-                   fmt='.2f',
-                   cbar_kws={'label': 'Action Value (0-1)'},
-                   ax=ax)
-        
-        plt.title('Agent Action Patterns by Market Regime', fontsize=16, fontweight='bold')
-        plt.xlabel('Action by Market Regime', fontsize=12)
-        plt.ylabel('Agent', fontsize=12)
-        plt.xticks(rotation=90)
-        plt.tight_layout()
-        plt.savefig(self.output_dir / "action_heatmap_by_regime.png", dpi=300)
-        print("Action heatmap saved!")
-        plt.close()
-    
-    def plot_allocation_evolution(self):
-        """Plot how allocations change with age"""
-        agents_to_plot = ['dqn', 'ppo', 'sac', '60_40', 'age_based']
-        agents_in_data = [a for a in agents_to_plot if a in self.behavioral_data]
-        
-        fig, axes = plt.subplots(2, 2, figsize=(16, 12))
-        fig.suptitle('Portfolio Evolution by Age', fontsize=16, fontweight='bold')
-        
-        components = ['emergency', 'stocks', 'bonds', 'cc_debt']
-        titles = ['Emergency Fund', 'Stock Holdings', 'Bond Holdings', 'Credit Card Debt']
-        
-        for idx, (component, title) in enumerate(zip(components, titles)):
-            ax = axes[idx // 2, idx % 2]
-            
-            for agent_name in agents_in_data:
-                allocations = self.behavioral_data[agent_name]['allocations_by_age']
+                # Average allocations in this regime
+                avg_stock = np.mean([a['stock_pct'] for a in decoded_actions])
+                avg_bond = np.mean([a['bond_pct'] for a in decoded_actions])
+                avg_re = np.mean([a['re_pct'] for a in decoded_actions])
                 
-                ages = sorted(allocations.keys())
-                means = []
-                stds = []
-                
-                for age in ages:
-                    values = [a[component] for a in allocations[age]]
-                    means.append(np.mean(values))
-                    stds.append(np.std(values))
-                
-                ax.plot(ages, means, marker='o', label=agent_name, linewidth=2)
-                ax.fill_between(ages, 
-                               np.array(means) - np.array(stds),
-                               np.array(means) + np.array(stds),
-                               alpha=0.2)
+                x = [0, 1, 2]
+                values = [avg_stock, avg_bond, avg_re]
+                ax.plot(x, values, marker='o', label=agent_name, linewidth=2)
             
-            ax.set_xlabel('Age', fontsize=12)
-            ax.set_ylabel(f'{title} ($)', fontsize=12)
-            ax.set_title(title, fontsize=14, fontweight='bold')
+            ax.set_xticks(x)
+            ax.set_xticklabels(['Stocks', 'Bonds', 'Real Estate'])
+            ax.set_ylabel('Allocation %', fontsize=11)
+            ax.set_title(f'{regime_name} Market', fontsize=13, fontweight='bold')
             ax.legend()
             ax.grid(alpha=0.3)
-            ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x/1000:.0f}k' if x >= 1000 else f'${x:.0f}'))
+            ax.set_ylim([0, 100])
         
         plt.tight_layout()
-        plt.savefig(self.output_dir / "allocation_evolution.png", dpi=300)
-        print("Allocation evolution plot saved!")
+        plt.savefig(self.output_dir / "regime_preferences.png", dpi=300)
+        print("Regime preferences plot saved!")
         plt.close()
     
-    def plot_market_timing_comparison(self):
-        """Compare market timing scores across agents"""
-        if not self.behavioral_data:
-            print("No behavioral data to plot")
-            return
+    def plot_top_actions(self):
+        """Plot most frequently used actions for each agent"""
+        agents_in_data = list(self.behavioral_data.keys())
         
-        agents = []
-        scores = []
+        fig, axes = plt.subplots(len(agents_in_data), 1, figsize=(14, 4*len(agents_in_data)))
+        if len(agents_in_data) == 1:
+            axes = [axes]
         
-        for agent_name, data in self.behavioral_data.items():
-            agents.append(agent_name)
-            scores.append(data['market_timing_score'])
-        
-        # Sort by score
-        sorted_indices = np.argsort(scores)[::-1]
-        agents = [agents[i] for i in sorted_indices]
-        scores = [scores[i] for i in sorted_indices]
-        
-        fig, ax = plt.subplots(figsize=(12, 6))
-        
-        colors = ['#2E86AB' if a in ['dqn', 'ppo', 'sac'] else '#A23B72' for a in agents]
-        
-        ax.barh(agents, scores, color=colors, alpha=0.7, edgecolor='black')
-        ax.set_xlabel('Market Timing Score', fontsize=12, fontweight='bold')
-        ax.set_ylabel('Agent', fontsize=12, fontweight='bold')
-        ax.set_title('Market Timing Ability (Higher = Better Risk Management)', 
-                    fontsize=14, fontweight='bold')
-        ax.grid(axis='x', alpha=0.3)
+        for idx, agent_name in enumerate(agents_in_data):
+            ax = axes[idx]
+            
+            action_counts = self.behavioral_data[agent_name]['action_counts']
+            
+            # Get top 10 actions
+            top_actions = sorted(action_counts.items(), key=lambda x: x[1], reverse=True)[:10]
+            
+            action_labels = [f"Action {a}\n{ACTION_DESCRIPTIONS[a][:30]}..." for a, _ in top_actions]
+            counts = [c for _, c in top_actions]
+            total = sum(action_counts.values())
+            percentages = [(c/total)*100 for c in counts]
+            
+            ax.barh(action_labels, percentages, color='#2E86AB', alpha=0.7)
+            ax.set_xlabel('Usage %', fontsize=11)
+            ax.set_title(f'{agent_name.upper()} Top 10 Actions', fontsize=13, fontweight='bold')
+            ax.grid(axis='x', alpha=0.3)
+            
+            # Add percentage labels
+            for i, pct in enumerate(percentages):
+                ax.text(pct + 0.5, i, f'{pct:.1f}%', va='center', fontweight='bold')
         
         plt.tight_layout()
-        plt.savefig(self.output_dir / "market_timing_scores.png", dpi=300)
-        print("Market timing comparison saved!")
-        plt.close()
-    
-    def plot_action_distribution(self):
-        """Plot distribution of actions for key agents"""
-        agents_to_plot = ['dqn', 'ppo', '60_40', 'markowitz']
-        agents_in_data = [a for a in agents_to_plot if a in self.behavioral_data]
-        
-        fig, axes = plt.subplots(2, 3, figsize=(18, 10))
-        fig.suptitle('Action Distribution Comparison', fontsize=16, fontweight='bold')
-        
-        for action_idx, action_name in enumerate(self.action_labels):
-            ax = axes[action_idx // 3, action_idx % 3]
-            
-            for agent_name in agents_in_data:
-                # Collect all actions across all regimes
-                all_actions = []
-                for regime in [0, 1, 2]:
-                    actions = self.behavioral_data[agent_name]['actions_by_regime'][regime]
-                    if actions:
-                        all_actions.extend([a[action_idx] for a in actions])
-                
-                if all_actions:
-                    ax.hist(all_actions, bins=20, alpha=0.5, label=agent_name, density=True)
-            
-            ax.set_xlabel(action_name, fontsize=10)
-            ax.set_ylabel('Density', fontsize=10)
-            ax.set_title(action_name, fontsize=11, fontweight='bold')
-            ax.legend()
-            ax.grid(alpha=0.3)
-        
-        plt.tight_layout()
-        plt.savefig(self.output_dir / "action_distributions.png", dpi=300)
-        print("Action distribution plot saved!")
+        plt.savefig(self.output_dir / "top_actions.png", dpi=300)
+        print("Top actions plot saved!")
         plt.close()
     
     def generate_behavioral_report(self):
         """Generate comprehensive behavioral analysis report"""
         report = []
         report.append("="*80)
-        report.append("BEHAVIORAL ANALYSIS REPORT")
+        report.append("BEHAVIORAL ANALYSIS REPORT (Discrete Action Space)")
         report.append("="*80)
         report.append("")
         
@@ -392,28 +323,40 @@ class BehavioralAnalyzer:
             report.append(f"{'='*60}")
             
             # Market timing
-            report.append(f"\nMarket Timing Score: {data['market_timing_score']:.3f}")
-            report.append("  (Higher = better risk reduction in bear markets)")
+            report.append(f"\nMarket Timing Score: {data['market_timing_score']:.1f}%")
+            report.append("  (Stock % reduction from bull to bear markets)")
             
             # Debt priority
-            report.append(f"\nDebt Priority Score: {data['debt_priority_score']:.3f}")
-            report.append("  (Higher = prioritizes high-interest credit card debt)")
+            report.append(f"\nDebt Priority Score: {data['debt_priority_score']:.1f}%")
+            report.append("  (Average % of income allocated to debt)")
             
-            # Emergency fund
-            report.append(f"\nEmergency Fund Priority: {data['emergency_fund_priority']:.3f}")
-            report.append("  (Target: 1.0 = $12k emergency fund in 20s)")
+            # Top 5 most used actions
+            report.append("\nTop 5 Most Used Strategies:")
+            action_counts = data['action_counts']
+            total_actions = sum(action_counts.values())
+            top_5 = sorted(action_counts.items(), key=lambda x: x[1], reverse=True)[:5]
             
-            # Average actions by regime
-            report.append("\nAverage Actions by Market Regime:")
+            for rank, (action_idx, count) in enumerate(top_5, 1):
+                pct = (count / total_actions) * 100
+                report.append(f"  {rank}. Action {action_idx} ({pct:.1f}%): {ACTION_DESCRIPTIONS[action_idx]}")
+            
+            # Average allocations by regime
+            report.append("\nAverage Allocations by Market Regime:")
             for regime, regime_name in [(0, 'NORMAL'), (1, 'BULL'), (2, 'BEAR')]:
-                actions = data['actions_by_regime'][regime]
-                if not actions:
+                decoded = data['decoded_actions_by_regime'][regime]
+                if not decoded:
                     continue
                 
+                avg_invest = np.mean([a['invest_pct'] for a in decoded])
+                avg_debt = np.mean([a['debt_pct'] for a in decoded])
+                avg_emergency = np.mean([a['emergency_pct'] for a in decoded])
+                avg_stock = np.mean([a['stock_pct'] for a in decoded])
+                avg_bond = np.mean([a['bond_pct'] for a in decoded])
+                avg_re = np.mean([a['re_pct'] for a in decoded])
+                
                 report.append(f"\n  {regime_name} Market:")
-                avg_action = np.mean(actions, axis=0)
-                for i, (action_val, action_name) in enumerate(zip(avg_action, self.action_labels)):
-                    report.append(f"    {action_name}: {action_val:.3f}")
+                report.append(f"    Money: {avg_invest:.0f}% invest, {avg_debt:.0f}% debt, {avg_emergency:.0f}% emergency")
+                report.append(f"    Invest: {avg_stock:.0f}% stocks, {avg_bond:.0f}% bonds, {avg_re:.0f}% RE")
         
         report.append("\n" + "="*80)
         
@@ -428,7 +371,7 @@ class BehavioralAnalyzer:
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description='Behavioral analysis for ADJFin')
+    parser = argparse.ArgumentParser(description='Behavioral analysis for ADJFin (discrete)')
     parser.add_argument('--episodes', type=int, default=5, 
                        help='Episodes per agent for analysis')
     parser.add_argument('--agents', nargs='+', default=None,
@@ -439,12 +382,11 @@ if __name__ == "__main__":
     analyzer = BehavioralAnalyzer()
     
     # Default agents to analyze
-    default_agents = ['dqn', 'ppo', 'sac', '60_40', 'debt_avalanche', 
-                     'age_based', 'markowitz']
+    default_agents = ['60_40', 'debt_avalanche', 'age_based', 'markowitz', 'ppo', 'dqn']
     agents_to_analyze = args.agents if args.agents else default_agents
     
     print("="*60)
-    print("RUNNING BEHAVIORAL ANALYSIS")
+    print("RUNNING BEHAVIORAL ANALYSIS (Discrete Actions)")
     print("="*60)
     
     for agent_name in agents_to_analyze:
@@ -460,10 +402,9 @@ if __name__ == "__main__":
     print("GENERATING VISUALIZATIONS")
     print("="*60)
     
-    analyzer.plot_action_heatmap()
-    analyzer.plot_allocation_evolution()
-    analyzer.plot_market_timing_comparison()
-    analyzer.plot_action_distribution()
+    analyzer.plot_action_frequency_heatmap()
+    analyzer.plot_regime_preferences()
+    analyzer.plot_top_actions()
     
     print("\n" + "="*60)
     print("GENERATING REPORT")

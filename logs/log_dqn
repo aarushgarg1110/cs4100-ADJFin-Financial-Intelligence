@@ -1,0 +1,498 @@
+  0%|                                                                                                                                         | 0/5 [00:00<?, ?it/s]
+Trial 0:
+  lr=0.000030, batch_size=64, epsilon_decay=0.9950, target_update_freq=500, gamma=0.99
+Ep 25/500 | Reward: 382.43 | Q Loss: 41002.7305 | Eps: 0.882 | Actions: 89/90 | H: 4.45
+Ep 50/500 | Reward: 374.96 | Q Loss: 2776.3790 | Eps: 0.778 | Actions: 87/90 | H: 4.48
+Ep 75/500 | Reward: 376.44 | Q Loss: 2059.3809 | Eps: 0.687 | Actions: 85/90 | H: 4.49
+Ep 100/500 | Reward: 382.30 | Q Loss: 2536.6312 | Eps: 0.606 | Actions: 81/90 | H: 4.49
+Ep 125/500 | Reward: 388.80 | Q Loss: 2349.1434 | Eps: 0.534 | Actions: 76/90 | H: 4.49
+Ep 150/500 | Reward: 382.67 | Q Loss: 2054.2398 | Eps: 0.471 | Actions: 78/90 | H: 4.48
+Ep 175/500 | Reward: 379.58 | Q Loss: 2859.1045 | Eps: 0.416 | Actions: 71/90 | H: 4.48
+Ep 200/500 | Reward: 370.61 | Q Loss: 2006.5901 | Eps: 0.367 | Actions: 73/90 | H: 4.48
+Ep 225/500 | Reward: 380.31 | Q Loss: 2675.2102 | Eps: 0.324 | Actions: 71/90 | H: 4.48
+Ep 250/500 | Reward: 368.66 | Q Loss: 2306.0675 | Eps: 0.286 | Actions: 69/90 | H: 4.47
+Ep 275/500 | Reward: 380.92 | Q Loss: 2040.1432 | Eps: 0.252 | Actions: 64/90 | H: 4.47
+Ep 300/500 | Reward: 384.50 | Q Loss: 2531.5085 | Eps: 0.222 | Actions: 50/90 | H: 4.47
+Ep 325/500 | Reward: 370.55 | Q Loss: 2718.6229 | Eps: 0.196 | Actions: 53/90 | H: 4.46
+Ep 350/500 | Reward: 371.91 | Q Loss: 2840.4477 | Eps: 0.173 | Actions: 50/90 | H: 4.46
+Ep 375/500 | Reward: 373.28 | Q Loss: 3306.5050 | Eps: 0.153 | Actions: 45/90 | H: 4.45
+Ep 400/500 | Reward: 366.84 | Q Loss: 3257.5814 | Eps: 0.135 | Actions: 40/90 | H: 4.45
+Ep 425/500 | Reward: 363.00 | Q Loss: 3096.6256 | Eps: 0.119 | Actions: 32/90 | H: 4.44
+Ep 450/500 | Reward: 372.46 | Q Loss: 2785.7663 | Eps: 0.105 | Actions: 45/90 | H: 4.43
+Ep 475/500 | Reward: 380.65 | Q Loss: 3504.1061 | Eps: 0.092 | Actions: 35/90 | H: 4.43
+Ep 500/500 | Reward: 361.49 | Q Loss: 3838.7377 | Eps: 0.082 | Actions: 30/90 | H: 4.42
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:56<00:00,  1.07s/it]
+  Trial 0 complete: 369.79%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:56<00:00,  1.02it/s]
+
+[I 2025-11-27 15:59:39,165] Trial 0 finished with value: 369.7903261496474 and parameters: {'lr': 3e-05, 'batch_size': 64, 'epsilon_decay': 0.995, 'target_update_freq': 500, 'gamma': 0.99}. Best is trial 3 with value: 374.8912961935539.
+Best trial: 3. Best value: 374.891:  20%|██████████████████▍                                                                         | 1/5 [09:05<36:21, 545.43s/it]
+Trial 6:
+  lr=0.000030, batch_size=256, epsilon_decay=0.9900, target_update_freq=250, gamma=0.99
+Ep 25/500 | Reward: 383.66 | Q Loss: 29497.2300 | Eps: 0.778 | Actions: 86/90 | H: 4.36
+Ep 50/500 | Reward: 373.75 | Q Loss: 2122.8976 | Eps: 0.605 | Actions: 84/90 | H: 4.44
+Ep 75/500 | Reward: 378.97 | Q Loss: 1938.7849 | Eps: 0.471 | Actions: 79/90 | H: 4.46
+Ep 100/500 | Reward: 382.79 | Q Loss: 2193.8193 | Eps: 0.366 | Actions: 76/90 | H: 4.47
+Ep 125/500 | Reward: 389.90 | Q Loss: 2153.3115 | Eps: 0.285 | Actions: 73/90 | H: 4.46
+Ep 150/500 | Reward: 385.74 | Q Loss: 1829.2431 | Eps: 0.221 | Actions: 60/90 | H: 4.46
+Ep 175/500 | Reward: 377.89 | Q Loss: 2135.5226 | Eps: 0.172 | Actions: 48/90 | H: 4.45
+Ep 200/500 | Reward: 375.97 | Q Loss: 2582.0370 | Eps: 0.134 | Actions: 50/90 | H: 4.44
+Ep 225/500 | Reward: 387.21 | Q Loss: 2992.8591 | Eps: 0.104 | Actions: 41/90 | H: 4.41
+Ep 250/500 | Reward: 372.32 | Q Loss: 2229.4926 | Eps: 0.081 | Actions: 36/90 | H: 4.39
+Ep 275/500 | Reward: 384.38 | Q Loss: 2785.9523 | Eps: 0.063 | Actions: 29/90 | H: 4.37
+Ep 300/500 | Reward: 387.81 | Q Loss: 2152.5973 | Eps: 0.050 | Actions: 30/90 | H: 4.35
+Ep 325/500 | Reward: 370.81 | Q Loss: 2598.1064 | Eps: 0.050 | Actions: 33/90 | H: 4.33
+Ep 350/500 | Reward: 367.13 | Q Loss: 2445.6018 | Eps: 0.050 | Actions: 34/90 | H: 4.32
+Ep 375/500 | Reward: 374.12 | Q Loss: 3132.9192 | Eps: 0.050 | Actions: 32/90 | H: 4.31
+Ep 400/500 | Reward: 365.84 | Q Loss: 2672.4939 | Eps: 0.050 | Actions: 32/90 | H: 4.30
+Ep 425/500 | Reward: 364.79 | Q Loss: 2935.2768 | Eps: 0.050 | Actions: 34/90 | H: 4.29
+Ep 450/500 | Reward: 371.59 | Q Loss: 2643.6542 | Eps: 0.050 | Actions: 27/90 | H: 4.28
+Ep 475/500 | Reward: 378.47 | Q Loss: 2473.1480 | Eps: 0.050 | Actions: 28/90 | H: 4.28
+Ep 500/500 | Reward: 367.43 | Q Loss: 2767.8626 | Eps: 0.050 | Actions: 38/90 | H: 4.27
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:56<00:00,  1.07s/it]
+  Trial 6 complete: 376.13%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:56<00:00,  1.12s/it]
+
+[I 2025-11-27 16:08:35,796] Trial 6 finished with value: 376.13149930910436 and parameters: {'lr': 3e-05, 'batch_size': 256, 'epsilon_decay': 0.99, 'target_update_freq': 250, 'gamma': 0.99}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146:  40%|████████████████████████████████████▊                                                       | 2/5 [18:02<27:00, 540.26s/it]
+Trial 10:
+  lr=0.000030, batch_size=256, epsilon_decay=0.9950, target_update_freq=1000, gamma=0.99
+Ep 25/500 | Reward: 383.02 | Q Loss: 21140.0362 | Eps: 0.882 | Actions: 87/90 | H: 4.47
+Ep 50/500 | Reward: 374.07 | Q Loss: 1553.8629 | Eps: 0.778 | Actions: 88/90 | H: 4.49
+Ep 75/500 | Reward: 378.67 | Q Loss: 1507.0344 | Eps: 0.687 | Actions: 89/90 | H: 4.49
+Ep 100/500 | Reward: 382.89 | Q Loss: 1322.8215 | Eps: 0.606 | Actions: 85/90 | H: 4.49
+Ep 125/500 | Reward: 392.23 | Q Loss: 1308.6769 | Eps: 0.534 | Actions: 85/90 | H: 4.48
+Ep 150/500 | Reward: 384.71 | Q Loss: 1353.0605 | Eps: 0.471 | Actions: 82/90 | H: 4.48
+Ep 175/500 | Reward: 381.45 | Q Loss: 1452.3381 | Eps: 0.416 | Actions: 71/90 | H: 4.48
+Ep 200/500 | Reward: 375.91 | Q Loss: 1364.6458 | Eps: 0.367 | Actions: 77/90 | H: 4.48
+Ep 225/500 | Reward: 383.11 | Q Loss: 1518.9178 | Eps: 0.324 | Actions: 67/90 | H: 4.48
+Ep 250/500 | Reward: 374.23 | Q Loss: 1435.7344 | Eps: 0.286 | Actions: 71/90 | H: 4.48
+Ep 275/500 | Reward: 389.41 | Q Loss: 1437.7099 | Eps: 0.252 | Actions: 67/90 | H: 4.47
+Ep 300/500 | Reward: 392.54 | Q Loss: 1601.8759 | Eps: 0.222 | Actions: 66/90 | H: 4.47
+Ep 325/500 | Reward: 377.80 | Q Loss: 1661.6109 | Eps: 0.196 | Actions: 61/90 | H: 4.46
+Ep 350/500 | Reward: 374.35 | Q Loss: 1483.8521 | Eps: 0.173 | Actions: 60/90 | H: 4.46
+Ep 375/500 | Reward: 376.47 | Q Loss: 1374.5141 | Eps: 0.153 | Actions: 47/90 | H: 4.46
+Ep 400/500 | Reward: 374.68 | Q Loss: 1520.4889 | Eps: 0.135 | Actions: 51/90 | H: 4.46
+Ep 425/500 | Reward: 368.85 | Q Loss: 1742.0648 | Eps: 0.119 | Actions: 51/90 | H: 4.45
+Ep 450/500 | Reward: 379.06 | Q Loss: 1496.0593 | Eps: 0.105 | Actions: 51/90 | H: 4.45
+Ep 475/500 | Reward: 381.44 | Q Loss: 1804.4593 | Eps: 0.092 | Actions: 43/90 | H: 4.44
+Ep 500/500 | Reward: 368.08 | Q Loss: 1661.4372 | Eps: 0.082 | Actions: 38/90 | H: 4.44
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:41<00:00,  1.04s/it]
+  Trial 10 complete: 377.37|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:41<00:00,  1.54s/it]
+
+[I 2025-11-27 16:17:17,591] Trial 10 finished with value: 377.3718670532197 and parameters: {'lr': 3e-05, 'batch_size': 256, 'epsilon_decay': 0.995, 'target_update_freq': 1000, 'gamma': 0.99}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146:  60%|███████████████████████████████████████████████████████▏                                    | 3/5 [26:43<17:43, 531.81s/it]
+Trial 14:
+  lr=0.000010, batch_size=128, epsilon_decay=0.9980, target_update_freq=500, gamma=0.98
+Ep 25/500 | Reward: 383.77 | Q Loss: 40713.6781 | Eps: 0.951 | Actions: 88/90 | H: 4.48
+Ep 50/500 | Reward: 374.05 | Q Loss: 16340.0599 | Eps: 0.905 | Actions: 88/90 | H: 4.48
+Ep 75/500 | Reward: 379.14 | Q Loss: 3217.8560 | Eps: 0.861 | Actions: 87/90 | H: 4.49
+Ep 100/500 | Reward: 382.94 | Q Loss: 1633.9732 | Eps: 0.819 | Actions: 88/90 | H: 4.49
+Ep 125/500 | Reward: 387.39 | Q Loss: 1607.9288 | Eps: 0.779 | Actions: 86/90 | H: 4.49
+Ep 150/500 | Reward: 380.26 | Q Loss: 1625.2248 | Eps: 0.741 | Actions: 86/90 | H: 4.49
+Ep 175/500 | Reward: 378.49 | Q Loss: 1755.6621 | Eps: 0.704 | Actions: 86/90 | H: 4.49
+Ep 200/500 | Reward: 374.09 | Q Loss: 1630.3943 | Eps: 0.670 | Actions: 86/90 | H: 4.49
+Ep 225/500 | Reward: 381.80 | Q Loss: 1450.8398 | Eps: 0.637 | Actions: 88/90 | H: 4.49
+Ep 250/500 | Reward: 374.22 | Q Loss: 1611.1836 | Eps: 0.606 | Actions: 86/90 | H: 4.49
+Ep 275/500 | Reward: 387.68 | Q Loss: 1524.1876 | Eps: 0.577 | Actions: 79/90 | H: 4.49
+Ep 300/500 | Reward: 388.15 | Q Loss: 1589.4933 | Eps: 0.548 | Actions: 86/90 | H: 4.49
+Ep 325/500 | Reward: 378.23 | Q Loss: 1720.0647 | Eps: 0.522 | Actions: 85/90 | H: 4.49
+Ep 350/500 | Reward: 372.27 | Q Loss: 1479.2469 | Eps: 0.496 | Actions: 82/90 | H: 4.49
+Ep 375/500 | Reward: 383.63 | Q Loss: 1458.3073 | Eps: 0.472 | Actions: 79/90 | H: 4.48
+Ep 400/500 | Reward: 377.72 | Q Loss: 1587.8956 | Eps: 0.449 | Actions: 82/90 | H: 4.48
+Ep 425/500 | Reward: 371.94 | Q Loss: 1573.8252 | Eps: 0.427 | Actions: 73/90 | H: 4.48
+Ep 450/500 | Reward: 380.60 | Q Loss: 1524.0605 | Eps: 0.406 | Actions: 78/90 | H: 4.48
+Best trial: 4. Best value: 387.146:  60%|███████████████████████████████████████████████████████▏                                    | 3/5 [34:38<17:43, 531.81s/it]
+Training Discrete DQN:  92%|█████████████████████████████████████████████████████████████████████████████████████████████▊
+Training Discrete DQN:  92%|██████████████████████████████████████████████████████████████████████████████████████████████
+Training Discrete DQN:  92%|██████████████████████████████████████████████████████████████████████████████████████████████
+Training Discrete DQN:  93%|██████████████████████████████████████████████████████████████████████████████████████████████
+Ep 475/500 | Reward: 390.26 | Q Loss: 1722.9301 | Eps: 0.386 | Actions: 75/90 | H: 4.48
+Ep 500/500 | Reward: 373.87 | Q Loss: 1234.5880 | Eps: 0.368 | Actions: 74/90 | H: 4.48
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:51<00:00,  1.06s/it]
+  Trial 14 complete: 381.84|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:51<00:00,  1.09s/it]
+
+[I 2025-11-27 16:26:09,871] Trial 14 finished with value: 381.84348656136734 and parameters: {'lr': 1e-05, 'batch_size': 128, 'epsilon_decay': 0.998, 'target_update_freq': 500, 'gamma': 0.98}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146:  80%|█████████████████████████████████████████████████████████████████████████▌                  | 4/5 [35:36<08:51, 532.00s/it]
+Trial 18:
+  lr=0.000010, batch_size=128, epsilon_decay=0.9980, target_update_freq=500, gamma=0.95
+Ep 25/500 | Reward: 381.32 | Q Loss: 55220.7717 | Eps: 0.951 | Actions: 87/90 | H: 4.48
+Ep 50/500 | Reward: 373.06 | Q Loss: 21781.8103 | Eps: 0.905 | Actions: 90/90 | H: 4.49
+Ep 75/500 | Reward: 379.61 | Q Loss: 4411.0899 | Eps: 0.861 | Actions: 86/90 | H: 4.49
+Ep 100/500 | Reward: 384.47 | Q Loss: 2067.5506 | Eps: 0.819 | Actions: 87/90 | H: 4.49
+Ep 125/500 | Reward: 389.15 | Q Loss: 1814.6100 | Eps: 0.779 | Actions: 89/90 | H: 4.49
+Ep 150/500 | Reward: 383.28 | Q Loss: 1818.4108 | Eps: 0.741 | Actions: 87/90 | H: 4.49
+Ep 175/500 | Reward: 380.68 | Q Loss: 1456.3044 | Eps: 0.704 | Actions: 89/90 | H: 4.49
+Ep 200/500 | Reward: 373.42 | Q Loss: 1459.6462 | Eps: 0.670 | Actions: 85/90 | H: 4.49
+Ep 225/500 | Reward: 385.03 | Q Loss: 1511.1113 | Eps: 0.637 | Actions: 88/90 | H: 4.49
+Ep 250/500 | Reward: 376.57 | Q Loss: 1138.7807 | Eps: 0.606 | Actions: 86/90 | H: 4.49
+Ep 275/500 | Reward: 384.64 | Q Loss: 1398.4299 | Eps: 0.577 | Actions: 84/90 | H: 4.49
+Ep 300/500 | Reward: 383.43 | Q Loss: 1056.8840 | Eps: 0.548 | Actions: 85/90 | H: 4.49
+Ep 325/500 | Reward: 376.43 | Q Loss: 1119.4402 | Eps: 0.522 | Actions: 85/90 | H: 4.49
+Ep 350/500 | Reward: 367.14 | Q Loss: 939.7509 | Eps: 0.496 | Actions: 83/90 | H: 4.49
+Ep 375/500 | Reward: 377.99 | Q Loss: 1046.7385 | Eps: 0.472 | Actions: 77/90 | H: 4.49
+Ep 400/500 | Reward: 373.86 | Q Loss: 972.9888 | Eps: 0.449 | Actions: 81/90 | H: 4.48
+Ep 425/500 | Reward: 366.59 | Q Loss: 745.9535 | Eps: 0.427 | Actions: 76/90 | H: 4.48
+Ep 450/500 | Reward: 374.80 | Q Loss: 779.3883 | Eps: 0.406 | Actions: 81/90 | H: 4.48
+Ep 475/500 | Reward: 383.55 | Q Loss: 637.9872 | Eps: 0.386 | Actions: 72/90 | H: 4.48
+Ep 500/500 | Reward: 368.57 | Q Loss: 700.2901 | Eps: 0.368 | Actions: 75/90 | H: 4.48
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:22<00:00,  1.13it/s]
+  Trial 18 complete: 378.67|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:22<00:00,  1.22it/s]
+
+[I 2025-11-27 16:33:32,467] Trial 18 finished with value: 378.6699338357052 and parameters: {'lr': 1e-05, 'batch_size': 128, 'epsilon_decay': 0.998, 'target_update_freq': 500, 'gamma': 0.95}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146: 100%|████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [42:58<00:00, 515.74s/it]
+============================================================
+
+  0%|                                                                                                                                         | 0/5 [00:00<?, ?it/s]
+Trial 2:
+  lr=0.000010, batch_size=64, epsilon_decay=0.9950, target_update_freq=1000, gamma=0.98
+Ep 25/500 | Reward: 380.81 | Q Loss: 48918.6633 | Eps: 0.882 | Actions: 90/90 | H: 4.43
+Ep 50/500 | Reward: 371.77 | Q Loss: 22541.5159 | Eps: 0.778 | Actions: 85/90 | H: 4.45
+Ep 75/500 | Reward: 377.38 | Q Loss: 8399.1871 | Eps: 0.687 | Actions: 83/90 | H: 4.47
+Ep 100/500 | Reward: 380.00 | Q Loss: 3235.5191 | Eps: 0.606 | Actions: 85/90 | H: 4.47
+Ep 125/500 | Reward: 386.64 | Q Loss: 2285.7713 | Eps: 0.534 | Actions: 83/90 | H: 4.47
+Ep 150/500 | Reward: 381.99 | Q Loss: 1972.2257 | Eps: 0.471 | Actions: 82/90 | H: 4.47
+Ep 175/500 | Reward: 377.73 | Q Loss: 1604.8229 | Eps: 0.416 | Actions: 79/90 | H: 4.47
+Ep 200/500 | Reward: 371.29 | Q Loss: 2108.7290 | Eps: 0.367 | Actions: 76/90 | H: 4.46
+Ep 225/500 | Reward: 382.75 | Q Loss: 1973.0172 | Eps: 0.324 | Actions: 68/90 | H: 4.46
+Ep 250/500 | Reward: 370.67 | Q Loss: 1916.8686 | Eps: 0.286 | Actions: 71/90 | H: 4.46
+Ep 275/500 | Reward: 383.13 | Q Loss: 2248.4392 | Eps: 0.252 | Actions: 73/90 | H: 4.46
+Ep 300/500 | Reward: 385.04 | Q Loss: 1986.1647 | Eps: 0.222 | Actions: 64/90 | H: 4.45
+Ep 325/500 | Reward: 366.95 | Q Loss: 1971.8408 | Eps: 0.196 | Actions: 48/90 | H: 4.45
+Ep 350/500 | Reward: 360.01 | Q Loss: 1852.8484 | Eps: 0.173 | Actions: 52/90 | H: 4.44
+Ep 375/500 | Reward: 373.87 | Q Loss: 2078.5550 | Eps: 0.153 | Actions: 49/90 | H: 4.44
+Ep 400/500 | Reward: 369.18 | Q Loss: 2103.0871 | Eps: 0.135 | Actions: 41/90 | H: 4.43
+Ep 425/500 | Reward: 362.79 | Q Loss: 2020.4267 | Eps: 0.119 | Actions: 45/90 | H: 4.42
+Ep 450/500 | Reward: 367.40 | Q Loss: 2471.3257 | Eps: 0.105 | Actions: 36/90 | H: 4.42
+Ep 475/500 | Reward: 382.16 | Q Loss: 1922.2656 | Eps: 0.092 | Actions: 37/90 | H: 4.41
+Ep 500/500 | Reward: 366.35 | Q Loss: 1947.5634 | Eps: 0.082 | Actions: 31/90 | H: 4.40
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:57<00:00,  1.08s/it]
+  Trial 2 complete: 380.94%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:57<00:00,  1.09s/it]
+
+[I 2025-11-27 16:00:13,479] Trial 2 finished with value: 380.9428095869829 and parameters: {'lr': 1e-05, 'batch_size': 64, 'epsilon_decay': 0.995, 'target_update_freq': 1000, 'gamma': 0.98}. Best is trial 2 with value: 380.9428095869829.
+Best trial: 2. Best value: 380.943:  20%|██████████████████▍                                                                         | 1/5 [09:04<36:16, 544.09s/it]
+Trial 7:
+  lr=0.000030, batch_size=128, epsilon_decay=0.9900, target_update_freq=250, gamma=0.95
+Ep 25/500 | Reward: 383.27 | Q Loss: 30504.1746 | Eps: 0.778 | Actions: 87/90 | H: 4.35
+Ep 50/500 | Reward: 373.83 | Q Loss: 1801.0275 | Eps: 0.605 | Actions: 84/90 | H: 4.44
+Ep 75/500 | Reward: 381.70 | Q Loss: 1465.7142 | Eps: 0.471 | Actions: 81/90 | H: 4.46
+Ep 100/500 | Reward: 384.02 | Q Loss: 1307.4728 | Eps: 0.366 | Actions: 71/90 | H: 4.46
+Ep 125/500 | Reward: 390.82 | Q Loss: 1082.3689 | Eps: 0.285 | Actions: 69/90 | H: 4.46
+Ep 150/500 | Reward: 383.41 | Q Loss: 1000.7061 | Eps: 0.221 | Actions: 64/90 | H: 4.46
+Ep 175/500 | Reward: 384.11 | Q Loss: 980.9953 | Eps: 0.172 | Actions: 52/90 | H: 4.46
+Ep 200/500 | Reward: 373.23 | Q Loss: 754.5793 | Eps: 0.134 | Actions: 52/90 | H: 4.46
+Ep 225/500 | Reward: 383.94 | Q Loss: 976.2219 | Eps: 0.104 | Actions: 51/90 | H: 4.45
+Ep 250/500 | Reward: 376.05 | Q Loss: 802.4815 | Eps: 0.081 | Actions: 47/90 | H: 4.45
+Ep 275/500 | Reward: 389.34 | Q Loss: 754.5631 | Eps: 0.063 | Actions: 35/90 | H: 4.45
+Ep 300/500 | Reward: 391.91 | Q Loss: 691.1454 | Eps: 0.050 | Actions: 40/90 | H: 4.45
+Ep 325/500 | Reward: 379.13 | Q Loss: 594.3147 | Eps: 0.050 | Actions: 37/90 | H: 4.45
+Ep 350/500 | Reward: 375.97 | Q Loss: 525.0574 | Eps: 0.050 | Actions: 37/90 | H: 4.44
+Ep 375/500 | Reward: 380.15 | Q Loss: 490.0429 | Eps: 0.050 | Actions: 27/90 | H: 4.44
+Ep 400/500 | Reward: 374.49 | Q Loss: 490.2035 | Eps: 0.050 | Actions: 32/90 | H: 4.44
+Ep 425/500 | Reward: 369.42 | Q Loss: 403.5479 | Eps: 0.050 | Actions: 44/90 | H: 4.44
+Ep 450/500 | Reward: 377.87 | Q Loss: 371.1907 | Eps: 0.050 | Actions: 41/90 | H: 4.44
+Ep 475/500 | Reward: 386.32 | Q Loss: 346.5427 | Eps: 0.050 | Actions: 39/90 | H: 4.44
+Ep 500/500 | Reward: 369.89 | Q Loss: 410.4983 | Eps: 0.050 | Actions: 36/90 | H: 4.44
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:35<00:00,  1.03s/it]
+  Trial 7 complete: 381.46%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:35<00:00,  1.08s/it]
+  
+  0%|                                                                                                                                         | 0/5 [00:00<?, ?it/s]
+Trial 3:
+  lr=0.000010, batch_size=64, epsilon_decay=0.9980, target_update_freq=1000, gamma=0.95
+Ep 25/500 | Reward: 380.77 | Q Loss: 49160.5403 | Eps: 0.951 | Actions: 88/90 | H: 4.48
+Ep 50/500 | Reward: 374.18 | Q Loss: 24723.8999 | Eps: 0.905 | Actions: 85/90 | H: 4.49
+Ep 75/500 | Reward: 377.37 | Q Loss: 6973.6659 | Eps: 0.861 | Actions: 89/90 | H: 4.49
+Ep 100/500 | Reward: 381.84 | Q Loss: 2680.3625 | Eps: 0.819 | Actions: 85/90 | H: 4.49
+Ep 125/500 | Reward: 388.87 | Q Loss: 2115.0099 | Eps: 0.779 | Actions: 84/90 | H: 4.49
+Ep 150/500 | Reward: 381.34 | Q Loss: 2037.2800 | Eps: 0.741 | Actions: 84/90 | H: 4.49
+Ep 175/500 | Reward: 378.34 | Q Loss: 1847.1137 | Eps: 0.704 | Actions: 87/90 | H: 4.49
+Ep 200/500 | Reward: 373.85 | Q Loss: 1801.7171 | Eps: 0.670 | Actions: 86/90 | H: 4.49
+Ep 225/500 | Reward: 380.79 | Q Loss: 1753.0362 | Eps: 0.637 | Actions: 84/90 | H: 4.49
+Ep 250/500 | Reward: 373.16 | Q Loss: 1893.0760 | Eps: 0.606 | Actions: 88/90 | H: 4.49
+Ep 275/500 | Reward: 385.39 | Q Loss: 1551.1913 | Eps: 0.577 | Actions: 85/90 | H: 4.49
+Ep 300/500 | Reward: 385.66 | Q Loss: 1449.9186 | Eps: 0.548 | Actions: 81/90 | H: 4.48
+Ep 325/500 | Reward: 375.57 | Q Loss: 1194.9919 | Eps: 0.522 | Actions: 75/90 | H: 4.48
+Ep 350/500 | Reward: 371.61 | Q Loss: 1117.8249 | Eps: 0.496 | Actions: 80/90 | H: 4.48
+Ep 375/500 | Reward: 379.13 | Q Loss: 1269.0757 | Eps: 0.472 | Actions: 82/90 | H: 4.48
+Ep 400/500 | Reward: 374.20 | Q Loss: 1395.7301 | Eps: 0.449 | Actions: 78/90 | H: 4.48
+Ep 425/500 | Reward: 367.49 | Q Loss: 1394.8081 | Eps: 0.427 | Actions: 79/90 | H: 4.48
+Ep 450/500 | Reward: 377.79 | Q Loss: 1151.9080 | Eps: 0.406 | Actions: 76/90 | H: 4.48
+Ep 475/500 | Reward: 383.53 | Q Loss: 1246.8953 | Eps: 0.386 | Actions: 73/90 | H: 4.47
+Ep 500/500 | Reward: 368.78 | Q Loss: 854.8186 | Eps: 0.368 | Actions: 74/90 | H: 4.47
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:20<00:00,  1.00s/it]
+  Trial 3 complete: 374.89%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:20<00:00,  1.16it/s]
+
+[I 2025-11-27 15:59:37,387] Trial 3 finished with value: 374.8912961935539 and parameters: {'lr': 1e-05, 'batch_size': 64, 'epsilon_decay': 0.998, 'target_update_freq': 1000, 'gamma': 0.95}. Best is trial 3 with value: 374.8912961935539.
+Best trial: 3. Best value: 374.891:  20%|██████████████████▍                                                                         | 1/5 [08:27<33:48, 507.09s/it]
+Trial 5:
+  lr=0.000003, batch_size=128, epsilon_decay=0.9950, target_update_freq=250, gamma=0.98
+Ep 25/500 | Reward: 382.92 | Q Loss: 46756.6450 | Eps: 0.882 | Actions: 88/90 | H: 4.43
+Ep 50/500 | Reward: 374.91 | Q Loss: 32833.3561 | Eps: 0.778 | Actions: 86/90 | H: 4.34
+Ep 75/500 | Reward: 377.23 | Q Loss: 21521.7389 | Eps: 0.687 | Actions: 85/90 | H: 4.34
+Ep 100/500 | Reward: 377.90 | Q Loss: 15253.9237 | Eps: 0.606 | Actions: 87/90 | H: 4.35
+Ep 125/500 | Reward: 378.94 | Q Loss: 10123.4126 | Eps: 0.534 | Actions: 82/90 | H: 4.37
+Ep 150/500 | Reward: 379.94 | Q Loss: 7155.9658 | Eps: 0.471 | Actions: 77/90 | H: 4.37
+Ep 175/500 | Reward: 374.24 | Q Loss: 4860.1694 | Eps: 0.416 | Actions: 80/90 | H: 4.37
+Ep 200/500 | Reward: 369.67 | Q Loss: 3808.0900 | Eps: 0.367 | Actions: 77/90 | H: 4.37
+Ep 225/500 | Reward: 376.15 | Q Loss: 2902.7317 | Eps: 0.324 | Actions: 75/90 | H: 4.37
+Ep 250/500 | Reward: 370.34 | Q Loss: 2451.7469 | Eps: 0.286 | Actions: 67/90 | H: 4.36
+Ep 275/500 | Reward: 375.38 | Q Loss: 1737.5668 | Eps: 0.252 | Actions: 64/90 | H: 4.35
+Ep 300/500 | Reward: 379.91 | Q Loss: 2127.1867 | Eps: 0.222 | Actions: 63/90 | H: 4.34
+Ep 325/500 | Reward: 365.88 | Q Loss: 1717.9753 | Eps: 0.196 | Actions: 65/90 | H: 4.32
+Ep 350/500 | Reward: 361.88 | Q Loss: 1643.3001 | Eps: 0.173 | Actions: 61/90 | H: 4.31
+Ep 375/500 | Reward: 369.89 | Q Loss: 1460.5956 | Eps: 0.153 | Actions: 50/90 | H: 4.30
+Ep 400/500 | Reward: 359.81 | Q Loss: 1398.0322 | Eps: 0.135 | Actions: 47/90 | H: 4.28
+Ep 425/500 | Reward: 352.17 | Q Loss: 1064.9678 | Eps: 0.119 | Actions: 48/90 | H: 4.26
+Ep 450/500 | Reward: 362.21 | Q Loss: 1069.9250 | Eps: 0.105 | Actions: 47/90 | H: 4.24
+Ep 475/500 | Reward: 373.54 | Q Loss: 1385.6641 | Eps: 0.092 | Actions: 48/90 | H: 4.22
+Ep 500/500 | Reward: 351.66 | Q Loss: 1010.6090 | Eps: 0.082 | Actions: 48/90 | H: 4.20
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:10<00:00,  1.02it/s]
+  Trial 5 complete: 361.80%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:10<00:00,  1.10s/it]
+
+[I 2025-11-27 16:07:48,313] Trial 5 finished with value: 361.7978307989022 and parameters: {'lr': 3e-06, 'batch_size': 128, 'epsilon_decay': 0.995, 'target_update_freq': 250, 'gamma': 0.98}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146:  40%|████████████████████████████████████▊                                                       | 2/5 [16:38<24:52, 497.58s/it]
+Trial 9:
+  lr=0.000010, batch_size=256, epsilon_decay=0.9980, target_update_freq=1000, gamma=0.99
+Ep 25/500 | Reward: 382.42 | Q Loss: 35124.3025 | Eps: 0.951 | Actions: 89/90 | H: 4.49
+Ep 50/500 | Reward: 373.88 | Q Loss: 5833.5181 | Eps: 0.905 | Actions: 89/90 | H: 4.49
+Ep 75/500 | Reward: 379.20 | Q Loss: 1556.6984 | Eps: 0.861 | Actions: 90/90 | H: 4.49
+Ep 100/500 | Reward: 384.04 | Q Loss: 1782.4354 | Eps: 0.819 | Actions: 88/90 | H: 4.49
+Ep 125/500 | Reward: 391.02 | Q Loss: 1454.4003 | Eps: 0.779 | Actions: 85/90 | H: 4.49
+Ep 150/500 | Reward: 383.09 | Q Loss: 1259.0836 | Eps: 0.741 | Actions: 88/90 | H: 4.49
+Ep 175/500 | Reward: 381.82 | Q Loss: 1393.4056 | Eps: 0.704 | Actions: 84/90 | H: 4.49
+Ep 200/500 | Reward: 375.51 | Q Loss: 1401.3755 | Eps: 0.670 | Actions: 82/90 | H: 4.49
+Ep 225/500 | Reward: 384.04 | Q Loss: 1344.8131 | Eps: 0.637 | Actions: 84/90 | H: 4.49
+Ep 250/500 | Reward: 375.94 | Q Loss: 1414.8416 | Eps: 0.606 | Actions: 81/90 | H: 4.49
+Ep 275/500 | Reward: 388.56 | Q Loss: 1372.8836 | Eps: 0.577 | Actions: 85/90 | H: 4.49
+Ep 300/500 | Reward: 390.44 | Q Loss: 1312.9604 | Eps: 0.548 | Actions: 87/90 | H: 4.49
+Ep 325/500 | Reward: 378.63 | Q Loss: 1269.0572 | Eps: 0.522 | Actions: 82/90 | H: 4.49
+Ep 350/500 | Reward: 375.05 | Q Loss: 1279.0417 | Eps: 0.496 | Actions: 83/90 | H: 4.48
+Ep 375/500 | Reward: 382.93 | Q Loss: 1233.4943 | Eps: 0.472 | Actions: 78/90 | H: 4.48
+Ep 400/500 | Reward: 379.08 | Q Loss: 1047.0330 | Eps: 0.449 | Actions: 76/90 | H: 4.48
+Ep 425/500 | Reward: 370.44 | Q Loss: 1214.2626 | Eps: 0.427 | Actions: 81/90 | H: 4.47
+Ep 450/500 | Reward: 382.15 | Q Loss: 1281.5427 | Eps: 0.406 | Actions: 77/90 | H: 4.47
+Ep 475/500 | Reward: 389.30 | Q Loss: 1333.0772 | Eps: 0.386 | Actions: 77/90 | H: 4.46
+Ep 500/500 | Reward: 373.74 | Q Loss: 1221.3177 | Eps: 0.368 | Actions: 78/90 | H: 4.46
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:58<00:00,  1.04it/s]
+  Trial 9 complete: 382.89%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:58<00:00,  1.02s/it]
+
+[I 2025-11-27 16:15:47,583] Trial 9 finished with value: 382.88836504177345 and parameters: {'lr': 1e-05, 'batch_size': 256, 'epsilon_decay': 0.998, 'target_update_freq': 1000, 'gamma': 0.99}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146:  60%|███████████████████████████████████████████████████████▏                                    | 3/5 [24:37<16:18, 489.21s/it]
+Trial 12:
+  lr=0.000030, batch_size=128, epsilon_decay=0.9980, target_update_freq=250, gamma=0.99
+Ep 25/500 | Reward: 382.55 | Q Loss: 31022.8009 | Eps: 0.951 | Actions: 89/90 | H: 4.48
+Ep 50/500 | Reward: 373.05 | Q Loss: 1708.2783 | Eps: 0.905 | Actions: 86/90 | H: 4.49
+Ep 75/500 | Reward: 377.11 | Q Loss: 1612.2279 | Eps: 0.861 | Actions: 90/90 | H: 4.49
+Ep 100/500 | Reward: 382.47 | Q Loss: 1807.9719 | Eps: 0.819 | Actions: 88/90 | H: 4.50
+Ep 125/500 | Reward: 388.02 | Q Loss: 2058.7722 | Eps: 0.779 | Actions: 85/90 | H: 4.50
+Ep 150/500 | Reward: 382.49 | Q Loss: 1484.9448 | Eps: 0.741 | Actions: 85/90 | H: 4.50
+Ep 175/500 | Reward: 379.91 | Q Loss: 1504.3417 | Eps: 0.704 | Actions: 88/90 | H: 4.49
+Ep 200/500 | Reward: 373.41 | Q Loss: 1779.0295 | Eps: 0.670 | Actions: 85/90 | H: 4.49
+Ep 225/500 | Reward: 383.42 | Q Loss: 1865.7730 | Eps: 0.637 | Actions: 84/90 | H: 4.49
+Ep 250/500 | Reward: 376.98 | Q Loss: 1736.4599 | Eps: 0.606 | Actions: 89/90 | H: 4.49
+Ep 275/500 | Reward: 389.10 | Q Loss: 1787.8931 | Eps: 0.577 | Actions: 87/90 | H: 4.49
+Ep 300/500 | Reward: 388.84 | Q Loss: 1830.0032 | Eps: 0.548 | Actions: 85/90 | H: 4.49
+Ep 325/500 | Reward: 379.92 | Q Loss: 1826.4460 | Eps: 0.522 | Actions: 81/90 | H: 4.48
+Ep 350/500 | Reward: 376.26 | Q Loss: 1743.5433 | Eps: 0.496 | Actions: 82/90 | H: 4.48
+Ep 375/500 | Reward: 384.41 | Q Loss: 2280.2316 | Eps: 0.472 | Actions: 84/90 | H: 4.47
+Ep 400/500 | Reward: 377.55 | Q Loss: 1701.8285 | Eps: 0.449 | Actions: 79/90 | H: 4.47
+Ep 425/500 | Reward: 371.11 | Q Loss: 1879.4637 | Eps: 0.427 | Actions: 79/90 | H: 4.46
+Ep 450/500 | Reward: 381.22 | Q Loss: 1791.3566 | Eps: 0.406 | Actions: 76/90 | H: 4.45
+Ep 475/500 | Reward: 388.24 | Q Loss: 1546.2392 | Eps: 0.386 | Actions: 77/90 | H: 4.44
+Ep 500/500 | Reward: 374.63 | Q Loss: 1968.6631 | Eps: 0.368 | Actions: 74/90 | H: 4.43
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:41<00:00,  1.04s/it]
+  Trial 12 complete: 384.39|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:41<00:00,  1.06it/s]
+
+[I 2025-11-27 16:24:29,843] Trial 12 finished with value: 384.3922851467855 and parameters: {'lr': 3e-05, 'batch_size': 128, 'epsilon_decay': 0.998, 'target_update_freq': 250, 'gamma': 0.99}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146:  80%|█████████████████████████████████████████████████████████████████████████▌                  | 4/5 [33:19<08:22, 502.26s/it]
+Trial 16:
+  lr=0.000010, batch_size=128, epsilon_decay=0.9980, target_update_freq=500, gamma=0.98
+Ep 25/500 | Reward: 381.46 | Q Loss: 56877.2181 | Eps: 0.951 | Actions: 88/90 | H: 4.48
+Ep 50/500 | Reward: 373.17 | Q Loss: 24233.0319 | Eps: 0.905 | Actions: 89/90 | H: 4.48
+Best trial: 4. Best value: 387.146:  80%|█████████████████████████████████████████████████████████████████████████▌                  | 4/5 [33:58<08:22, 502.26s/it]
+Training Discrete DQN:  13%|█████████████▍
+Training Discrete DQN:  13%|█████████████▌
+Training Discrete DQN:  13%|█████████████▊
+Training Discrete DQN:  14%|██████████████
+Training Discrete DQN:  14%|██████████████▏
+Ep 75/500 | Reward: 379.48 | Q Loss: 4895.9235 | Eps: 0.861 | Actions: 90/90 | H: 4.49
+Ep 100/500 | Reward: 383.89 | Q Loss: 2145.9450 | Eps: 0.819 | Actions: 89/90 | H: 4.49
+Ep 125/500 | Reward: 386.86 | Q Loss: 1970.5726 | Eps: 0.779 | Actions: 86/90 | H: 4.49
+Ep 150/500 | Reward: 383.69 | Q Loss: 1919.2422 | Eps: 0.741 | Actions: 89/90 | H: 4.49
+Ep 175/500 | Reward: 379.92 | Q Loss: 2306.7096 | Eps: 0.704 | Actions: 86/90 | H: 4.49
+Ep 200/500 | Reward: 373.39 | Q Loss: 1986.2771 | Eps: 0.670 | Actions: 82/90 | H: 4.49
+Ep 225/500 | Reward: 384.19 | Q Loss: 2043.1050 | Eps: 0.637 | Actions: 86/90 | H: 4.49
+Ep 250/500 | Reward: 374.68 | Q Loss: 1764.6218 | Eps: 0.606 | Actions: 84/90 | H: 4.49
+Ep 275/500 | Reward: 385.07 | Q Loss: 1843.9167 | Eps: 0.577 | Actions: 83/90 | H: 4.49
+Ep 300/500 | Reward: 389.59 | Q Loss: 1811.4240 | Eps: 0.548 | Actions: 81/90 | H: 4.48
+Ep 325/500 | Reward: 377.19 | Q Loss: 1864.3242 | Eps: 0.522 | Actions: 82/90 | H: 4.48
+Ep 350/500 | Reward: 374.29 | Q Loss: 1667.7276 | Eps: 0.496 | Actions: 75/90 | H: 4.48
+Ep 375/500 | Reward: 378.72 | Q Loss: 1736.7941 | Eps: 0.472 | Actions: 78/90 | H: 4.48
+Ep 400/500 | Reward: 374.81 | Q Loss: 1879.3089 | Eps: 0.449 | Actions: 81/90 | H: 4.48
+Ep 425/500 | Reward: 367.13 | Q Loss: 1785.8145 | Eps: 0.427 | Actions: 75/90 | H: 4.48
+Ep 450/500 | Reward: 376.45 | Q Loss: 1919.6944 | Eps: 0.406 | Actions: 77/90 | H: 4.47
+Ep 475/500 | Reward: 382.27 | Q Loss: 1720.8065 | Eps: 0.386 | Actions: 72/90 | H: 4.47
+Ep 500/500 | Reward: 368.26 | Q Loss: 1694.0375 | Eps: 0.368 | Actions: 68/90 | H: 4.47
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:44<00:00,  1.08it/s]
+  Trial 16 complete: 377.47|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:44<00:00,  1.07s/it]
+
+[I 2025-11-27 16:32:14,792] Trial 16 finished with value: 377.4667824965884 and pa
+============================================================
+Starting Optuna optimization for DQN
+Trials: 5 | Episodes per trial: 500
+============================================================
+
+  0%|                                                                                                                                         | 0/5 [00:00<?, ?it/s]
+Trial 1:
+  lr=0.000010, batch_size=64, epsilon_decay=0.9980, target_update_freq=250, gamma=0.99
+Ep 25/500 | Reward: 382.09 | Q Loss: 53376.1725 | Eps: 0.951 | Actions: 90/90 | H: 4.48
+Ep 50/500 | Reward: 374.44 | Q Loss: 29967.2129 | Eps: 0.905 | Actions: 89/90 | H: 4.49
+Ep 75/500 | Reward: 377.17 | Q Loss: 11127.6679 | Eps: 0.861 | Actions: 88/90 | H: 4.49
+Ep 100/500 | Reward: 381.76 | Q Loss: 3415.3947 | Eps: 0.819 | Actions: 89/90 | H: 4.49
+Ep 125/500 | Reward: 388.07 | Q Loss: 2909.3782 | Eps: 0.779 | Actions: 85/90 | H: 4.49
+Ep 150/500 | Reward: 381.77 | Q Loss: 3023.4721 | Eps: 0.741 | Actions: 88/90 | H: 4.49
+Ep 175/500 | Reward: 378.83 | Q Loss: 2649.3626 | Eps: 0.704 | Actions: 82/90 | H: 4.49
+Ep 200/500 | Reward: 372.68 | Q Loss: 2966.6102 | Eps: 0.670 | Actions: 87/90 | H: 4.49
+Ep 225/500 | Reward: 381.69 | Q Loss: 3116.9471 | Eps: 0.637 | Actions: 83/90 | H: 4.48
+Ep 250/500 | Reward: 372.11 | Q Loss: 3412.7226 | Eps: 0.606 | Actions: 83/90 | H: 4.48
+Ep 275/500 | Reward: 383.03 | Q Loss: 3317.7205 | Eps: 0.577 | Actions: 85/90 | H: 4.48
+Ep 300/500 | Reward: 383.98 | Q Loss: 3701.0177 | Eps: 0.548 | Actions: 80/90 | H: 4.48
+Ep 325/500 | Reward: 374.06 | Q Loss: 4101.7514 | Eps: 0.522 | Actions: 83/90 | H: 4.47
+Ep 350/500 | Reward: 371.28 | Q Loss: 3407.8649 | Eps: 0.496 | Actions: 74/90 | H: 4.47
+Ep 375/500 | Reward: 377.78 | Q Loss: 4399.3810 | Eps: 0.472 | Actions: 78/90 | H: 4.46
+Ep 400/500 | Reward: 377.70 | Q Loss: 3214.4733 | Eps: 0.449 | Actions: 78/90 | H: 4.46
+Ep 425/500 | Reward: 368.21 | Q Loss: 3767.8754 | Eps: 0.427 | Actions: 77/90 | H: 4.45
+Ep 450/500 | Reward: 376.28 | Q Loss: 4463.6597 | Eps: 0.406 | Actions: 77/90 | H: 4.45
+Ep 475/500 | Reward: 382.56 | Q Loss: 5458.4794 | Eps: 0.386 | Actions: 79/90 | H: 4.45
+Ep 500/500 | Reward: 365.82 | Q Loss: 4150.2053 | Eps: 0.368 | Actions: 70/90 | H: 4.44
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:21<00:00,  1.00s/it]
+  Trial 1 complete: 372.63%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:21<00:00,  1.13it/s]
+
+[I 2025-11-27 15:59:36,807] Trial 1 finished with value: 372.6289672151781 and parameters: {'lr': 1e-05, 'batch_size': 64, 'epsilon_decay': 0.998, 'target_update_freq': 250, 'gamma': 0.99}. Best is trial 1 with value: 372.6289672151781.
+Best trial: 1. Best value: 372.629:  20%|██████████████████▍                                                                         | 1/5 [08:29<33:57, 509.42s/it]
+Trial 4:
+  lr=0.000010, batch_size=128, epsilon_decay=0.9980, target_update_freq=500, gamma=0.98
+Ep 25/500 | Reward: 382.08 | Q Loss: 45980.2427 | Eps: 0.951 | Actions: 88/90 | H: 4.48
+Ep 50/500 | Reward: 373.81 | Q Loss: 14629.6792 | Eps: 0.905 | Actions: 87/90 | H: 4.49
+Ep 75/500 | Reward: 377.41 | Q Loss: 3924.4717 | Eps: 0.861 | Actions: 89/90 | H: 4.49
+Ep 100/500 | Reward: 381.38 | Q Loss: 2208.1797 | Eps: 0.819 | Actions: 85/90 | H: 4.49
+Ep 125/500 | Reward: 386.55 | Q Loss: 1719.3776 | Eps: 0.779 | Actions: 88/90 | H: 4.49
+Ep 150/500 | Reward: 381.06 | Q Loss: 1997.5620 | Eps: 0.741 | Actions: 83/90 | H: 4.49
+Ep 175/500 | Reward: 378.83 | Q Loss: 1796.8684 | Eps: 0.704 | Actions: 84/90 | H: 4.49
+Ep 200/500 | Reward: 373.65 | Q Loss: 1526.6961 | Eps: 0.670 | Actions: 86/90 | H: 4.49
+Ep 225/500 | Reward: 378.39 | Q Loss: 1752.0803 | Eps: 0.637 | Actions: 85/90 | H: 4.49
+Ep 250/500 | Reward: 376.52 | Q Loss: 1822.3456 | Eps: 0.606 | Actions: 85/90 | H: 4.49
+Ep 275/500 | Reward: 387.93 | Q Loss: 2080.0145 | Eps: 0.577 | Actions: 83/90 | H: 4.49
+Ep 300/500 | Reward: 389.94 | Q Loss: 1850.7628 | Eps: 0.548 | Actions: 78/90 | H: 4.49
+Ep 325/500 | Reward: 378.65 | Q Loss: 1675.6787 | Eps: 0.522 | Actions: 83/90 | H: 4.49
+Ep 350/500 | Reward: 372.95 | Q Loss: 1632.9078 | Eps: 0.496 | Actions: 82/90 | H: 4.48
+Ep 375/500 | Reward: 383.13 | Q Loss: 1607.8288 | Eps: 0.472 | Actions: 77/90 | H: 4.48
+Ep 400/500 | Reward: 379.53 | Q Loss: 1516.2681 | Eps: 0.449 | Actions: 78/90 | H: 4.48
+Ep 425/500 | Reward: 373.11 | Q Loss: 1813.5354 | Eps: 0.427 | Actions: 82/90 | H: 4.48
+Ep 450/500 | Reward: 379.54 | Q Loss: 1679.0119 | Eps: 0.406 | Actions: 79/90 | H: 4.48
+Ep 475/500 | Reward: 392.52 | Q Loss: 1809.4618 | Eps: 0.386 | Actions: 82/90 | H: 4.48
+Ep 500/500 | Reward: 375.11 | Q Loss: 1572.4441 | Eps: 0.368 | Actions: 80/90 | H: 4.48
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:36<00:00,  1.10it/s]
+  Trial 4 complete: 387.15%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:36<00:00,  1.09s/it]
+
+[I 2025-11-27 16:07:13,410] Trial 4 finished with value: 387.1456596500128 and parameters: {'lr': 1e-05, 'batch_size': 128, 'epsilon_decay': 0.998, 'target_update_freq': 500, 'gamma': 0.98}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146:  40%|████████████████████████████████████▊                                                       | 2/5 [16:06<23:55, 478.38s/it]
+Trial 8:
+  lr=0.000030, batch_size=256, epsilon_decay=0.9950, target_update_freq=250, gamma=0.98
+Ep 25/500 | Reward: 381.92 | Q Loss: 21020.8377 | Eps: 0.882 | Actions: 86/90 | H: 4.46
+Ep 50/500 | Reward: 374.88 | Q Loss: 1570.2820 | Eps: 0.778 | Actions: 87/90 | H: 4.48
+Ep 75/500 | Reward: 378.66 | Q Loss: 1380.6620 | Eps: 0.687 | Actions: 86/90 | H: 4.49
+Ep 100/500 | Reward: 384.89 | Q Loss: 1426.2406 | Eps: 0.606 | Actions: 85/90 | H: 4.49
+Ep 125/500 | Reward: 390.78 | Q Loss: 1314.9829 | Eps: 0.534 | Actions: 83/90 | H: 4.49
+Ep 150/500 | Reward: 385.29 | Q Loss: 1233.8672 | Eps: 0.471 | Actions: 79/90 | H: 4.48
+Ep 175/500 | Reward: 383.61 | Q Loss: 1338.8914 | Eps: 0.416 | Actions: 73/90 | H: 4.48
+Ep 200/500 | Reward: 374.34 | Q Loss: 1111.8579 | Eps: 0.367 | Actions: 75/90 | H: 4.48
+Ep 225/500 | Reward: 386.00 | Q Loss: 1259.9449 | Eps: 0.324 | Actions: 76/90 | H: 4.47
+Ep 250/500 | Reward: 377.35 | Q Loss: 1262.1586 | Eps: 0.286 | Actions: 65/90 | H: 4.47
+Ep 275/500 | Reward: 391.20 | Q Loss: 1171.8876 | Eps: 0.252 | Actions: 60/90 | H: 4.47
+Ep 300/500 | Reward: 391.07 | Q Loss: 1170.4272 | Eps: 0.222 | Actions: 58/90 | H: 4.46
+Ep 325/500 | Reward: 379.01 | Q Loss: 1148.1290 | Eps: 0.196 | Actions: 64/90 | H: 4.46
+Ep 350/500 | Reward: 373.69 | Q Loss: 1055.2765 | Eps: 0.173 | Actions: 55/90 | H: 4.45
+Ep 375/500 | Reward: 382.34 | Q Loss: 1122.8779 | Eps: 0.153 | Actions: 54/90 | H: 4.45
+Ep 400/500 | Reward: 377.71 | Q Loss: 1083.3478 | Eps: 0.135 | Actions: 46/90 | H: 4.44
+Ep 425/500 | Reward: 370.16 | Q Loss: 1128.8624 | Eps: 0.119 | Actions: 42/90 | H: 4.44
+Ep 450/500 | Reward: 380.20 | Q Loss: 1000.4096 | Eps: 0.105 | Actions: 44/90 | H: 4.43
+Ep 475/500 | Reward: 385.66 | Q Loss: 941.3859 | Eps: 0.092 | Actions: 39/90 | H: 4.42
+Ep 500/500 | Reward: 367.15 | Q Loss: 1020.1783 | Eps: 0.082 | Actions: 48/90 | H: 4.42
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:37<00:00,  1.03s/it]
+  Trial 8 complete: 378.17%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:37<00:00,  1.07s/it]
+
+[I 2025-11-27 16:15:51,957] Trial 8 finished with value: 378.171746371093 and parameters: {'lr': 3e-05, 'batch_size': 256, 'epsilon_decay': 0.995, 'target_update_freq': 250, 'gamma': 0.98}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146:  60%|███████████████████████████████████████████████████████▏                                    | 3/5 [24:44<16:33, 496.69s/it]
+Trial 13:
+  lr=0.000003, batch_size=128, epsilon_decay=0.9980, target_update_freq=500, gamma=0.98
+Ep 25/500 | Reward: 382.88 | Q Loss: 42312.8516 | Eps: 0.951 | Actions: 89/90 | H: 4.48
+Ep 50/500 | Reward: 374.70 | Q Loss: 33591.5919 | Eps: 0.905 | Actions: 88/90 | H: 4.45
+Ep 75/500 | Reward: 378.42 | Q Loss: 27334.9202 | Eps: 0.861 | Actions: 86/90 | H: 4.45
+Ep 100/500 | Reward: 382.42 | Q Loss: 18808.2898 | Eps: 0.819 | Actions: 89/90 | H: 4.45
+Ep 125/500 | Reward: 386.60 | Q Loss: 11902.7977 | Eps: 0.779 | Actions: 87/90 | H: 4.46
+Ep 150/500 | Reward: 383.02 | Q Loss: 8364.7157 | Eps: 0.741 | Actions: 84/90 | H: 4.46
+Ep 175/500 | Reward: 380.07 | Q Loss: 5869.3447 | Eps: 0.704 | Actions: 83/90 | H: 4.46
+Ep 200/500 | Reward: 374.01 | Q Loss: 4031.2279 | Eps: 0.670 | Actions: 86/90 | H: 4.47
+Ep 225/500 | Reward: 381.59 | Q Loss: 2768.8313 | Eps: 0.637 | Actions: 86/90 | H: 4.47
+Ep 250/500 | Reward: 375.70 | Q Loss: 2461.2218 | Eps: 0.606 | Actions: 85/90 | H: 4.47
+Ep 275/500 | Reward: 387.16 | Q Loss: 2183.2193 | Eps: 0.577 | Actions: 83/90 | H: 4.47
+Ep 300/500 | Reward: 387.15 | Q Loss: 1773.9542 | Eps: 0.548 | Actions: 79/90 | H: 4.47
+Ep 325/500 | Reward: 375.18 | Q Loss: 1696.9993 | Eps: 0.522 | Actions: 82/90 | H: 4.47
+Ep 350/500 | Reward: 371.52 | Q Loss: 1669.0020 | Eps: 0.496 | Actions: 80/90 | H: 4.46
+Ep 375/500 | Reward: 377.79 | Q Loss: 1581.2351 | Eps: 0.472 | Actions: 83/90 | H: 4.46
+Ep 400/500 | Reward: 376.21 | Q Loss: 1837.3113 | Eps: 0.449 | Actions: 82/90 | H: 4.46
+Ep 425/500 | Reward: 367.23 | Q Loss: 1760.3140 | Eps: 0.427 | Actions: 83/90 | H: 4.46
+Ep 450/500 | Reward: 375.46 | Q Loss: 1704.4510 | Eps: 0.406 | Actions: 75/90 | H: 4.45
+Ep 475/500 | Reward: 389.71 | Q Loss: 1446.6466 | Eps: 0.386 | Actions: 70/90 | H: 4.45
+Ep 500/500 | Reward: 367.87 | Q Loss: 1560.2457 | Eps: 0.368 | Actions: 69/90 | H: 4.44
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:44<00:00,  1.05s/it]
+  Trial 13 complete: 375.50|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [08:44<00:00,  1.01it/s]
+
+[I 2025-11-27 16:24:36,581] Trial 13 finished with value: 375.4971366247424 and parameters: {'lr': 3e-06, 'batch_size': 128, 'epsilon_decay': 0.998, 'target_update_freq': 500, 'gamma': 0.98}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146:  80%|█████████████████████████████████████████████████████████████████████████▌                  | 4/5 [33:29<08:27, 507.72s/it]
+Trial 17:
+  lr=0.000010, batch_size=128, epsilon_decay=0.9980, target_update_freq=500, gamma=0.98
+Ep 25/500 | Reward: 380.38 | Q Loss: 57446.3902 | Eps: 0.951 | Actions: 89/90 | H: 4.48
+Ep 50/500 | Reward: 373.83 | Q Loss: 23791.9864 | Eps: 0.905 | Actions: 88/90 | H: 4.48
+Best trial: 4. Best value: 387.146:  80%|█████████████████████████████████████████████████████████████████████████▌                  | 4/5 [34:10<08:27, 507.72s/it]
+Training Discrete DQN:  11%|███████████▌
+Training Discrete DQN:  11%|███████████▋
+Training Discrete DQN:  12%|███████████▉
+Training Discrete DQN:  12%|████████████▏
+Training Discrete DQN:  12%|████████████▎
+Training Discrete DQN:  12%|████████████▌
+Ep 75/500 | Reward: 379.46 | Q Loss: 4992.8243 | Eps: 0.861 | Actions: 90/90 | H: 4.49
+Ep 100/500 | Reward: 384.90 | Q Loss: 2174.7452 | Eps: 0.819 | Actions: 88/90 | H: 4.49
+Ep 125/500 | Reward: 389.28 | Q Loss: 2381.8470 | Eps: 0.779 | Actions: 87/90 | H: 4.49
+Ep 150/500 | Reward: 382.53 | Q Loss: 2181.1318 | Eps: 0.741 | Actions: 84/90 | H: 4.49
+Ep 175/500 | Reward: 380.09 | Q Loss: 1784.5011 | Eps: 0.704 | Actions: 86/90 | H: 4.49
+Ep 200/500 | Reward: 374.56 | Q Loss: 1798.6151 | Eps: 0.670 | Actions: 83/90 | H: 4.49
+Ep 225/500 | Reward: 385.38 | Q Loss: 1978.0385 | Eps: 0.637 | Actions: 82/90 | H: 4.49
+Ep 250/500 | Reward: 374.23 | Q Loss: 1747.8593 | Eps: 0.606 | Actions: 79/90 | H: 4.49
+Ep 275/500 | Reward: 385.07 | Q Loss: 1808.6465 | Eps: 0.577 | Actions: 83/90 | H: 4.49
+Ep 300/500 | Reward: 386.36 | Q Loss: 1945.7415 | Eps: 0.548 | Actions: 86/90 | H: 4.49
+Ep 325/500 | Reward: 375.24 | Q Loss: 2262.6709 | Eps: 0.522 | Actions: 77/90 | H: 4.49
+Ep 350/500 | Reward: 368.72 | Q Loss: 1858.9353 | Eps: 0.496 | Actions: 81/90 | H: 4.49
+Ep 375/500 | Reward: 379.36 | Q Loss: 1674.2198 | Eps: 0.472 | Actions: 75/90 | H: 4.49
+Ep 400/500 | Reward: 377.40 | Q Loss: 1747.1730 | Eps: 0.449 | Actions: 75/90 | H: 4.49
+Ep 425/500 | Reward: 368.09 | Q Loss: 1965.5534 | Eps: 0.427 | Actions: 77/90 | H: 4.48
+Ep 450/500 | Reward: 376.89 | Q Loss: 2122.2819 | Eps: 0.406 | Actions: 70/90 | H: 4.48
+Ep 475/500 | Reward: 383.09 | Q Loss: 2048.7112 | Eps: 0.386 | Actions: 71/90 | H: 4.48
+Ep 500/500 | Reward: 369.98 | Q Loss: 2015.7679 | Eps: 0.368 | Actions: 79/90 | H: 4.48
+Training Discrete DQN: 100%|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:46<00:00,  1.07it/s]
+  Trial 17 complete: 373.60|██████████████████████████████████████████████████████████████████████████████████████████████████████| 500/500 [07:46<00:00,  1.07s/it]
+
+[I 2025-11-27 16:32:23,803] Trial 17 finished with value: 373.5964552770603 and parameters: {'lr': 1e-05, 'batch_size': 128, 'epsilon_decay': 0.998, 'target_update_freq': 500, 'gamma': 0.98}. Best is trial 4 with value: 387.1456596500128.
+Best trial: 4. Best value: 387.146: 100%|████████████████████████████████████████████████████████████████████████████████████████████| 5/5 [41:16<00:00, 495.28s/it]
+
+============================================================
+OPTIMIZATION COMPLETE
+============================================================
+Best trial: 4
+Best value: 387.15
+
+Best hyperparameters:
+  lr: 1e-05
+  batch_size: 128
+  epsilon_decay: 0.998
+  target_update_freq: 500
+  gamma: 0.98
