@@ -24,6 +24,10 @@
         
         /* Print styles for PDF export */
         @media print {
+            @page {
+                size: letter;
+                margin: 0.5in;
+            }
             body {
                 background: white;
             }
@@ -40,10 +44,8 @@
             .slide {
                 display: block !important;
                 page-break-after: always;
-                page-break-inside: avoid;
                 margin: 0;
-                padding: 40px;
-                min-height: 100vh;
+                padding: 20px;
             }
             .slide:last-child {
                 page-break-after: auto;
@@ -114,21 +116,63 @@
                     <!-- Action Space -->
                     <div class="bg-green-50 p-4 rounded-lg">
                         <h3 class="text-lg font-bold mb-3 text-green-700">Action Space: 90 Discrete Strategies</h3>
-                        <div class="text-xs space-y-2">
+                        <div class="grid grid-cols-2 gap-3 text-[10px]">
+                            <!-- 10 Money Allocations -->
                             <div class="bg-white p-2 rounded">
-                                <p class="font-semibold">10 Money Allocations:</p>
-                                <p class="text-gray-600">invest% / debt% / emergency%</p>
-                                <p class="text-[10px] text-gray-500 mt-1">80/10/10, 70/15/15, 60/20/20, ..., 40/10/50</p>
+                                <p class="font-bold text-xs mb-2 text-center">10 Money Allocations</p>
+                                <table class="w-full text-center">
+                                    <thead>
+                                        <tr class="border-b border-gray-300">
+                                            <th class="p-1">Invest</th>
+                                            <th class="p-1">Debt</th>
+                                            <th class="p-1">Emergency</th>
+                                            <th class="p-1">Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-red-100"><td>80%</td><td>10%</td><td>10%</td><td class="font-semibold">Aggressive</td></tr>
+                                        <tr class="bg-red-50"><td>70%</td><td>15%</td><td>15%</td><td class="font-semibold">Aggressive</td></tr>
+                                        <tr class="bg-red-50"><td>60%</td><td>20%</td><td>20%</td><td class="font-semibold">Aggressive</td></tr>
+                                        <tr class="bg-yellow-100"><td>60%</td><td>30%</td><td>10%</td><td class="font-semibold">Moderate</td></tr>
+                                        <tr class="bg-yellow-100"><td>50%</td><td>25%</td><td>25%</td><td class="font-semibold">Moderate</td></tr>
+                                        <tr class="bg-yellow-50"><td>50%</td><td>40%</td><td>10%</td><td class="font-semibold">Moderate</td></tr>
+                                        <tr class="bg-yellow-50"><td>40%</td><td>30%</td><td>30%</td><td class="font-semibold">Moderate</td></tr>
+                                        <tr class="bg-green-100"><td>40%</td><td>50%</td><td>10%</td><td class="font-semibold">Conservative</td></tr>
+                                        <tr class="bg-green-100"><td>40%</td><td>20%</td><td>40%</td><td class="font-semibold">Conservative</td></tr>
+                                        <tr class="bg-green-50"><td>40%</td><td>10%</td><td>50%</td><td class="font-semibold">Conservative</td></tr>
+                                    </tbody>
+                                </table>
                             </div>
+                            
+                            <!-- 9 Investment Portfolios -->
                             <div class="bg-white p-2 rounded">
-                                <p class="font-semibold">9 Investment Portfolios:</p>
-                                <p class="text-gray-600">stocks% / bonds% / real_estate%</p>
-                                <p class="text-[10px] text-gray-500 mt-1">80/15/5, 70/20/10, 60/30/10, ..., 30/60/10</p>
+                                <p class="font-bold text-xs mb-2 text-center">9 Investment Portfolios</p>
+                                <table class="w-full text-center">
+                                    <thead>
+                                        <tr class="border-b border-gray-300">
+                                            <th class="p-1">Stocks</th>
+                                            <th class="p-1">Bonds</th>
+                                            <th class="p-1">RE</th>
+                                            <th class="p-1">Type</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="bg-red-100"><td>80%</td><td>15%</td><td>5%</td><td class="font-semibold">Aggressive</td></tr>
+                                        <tr class="bg-red-50"><td>70%</td><td>20%</td><td>10%</td><td class="font-semibold">Aggressive</td></tr>
+                                        <tr class="bg-red-50"><td>60%</td><td>30%</td><td>10%</td><td class="font-semibold">Aggressive</td></tr>
+                                        <tr class="bg-yellow-100"><td>50%</td><td>40%</td><td>10%</td><td class="font-semibold">Moderate</td></tr>
+                                        <tr class="bg-yellow-100"><td>50%</td><td>30%</td><td>20%</td><td class="font-semibold">Moderate</td></tr>
+                                        <tr class="bg-yellow-50"><td>40%</td><td>50%</td><td>10%</td><td class="font-semibold">Moderate</td></tr>
+                                        <tr class="bg-yellow-50"><td>40%</td><td>40%</td><td>20%</td><td class="font-semibold">Moderate</td></tr>
+                                        <tr class="bg-green-100"><td>30%</td><td>60%</td><td>10%</td><td class="font-semibold">Conservative</td></tr>
+                                        <tr class="bg-green-50"><td>30%</td><td>50%</td><td>20%</td><td class="font-semibold">Conservative</td></tr>
+                                    </tbody>
+                                </table>
                             </div>
-                            <div class="bg-blue-100 p-2 rounded text-center">
-                                <p class="font-mono text-sm">action_id = money_idx × 9 + portfolio_idx</p>
-                                <p class="text-[10px] mt-1">Example: Action 22 = Balanced + Conservative</p>
-                            </div>
+                        </div>
+                        <div class="bg-blue-100 p-2 rounded text-center mt-2">
+                            <p class="font-mono text-xs">action_id = money_idx × 9 + portfolio_idx</p>
+                            <p class="text-[10px] mt-1">Example: Action 22 = (2×9 + 4) = Moderate invest + Balanced portfolio</p>
                         </div>
                     </div>
                 </div>
@@ -167,11 +211,11 @@
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-white rounded-lg shadow-lg p-2">
                             <p class="text-sm font-bold text-center mb-2">Net Worth Trajectories (30 Years)</p>
-                            <iframe src="human_only_net_worth_trajectories.html" width="100%" height="450" frameborder="0"></iframe>
+                            <iframe src="human_only_net_worth_trajectories.html" width="100%" height="550" frameborder="0" style="overflow: hidden;"></iframe>
                         </div>
                         <div class="bg-white rounded-lg shadow-lg p-2">
                             <p class="text-sm font-bold text-center mb-2">Portfolio Composition at Milestones</p>
-                            <iframe src="human_only_portfolio_snapshots.html" width="100%" height="450" frameborder="0"></iframe>
+                            <iframe src="human_only_portfolio_snapshots.html" width="100%" height="550" frameborder="0" style="overflow: hidden;"></iframe>
                         </div>
                     </div>
                     
@@ -470,17 +514,15 @@
                         </div>
                     </div>
 
-                    <!-- Performance Charts - 2 Column Layout -->
-                    <div class="grid grid-cols-2 gap-4">
+                    <!-- Performance Charts - Top/Bottom Layout -->
+                    <div class="space-y-2">
                         <div class="bg-white rounded-lg shadow-lg p-2">
-                            <p class="text-sm font-bold text-center mb-2">Performance Comparison</p>
-                            <img src="performance_with_error_bars.png" alt="Performance with Error Bars" class="rounded-lg">
-                            <p class="text-center text-xs text-gray-600 mt-1">Mean ± Std Dev (n=5 seeds)</p>
+                            <p class="text-sm font-bold text-center mb-2">Performance Comparison (Mean ± Std Dev, n=5 seeds)</p>
+                            <img src="performance_with_error_bars.png" alt="Performance with Error Bars" class="rounded-lg w-full">
                         </div>
                         <div class="bg-white rounded-lg shadow-lg p-2">
                             <p class="text-sm font-bold text-center mb-2">95% Confidence Intervals</p>
-                            <iframe src="confidence_intervals.html" width="100%" height="450" frameborder="0" class="rounded-lg"></iframe>
-                            <p class="text-center text-xs text-gray-600 mt-1">Interactive - Hover for details!</p>
+                            <img src="confidence_intervals.png" alt="Confidence Intervals" class="rounded-lg w-full">
                         </div>
                     </div>
 
@@ -488,7 +530,7 @@
                     <div class="grid grid-cols-2 gap-3">
                         <!-- Winner Announcement -->
                         <div class="bg-green-50 p-3 rounded-lg border-2 border-green-400">
-                            <h3 class="text-lg font-bold text-center mb-2 text-green-700">🏆 Winner: Sharpe 60%</h3>
+                            <h3 class="text-lg font-bold text-center mb-2 text-green-700"> Winner: Sharpe 60%</h3>
                             <div class="space-y-1 text-sm">
                                 <div class="bg-white p-2 rounded">
                                     <p><strong>Final Net Worth:</strong> $2.22M</p>
@@ -511,7 +553,7 @@
                                 <li>• <strong>Sharpe 70-80%:</strong> Too conservative, underperforms</li>
                             </ul>
                             <div class="bg-orange-100 p-2 rounded mt-2 border-l-4 border-orange-500">
-                                <p class="text-sm font-bold text-orange-800">⚠️ Critical Question:</p>
+                                <p class="text-sm font-bold text-orange-800"> Critical Question:</p>
                                 <p class="text-xs text-gray-700">Is the "winning" agent actually the best strategy?</p>
                             </div>
                         </div>
