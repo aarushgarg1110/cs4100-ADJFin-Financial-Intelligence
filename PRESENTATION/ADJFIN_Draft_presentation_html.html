@@ -75,6 +75,7 @@
                         <h1 class="text-6xl font-bold text-blue-600">ADJFin</h1>
                         <h2 class="text-4xl font-semibold">Financial Intelligence with Deep RL</h2>
                         <p class="text-2xl text-gray-600 mt-6">CS 4100 Project</p>
+                        <p class="text-xl text-gray-500 mt-4">Aarush Garg • Dylan Vo • Jesvin Jerry</p>
                     </div>
                     
                     <div class="text-xl text-gray-700 space-y-4 max-w-4xl">
@@ -89,34 +90,35 @@
             <div class="slide" id="slide-2">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">Environment: 30-Year Financial Lifecycle</h1>
                 
-                <div class="grid grid-cols-2 gap-4">
+                <div class="grid grid-cols-4 gap-4">
                     <!-- State Space -->
                     <div class="bg-blue-50 p-4 rounded-lg">
-                        <h3 class="text-lg font-bold mb-3 text-blue-700">State Space (13D)</h3>
-                        <div class="bg-gray-800 text-white p-3 rounded text-xs font-mono">
+                        <h3 class="text-xl font-bold mb-3 text-blue-700">State Space (13D)</h3>
+                        <div class="bg-gray-800 text-white p-3 rounded text-sm font-mono">
                             <div class="text-green-400 mb-1"># Continuous observation</div>
                             <div>state = [</div>
-                            <div class="ml-4">net_worth,        <span class="text-gray-400"># $150k</span></div>
+                            <div class="ml-4">net_worth,        <span class="text-gray-400"># $73k</span></div>
                             <div class="ml-4">stocks,           <span class="text-gray-400"># $45k</span></div>
                             <div class="ml-4">bonds,            <span class="text-gray-400"># $30k</span></div>
                             <div class="ml-4">real_estate,      <span class="text-gray-400"># $15k</span></div>
                             <div class="ml-4">cc_debt,          <span class="text-gray-400"># $5k</span></div>
                             <div class="ml-4">student_loan,     <span class="text-gray-400"># $20k</span></div>
-                            <div class="ml-4">monthly_income,   <span class="text-gray-400"># $6k</span></div>
+                            <div class="ml-4">income,           <span class="text-gray-400"># $6k/mo</span></div>
                             <div class="ml-4">age,              <span class="text-gray-400"># 35</span></div>
-                            <div class="ml-4">emergency_fund,   <span class="text-gray-400"># $8k</span></div>
-                            <div class="ml-4">stock_return_1m,  <span class="text-gray-400"># 2%</span></div>
-                            <div class="ml-4">regime,           <span class="text-gray-400"># bull</span></div>
-                            <div class="ml-4">event,            <span class="text-gray-400"># none</span></div>
-                            <div class="ml-4">unemployed_months <span class="text-gray-400"># 0</span></div>
+                            <div class="ml-4">emergency,        <span class="text-gray-400"># $8k</span></div>
+                            <div class="ml-4">return_1m,        <span class="text-gray-400"># 2%</span></div>
+                            <div class="ml-4">regime,           <span class="text-gray-400"># 0=bear, 1=normal, 2=bull</span></div>
+                            <div class="ml-4">event,            <span class="text-gray-400"># 0=none, 1=job, 2=med, 3=raise</span></div>
+                            <div class="ml-8 text-gray-500 text-xs"># job=unemployment, med=expense, raise=income↑</div>
+                            <div class="ml-4">unemployed        <span class="text-gray-400"># 0-6 months</span></div>
+                            <div class="ml-8 text-gray-500 text-xs"># income=0 during unemployment period</div>
                             <div>]</div>
                         </div>
                     </div>
-
                     <!-- Action Space -->
                     <div class="bg-green-50 p-4 rounded-lg">
-                        <h3 class="text-lg font-bold mb-3 text-green-700">Action Space: 90 Discrete Strategies</h3>
-                        <div class="grid grid-cols-2 gap-3 text-[10px]">
+                        <h3 class="text-xl font-bold mb-3 text-green-700">Action Space: 90</h3>
+                        <div class="space-y-2 text-xs">
                             <!-- 10 Money Allocations -->
                             <div class="bg-white p-2 rounded">
                                 <p class="font-bold text-xs mb-2 text-center">10 Money Allocations</p>
@@ -172,30 +174,71 @@
                         </div>
                         <div class="bg-blue-100 p-2 rounded text-center mt-2">
                             <p class="font-mono text-xs">action_id = money_idx × 9 + portfolio_idx</p>
-                            <p class="text-[10px] mt-1">Example: Action 22 = (2×9 + 4) = Moderate invest + Balanced portfolio</p>
+                            <p class="text-[10px] mt-1">Example: Action 22 = (2×9 + 4) = 60% invest/20% debt/20% emergency + 50% stocks/30% bonds/20% RE</p>
                         </div>
                     </div>
-                </div>
 
-                <!-- Market Dynamics -->
-                <div class="grid grid-cols-2 gap-4 mt-4">
-                    <div class="bg-purple-50 p-4 rounded-lg">
-                        <h3 class="text-lg font-bold mb-2 text-purple-700">Market Regimes</h3>
+                    <!-- Market Dynamics - Third Column (stacked) -->
+                    <div class="space-y-4">
+                        <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-2 text-purple-700">Market Regimes</h3>
                         <div class="bg-white p-2 rounded text-xs space-y-1">
-                            <div><strong>Bull:</strong> μ=1.8%/mo (>18%/yr), σ=3.5%</div>
-                            <div><strong>Normal:</strong> μ=0.8%/mo (~10%/yr), σ=4.2%</div>
-                            <div><strong>Bear:</strong> μ=-0.5%/mo (<-6%/yr), σ=6.8%</div>
-                            <div class="text-gray-500 mt-2">Data: SPY, BND, VNQ (2000-2024)</div>
+                            <div><strong>Bull:</strong> μ=1.8%/mo <span class="text-gray-500">(~24%/yr)</span></div>
+                            <div><strong>Normal:</strong> μ=0.8%/mo <span class="text-gray-500">(~10%/yr)</span></div>
+                            <div><strong>Bear:</strong> μ=-0.5%/mo <span class="text-gray-500">(-6%/yr)</span></div>
+                            <div class="text-gray-500 mt-2 text-[10px]">Data sourced from:<br/>SPY (S&P 500), BND (Total Bond),<br/>VNQ (Real Estate) 2000-2024</div>
                         </div>
                     </div>
 
                     <div class="bg-orange-50 p-4 rounded-lg">
-                        <h3 class="text-lg font-bold mb-2 text-orange-700">Life Events</h3>
+                        <h3 class="text-xl font-bold mb-2 text-orange-700">Life Events</h3>
                         <div class="bg-white p-2 rounded text-xs space-y-1">
-                            <div><strong>Job Loss:</strong> 4%/yr → 2-6mo unemployment</div>
-                            <div><strong>Medical:</strong> 10%/yr → $1k-$10k expense</div>
-                            <div><strong>Raise:</strong> 5%/yr → 10-30% income boost</div>
-                            <div class="text-gray-500 mt-2">Stochastic, independent sampling</div>
+                            <div><strong>Job Loss:</strong> 4%/yr <span class="text-gray-500">(2-6mo unemployment)</span></div>
+                            <div><strong>Medical:</strong> 10%/yr <span class="text-gray-500">($1k-$10k expense)</span></div>
+                            <div><strong>Raise:</strong> 5%/yr <span class="text-gray-500">(10-30% income boost)</span></div>
+                            <div class="text-gray-500 mt-2 text-[10px]">Stochastic, independent sampling</div>
+                        </div>
+                    </div>
+                    </div>
+
+                    <!-- One Month Example - Fourth Column -->
+                    <div class="bg-gradient-to-b from-blue-50 to-green-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-center text-blue-700">One Month Example</h3>
+                        <div class="bg-gray-800 text-white p-3 rounded text-xs font-mono leading-relaxed">
+                            <div class="text-blue-400 font-bold">## INITIAL STATE (Month 0):</div>
+                            <div>Stocks: $45k, Bonds: $30k, RE: $15k</div>
+                            <div>Emergency: $8k, CC: $5k, Loan: $20k</div>
+                            <div class="text-blue-300 font-bold">Net Worth: $73k</div>
+                            <div>Age: 35, Income: $6k/mo, Bull +2%</div>
+                            <div class="mt-2"></div>
+                            
+                            <div class="text-green-400 font-bold">## ACTION 31:</div>
+                            <div>money_idx=3: 60% invest/30% debt/10% emerg</div>
+                            <div>portfolio_idx=4: 50% stocks/30% bonds/20% RE</div>
+                            <div class="mt-2"></div>
+                            
+                            <div class="text-purple-400 font-bold">## EXECUTION:</div>
+                            <div>Income $6k - expenses $2k = $4k available</div>
+                            <div>Invest: $2.4k, Debt: $1.2k, Emerg: $400</div>
+                            <div>Market +2%: Stocks $45k→$47.1k</div>
+                            <div>Bonds +0.5%: $30k→$30.9k</div>
+                            <div>RE +1%: $15k→$15.6k</div>
+                            <div>CC debt: $5k - $1.2k = $3.8k</div>
+                            <div>Emergency: $8k + $400 = $8.4k</div>
+                            <div class="mt-2"></div>
+                            
+                            <div class="text-yellow-400 font-bold">## NEW STATE (Month 1):</div>
+                            <div>Stocks: $47.1k, Bonds: $30.9k, RE: $15.6k</div>
+                            <div>Emergency: $8.4k, CC: $3.8k, Loan: $20k</div>
+                            <div class="text-green-300 font-bold">Net Worth: $78.2k (+$5.2k!)</div>
+                            <div>Age: 35.08</div>
+                            <div class="mt-2"></div>
+                            
+                            <div class="text-orange-400 font-bold">## REWARD: +0.51</div>
+                            <div>Wealth: 0.078, Sharpe: 0.75, Debt↓: +0.1</div>
+                            <div class="mt-2"></div>
+                            
+                            <div class="text-gray-400 font-bold">## Repeat 360 times (30 years: age 25→55)</div>
                         </div>
                     </div>
                 </div>
@@ -203,8 +246,7 @@
 
            <!-- Slide 3: Human Baselines -->
             <div class="slide" id="slide-3">
-                <h1 class="text-4xl font-bold text-gray-800 mb-2">What Are We Competing Against?</h1>
-                <h2 class="text-2xl text-gray-600 mb-4">Human Baseline Strategies</h2>
+                <h1 class="text-3xl font-bold text-gray-800 mb-4">5 Expert Financial Strategies: Can RL Agents Learn to Outperform These Proven Approaches?</h1>
                 
                 <div class="space-y-4">
                     <!-- Embedded Plotly Charts - Two Columns -->
@@ -306,10 +348,6 @@
                             </div>
                         </div>
                     </div>
-                    
-                    <div class="bg-gray-800 text-white p-3 rounded-lg text-center">
-                        <p class="text-lg font-bold">Goal: Can RL learn strategies that match or beat these?</p>
-                    </div>
                 </div>
             </div>
 
@@ -318,156 +356,126 @@
                 <h1 class="text-4xl font-bold text-gray-800 mb-6">Deep Q-Network Architecture</h1>
                 
                 <div class="space-y-4">
-                    <!-- Network Architecture Flow -->
-                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
-                        <h3 class="text-xl font-bold mb-3 text-center text-blue-700">Q-Network Architecture</h3>
-                        <div class="flex justify-center items-center space-x-3">
-                            <div class="bg-white p-3 rounded shadow text-center">
-                                <p class="font-semibold text-sm">State</p>
-                                <p class="text-xs text-gray-600">(13D)</p>
-                            </div>
-                            <span class="text-xl">→</span>
-                            <div class="bg-blue-100 p-3 rounded shadow text-center">
-                                <p class="font-semibold text-sm">FC Layer</p>
-                                <p class="text-xs text-gray-600">13→128</p>
-                            </div>
-                            <span class="text-xl">→</span>
-                            <div class="bg-blue-100 p-3 rounded shadow text-center">
-                                <p class="font-semibold text-sm">FC Layer</p>
-                                <p class="text-xs text-gray-600">128→128</p>
-                            </div>
-                            <span class="text-xl">→</span>
-                            <div class="bg-blue-100 p-3 rounded shadow text-center">
-                                <p class="font-semibold text-sm">Output</p>
-                                <p class="text-xs text-gray-600">128→90</p>
-                            </div>
-                            <span class="text-xl">→</span>
-                            <div class="bg-green-100 p-3 rounded shadow text-center">
-                                <p class="font-semibold text-sm">argmax</p>
-                                <p class="text-xs text-gray-600">best action</p>
+                    <!-- 3x2 Grid Layout -->
+                    <div class="grid grid-cols-3 gap-3">
+                        <!-- Row 1: Architecture Components -->
+                        <div class="bg-white p-3 rounded-lg shadow-lg border-2 border-blue-500">
+                            <h3 class="text-sm font-bold mb-2 text-center text-blue-700">Q-Network Architecture</h3>
+                            <div class="flex flex-col items-center space-y-1 text-xs">
+                                <div class="bg-blue-50 p-2 rounded text-center w-full">State (13D)</div>
+                                <div>↓</div>
+                                <div class="bg-blue-100 p-2 rounded text-center w-full">FC: 13→128</div>
+                                <div>↓</div>
+                                <div class="bg-blue-100 p-2 rounded text-center w-full">FC: 128→128</div>
+                                <div>↓</div>
+                                <div class="bg-blue-100 p-2 rounded text-center w-full">FC: 128→90</div>
+                                <div>↓</div>
+                                <div class="bg-green-100 p-2 rounded text-center w-full">argmax → action</div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Dual Network Diagram -->
-                    <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white p-4 rounded-lg shadow-lg border-2 border-blue-500">
-                            <h3 class="text-lg font-bold mb-3 text-center text-blue-700">Experience Replay Buffer</h3>
+                        
+                        <div class="bg-white p-3 rounded-lg shadow-lg border-2 border-blue-500">
+                            <h3 class="text-sm font-bold mb-2 text-center text-blue-700">Experience Replay Buffer</h3>
                             <div class="space-y-2">
                                 <div class="bg-gray-100 p-2 rounded text-xs font-mono">
-                                    <div class="text-center font-bold mb-1">Capacity: 10,000 transitions</div>
-                                    <div class="grid grid-cols-5 gap-1 text-center">
+                                    <div class="text-center font-bold mb-1">Capacity: 10,000</div>
+                                    <div class="grid grid-cols-5 gap-1 text-center text-[10px]">
                                         <div class="bg-blue-200 p-1 rounded">s₁</div>
                                         <div class="bg-green-200 p-1 rounded">a₁</div>
                                         <div class="bg-yellow-200 p-1 rounded">r₁</div>
                                         <div class="bg-blue-200 p-1 rounded">s₂</div>
                                         <div class="bg-red-200 p-1 rounded">d₁</div>
                                     </div>
-                                    <div class="text-center mt-2">⋮</div>
-                                    <div class="text-center text-gray-600">Random sampling breaks correlation</div>
+                                    <div class="text-center mt-1">⋮</div>
                                 </div>
                                 <div class="bg-blue-50 p-2 rounded text-xs">
                                     <p class="font-semibold">Why it works:</p>
-                                    <p>• Breaks temporal correlation</p>
-                                    <p>• Reuses past experiences</p>
-                                    <p>• Improves sample efficiency</p>
+                                    <p>• Breaks correlation</p>
+                                    <p>• Reuses experiences</p>
+                                    <p>• Sample efficiency</p>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="bg-white p-4 rounded-lg shadow-lg border-2 border-purple-500">
-                            <h3 class="text-lg font-bold mb-3 text-center text-purple-700">Target Network</h3>
+                        <div class="bg-white p-3 rounded-lg shadow-lg border-2 border-purple-500">
+                            <h3 class="text-sm font-bold mb-2 text-center text-purple-700">Target Network</h3>
                             <div class="space-y-2">
                                 <div class="bg-gray-100 p-2 rounded text-xs">
                                     <div class="flex justify-around items-center mb-2">
                                         <div class="text-center">
-                                            <div class="bg-blue-300 p-2 rounded font-bold">Online Net</div>
-                                            <div class="text-xs mt-1">Updated every step</div>
+                                            <div class="bg-blue-300 p-1 rounded font-bold text-[10px]">Online</div>
+                                            <div class="text-[9px] mt-1">Every step</div>
                                         </div>
-                                        <div class="text-2xl">⇄</div>
+                                        <div class="text-lg">⇄</div>
                                         <div class="text-center">
-                                            <div class="bg-purple-300 p-2 rounded font-bold">Target Net</div>
-                                            <div class="text-xs mt-1">Updated every 500 steps</div>
+                                            <div class="bg-purple-300 p-1 rounded font-bold text-[10px]">Target</div>
+                                            <div class="text-[9px] mt-1">Every 500</div>
                                         </div>
                                     </div>
-                                    <div class="bg-white p-2 rounded font-mono text-xs">
-                                        Loss = (Q(s,a) - [r + γ·max Q'(s',a')])²
+                                    <div class="bg-white p-1 rounded font-mono text-[10px]">
+                                        Loss = (Q - [r + γ·max Q'])²
                                     </div>
                                 </div>
                                 <div class="bg-purple-50 p-2 rounded text-xs">
                                     <p class="font-semibold">Why it works:</p>
-                                    <p>• Stabilizes training targets</p>
-                                    <p>• Prevents moving target problem</p>
-                                    <p>• Reduces oscillations</p>
+                                    <p>• Stabilizes training</p>
+                                    <p>• Prevents oscillations</p>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    
-                    <!-- Code Snippet -->
-                    <div class="bg-gray-900 p-3 rounded-lg">
-                        <p class="text-white text-xs font-bold mb-2">Q-Network Implementation:</p>
-                        <pre class="text-green-400 text-xs font-mono"><code>class QNetwork(nn.Module):
-    def __init__(self, state_dim=13, num_actions=90, hidden_dim=128):
-        super().__init__()
+
+                        <!-- Row 2: Code and Reward Function -->
+                        <div class="bg-gray-900 p-3 rounded-lg">
+                            <p class="text-white text-xs font-bold mb-2">Q-Network Code:</p>
+                            <pre class="text-green-400 text-[10px] font-mono"><code>class QNetwork(nn.Module):
+    def __init__(self, state_dim=13, 
+                 num_actions=90):
         self.network = nn.Sequential(
-            nn.Linear(state_dim, hidden_dim),    # 13 → 128
+            nn.Linear(state_dim, 128),
             nn.ReLU(),
-            nn.Linear(hidden_dim, hidden_dim),   # 128 → 128
+            nn.Linear(128, 128),
             nn.ReLU(),
-            nn.Linear(hidden_dim, num_actions)   # 128 → 90
+            nn.Linear(128, num_actions)
         )
     
     def forward(self, state):
-        return self.network(state)  # Returns Q-value for each action</code></pre>
-                    </div>
-                    
-                    <div class="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
-                        <h3 class="text-xl font-bold mb-3 text-center text-green-700">Reward Function: Teaching Financial Wisdom</h3>
+        return self.network(state)</code></pre>
+                        </div>
                         
-                        <div class="grid grid-cols-2 gap-4">
-                            <!-- Left: Formula Breakdown -->
-                            <div class="bg-white p-3 rounded-lg shadow">
-                                <p class="font-bold text-sm mb-2 text-gray-800">Formula Components:</p>
-                                <div class="bg-gray-900 text-green-400 p-2 rounded font-mono text-xs space-y-1">
-                                    <div>reward = (1-w)×wealth + w×sharpe + bonuses - penalties</div>
-                                    <div class="text-gray-500">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-                                    <div class="text-blue-300">wealth = net_worth / $1M</div>
-                                    <div class="text-purple-300">sharpe = (return - 2%/12) / volatility</div>
-                                    <div class="text-gray-500">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-                                    <div class="text-yellow-300">Bonuses:</div>
-                                    <div class="text-yellow-200">  +0.2  emergency_fund ≥ $12k</div>
-                                    <div class="text-yellow-200">  +0.3  debt = $0</div>
-                                    <div class="text-gray-500">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
-                                    <div class="text-red-300">Penalties:</div>
-                                    <div class="text-red-200">  -5.0  bankruptcy (net worth < -$10k)</div>
-                                    <div class="text-red-200">  -(debt × APR/12) / 1000</div>
-                                </div>
-                            </div>
+                        <div class="col-span-2 bg-gradient-to-r from-green-50 to-blue-50 p-3 rounded-lg">
+                            <h3 class="text-sm font-bold mb-2 text-center text-green-700">Reward Function: Teaching Financial Wisdom</h3>
                             
-                            <!-- Right: Example + Explanation -->
-                            <div class="space-y-2">
-                                <div class="bg-blue-50 p-3 rounded-lg">
-                                    <p class="font-bold text-sm mb-2 text-blue-800">Example (Month 120, Age 35, w=0.5):</p>
-                                    <div class="text-xs space-y-1 font-mono">
-                                        <div>Net Worth: $250k → wealth = 0.25</div>
-                                        <div>Return: 1.2%, Vol: 3% → sharpe = 0.34</div>
-                                        <div>Emergency: $15k → bonus = +0.2</div>
-                                        <div>Debt: $0 → bonus = +0.3</div>
-                                        <div class="border-t border-blue-300 mt-1 pt-1 font-bold">
-                                            Reward = 0.5(0.25) + 0.5(0.34) + 0.5 = 0.795
-                                        </div>
+                            <div class="grid grid-cols-2 gap-3">
+                                <!-- Left: Formula -->
+                                <div class="bg-white p-2 rounded-lg shadow">
+                                    <p class="font-bold text-xs mb-1">Formula:</p>
+                                    <div class="bg-gray-900 text-green-400 p-2 rounded font-mono text-[10px] space-y-1">
+                                        <div>reward = (1-w)×wealth + w×sharpe</div>
+                                        <div class="text-gray-500">        + bonuses - penalties</div>
+                                        <div class="text-gray-500">━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+                                        <div class="text-blue-300">wealth = net_worth / $1M</div>
+                                        <div class="text-purple-300">sharpe = return / volatility</div>
+                                        <div class="text-gray-500">━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+                                        <div class="text-yellow-300">Bonuses:</div>
+                                        <div class="text-yellow-200">  +0.2  emergency ≥ $12k</div>
+                                        <div class="text-yellow-200">  +0.3  debt = $0</div>
+                                        <div class="text-gray-500">━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+                                        <div class="text-red-300">Penalties:</div>
+                                        <div class="text-red-200">  -5.0  bankruptcy</div>
                                     </div>
                                 </div>
                                 
-                                <div class="bg-purple-50 p-3 rounded-lg">
-                                    <p class="font-bold text-sm mb-2 text-purple-800">Why Sharpe Ratio?</p>
-                                    <div class="text-xs space-y-1">
-                                        <div>✓ Prevents reckless gambling</div>
-                                        <div>✓ Rewards consistent growth over lucky streaks</div>
-                                        <div>✓ Teaches risk-adjusted thinking</div>
-                                        <div class="mt-2 bg-white p-2 rounded text-xs">
-                                            <span class="font-bold">Example:</span> 20% return with 15% volatility (Sharpe=1.2) beats 25% return with 25% volatility (Sharpe=0.92)
+                                <!-- Right: Example -->
+                                <div class="bg-blue-50 p-2 rounded-lg text-xs">
+                                    <p class="font-bold mb-1">Example (w=0.6):</p>
+                                    <div class="space-y-1">
+                                        <div class="bg-white p-1 rounded">Net Worth: $500k → 0.5</div>
+                                        <div class="bg-white p-1 rounded">Sharpe: 1.2</div>
+                                        <div class="bg-white p-1 rounded">Emergency: $15k → +0.2</div>
+                                        <div class="bg-white p-1 rounded">Debt: $0 → +0.3</div>
+                                        <div class="bg-green-100 p-1 rounded font-bold">
+                                            = 0.4×0.5 + 0.6×1.2 + 0.5<br/>
+                                            = <span class="text-green-600">1.42</span>
                                         </div>
                                     </div>
                                 </div>
@@ -481,7 +489,7 @@
             <div class="slide" id="slide-5">
                 <h1 class="text-4xl font-bold text-gray-800 mb-3">Sharpe Ratio Experiment & Results</h1>
                 
-                <div class="space-y-3">
+                <div class="space-y-2">
                     <!-- Experiment Setup -->
                     <div class="bg-gradient-to-r from-yellow-50 to-orange-50 p-3 rounded-lg">
                         <h3 class="text-lg font-bold text-orange-700 mb-2 text-center">Experiment Design</h3>
@@ -514,8 +522,8 @@
                         </div>
                     </div>
 
-                    <!-- Performance Charts - Top/Bottom Layout -->
-                    <div class="space-y-2">
+                    <!-- Performance Charts - Left/Right Layout -->
+                    <div class="grid grid-cols-2 gap-4" style="transform: scale(0.7); transform-origin: top center;">
                         <div class="bg-white rounded-lg shadow-lg p-2">
                             <p class="text-sm font-bold text-center mb-2">Performance Comparison (Mean ± Std Dev, n=5 seeds)</p>
                             <img src="performance_with_error_bars.png" alt="Performance with Error Bars" class="rounded-lg w-full">
@@ -527,7 +535,7 @@
                     </div>
 
                     <!-- Results & Analysis -->
-                    <div class="grid grid-cols-2 gap-3">
+                    <div class="grid grid-cols-2 gap-3" style="margin-top: -60px;">
                         <!-- Winner Announcement -->
                         <div class="bg-green-50 p-3 rounded-lg border-2 border-green-400">
                             <h3 class="text-lg font-bold text-center mb-2 text-green-700"> Winner: Sharpe 60%</h3>
