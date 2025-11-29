@@ -235,58 +235,159 @@
             <div class="slide" id="slide-4">
                 <h1 class="text-4xl font-bold text-gray-800 mb-6">Deep Q-Network Architecture</h1>
                 
-                <div class="space-y-6">
-                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg">
-                        <h3 class="text-2xl font-bold mb-4 text-center text-blue-700">DQN with Experience Replay</h3>
-                        <div class="flex justify-center items-center space-x-4">
-                            <div class="bg-white p-4 rounded shadow text-center">
-                                <p class="font-semibold">State</p>
-                                <p class="text-sm text-gray-600">(13D vector)</p>
+                <div class="space-y-4">
+                    <!-- Network Architecture Flow -->
+                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-center text-blue-700">Q-Network Architecture</h3>
+                        <div class="flex justify-center items-center space-x-3">
+                            <div class="bg-white p-3 rounded shadow text-center">
+                                <p class="font-semibold text-sm">State</p>
+                                <p class="text-xs text-gray-600">(13D)</p>
                             </div>
-                            <span class="text-2xl">→</span>
-                            <div class="bg-white p-4 rounded shadow text-center">
-                                <p class="font-semibold">Q-Network</p>
-                                <p class="text-sm text-gray-600">FC[256,128,90]</p>
+                            <span class="text-xl">→</span>
+                            <div class="bg-blue-100 p-3 rounded shadow text-center">
+                                <p class="font-semibold text-sm">FC Layer</p>
+                                <p class="text-xs text-gray-600">13→128</p>
                             </div>
-                            <span class="text-2xl">→</span>
-                            <div class="bg-white p-4 rounded shadow text-center">
-                                <p class="font-semibold">Q-values</p>
-                                <p class="text-sm text-gray-600">(90 actions)</p>
+                            <span class="text-xl">→</span>
+                            <div class="bg-blue-100 p-3 rounded shadow text-center">
+                                <p class="font-semibold text-sm">FC Layer</p>
+                                <p class="text-xs text-gray-600">128→128</p>
                             </div>
-                            <span class="text-2xl">→</span>
-                            <div class="bg-white p-4 rounded shadow text-center">
-                                <p class="font-semibold">argmax</p>
-                                <p class="text-sm text-gray-600">best action</p>
+                            <span class="text-xl">→</span>
+                            <div class="bg-blue-100 p-3 rounded shadow text-center">
+                                <p class="font-semibold text-sm">Output</p>
+                                <p class="text-xs text-gray-600">128→90</p>
+                            </div>
+                            <span class="text-xl">→</span>
+                            <div class="bg-green-100 p-3 rounded shadow text-center">
+                                <p class="font-semibold text-sm">argmax</p>
+                                <p class="text-xs text-gray-600">best action</p>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-2 gap-6">
-                        <div class="bg-blue-50 p-5 rounded-lg">
-                            <h3 class="text-lg font-bold mb-3 text-blue-700">Training Configuration</h3>
-                            <div class="bg-gray-800 text-white p-3 rounded text-xs font-mono space-y-1">
-                                <div>episodes = 400</div>
-                                <div>learning_rate = 3e-5</div>
-                                <div>gamma = 0.98</div>
-                                <div>batch_size = 128</div>
-                                <div>replay_buffer = 10000</div>
-                                <div>target_update = 10 eps</div>
-                                <div>epsilon: 1.0 → 0.01</div>
+                    <!-- Dual Network Diagram -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white p-4 rounded-lg shadow-lg border-2 border-blue-500">
+                            <h3 class="text-lg font-bold mb-3 text-center text-blue-700">Experience Replay Buffer</h3>
+                            <div class="space-y-2">
+                                <div class="bg-gray-100 p-2 rounded text-xs font-mono">
+                                    <div class="text-center font-bold mb-1">Capacity: 10,000 transitions</div>
+                                    <div class="grid grid-cols-5 gap-1 text-center">
+                                        <div class="bg-blue-200 p-1 rounded">s₁</div>
+                                        <div class="bg-green-200 p-1 rounded">a₁</div>
+                                        <div class="bg-yellow-200 p-1 rounded">r₁</div>
+                                        <div class="bg-blue-200 p-1 rounded">s₂</div>
+                                        <div class="bg-red-200 p-1 rounded">d₁</div>
+                                    </div>
+                                    <div class="text-center mt-2">⋮</div>
+                                    <div class="text-center text-gray-600">Random sampling breaks correlation</div>
+                                </div>
+                                <div class="bg-blue-50 p-2 rounded text-xs">
+                                    <p class="font-semibold">Why it works:</p>
+                                    <p>• Breaks temporal correlation</p>
+                                    <p>• Reuses past experiences</p>
+                                    <p>• Improves sample efficiency</p>
+                                </div>
                             </div>
                         </div>
                         
-                        <div class="bg-purple-50 p-5 rounded-lg">
-                            <h3 class="text-lg font-bold mb-3 text-purple-700">Reward Function</h3>
-                            <div class="bg-white p-3 rounded text-sm space-y-2">
-                                <div class="font-mono text-xs">
-                                    r = (1-w) × wealth<br>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;+ w × sharpe_ratio<br>
-                                    &nbsp;&nbsp;&nbsp;&nbsp;+ bonuses - penalties
+                        <div class="bg-white p-4 rounded-lg shadow-lg border-2 border-purple-500">
+                            <h3 class="text-lg font-bold mb-3 text-center text-purple-700">Target Network</h3>
+                            <div class="space-y-2">
+                                <div class="bg-gray-100 p-2 rounded text-xs">
+                                    <div class="flex justify-around items-center mb-2">
+                                        <div class="text-center">
+                                            <div class="bg-blue-300 p-2 rounded font-bold">Online Net</div>
+                                            <div class="text-xs mt-1">Updated every step</div>
+                                        </div>
+                                        <div class="text-2xl">⇄</div>
+                                        <div class="text-center">
+                                            <div class="bg-purple-300 p-2 rounded font-bold">Target Net</div>
+                                            <div class="text-xs mt-1">Updated every 500 steps</div>
+                                        </div>
+                                    </div>
+                                    <div class="bg-white p-2 rounded font-mono text-xs">
+                                        Loss = (Q(s,a) - [r + γ·max Q'(s',a')])²
+                                    </div>
                                 </div>
-                                <div class="text-xs text-gray-600 mt-2">
-                                    <div>wealth = net_worth / $1M</div>
-                                    <div>sharpe = (return - rf) / volatility</div>
-                                    <div>w ∈ {0.1, 0.2, ..., 0.8}</div>
+                                <div class="bg-purple-50 p-2 rounded text-xs">
+                                    <p class="font-semibold">Why it works:</p>
+                                    <p>• Stabilizes training targets</p>
+                                    <p>• Prevents moving target problem</p>
+                                    <p>• Reduces oscillations</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Code Snippet -->
+                    <div class="bg-gray-900 p-3 rounded-lg">
+                        <p class="text-white text-xs font-bold mb-2">Q-Network Implementation:</p>
+                        <pre class="text-green-400 text-xs font-mono"><code>class QNetwork(nn.Module):
+    def __init__(self, state_dim=13, num_actions=90, hidden_dim=128):
+        super().__init__()
+        self.network = nn.Sequential(
+            nn.Linear(state_dim, hidden_dim),    # 13 → 128
+            nn.ReLU(),
+            nn.Linear(hidden_dim, hidden_dim),   # 128 → 128
+            nn.ReLU(),
+            nn.Linear(hidden_dim, num_actions)   # 128 → 90
+        )
+    
+    def forward(self, state):
+        return self.network(state)  # Returns Q-value for each action</code></pre>
+                    </div>
+                    
+                    <div class="bg-gradient-to-r from-green-50 to-blue-50 p-4 rounded-lg">
+                        <h3 class="text-xl font-bold mb-3 text-center text-green-700">Reward Function: Teaching Financial Wisdom</h3>
+                        
+                        <div class="grid grid-cols-2 gap-4">
+                            <!-- Left: Formula Breakdown -->
+                            <div class="bg-white p-3 rounded-lg shadow">
+                                <p class="font-bold text-sm mb-2 text-gray-800">Formula Components:</p>
+                                <div class="bg-gray-900 text-green-400 p-2 rounded font-mono text-xs space-y-1">
+                                    <div>reward = (1-w)×wealth + w×sharpe + bonuses - penalties</div>
+                                    <div class="text-gray-500">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+                                    <div class="text-blue-300">wealth = net_worth / $1M</div>
+                                    <div class="text-purple-300">sharpe = (return - 2%/12) / volatility</div>
+                                    <div class="text-gray-500">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+                                    <div class="text-yellow-300">Bonuses:</div>
+                                    <div class="text-yellow-200">  +0.2  emergency_fund ≥ $12k</div>
+                                    <div class="text-yellow-200">  +0.3  debt = $0</div>
+                                    <div class="text-gray-500">━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━</div>
+                                    <div class="text-red-300">Penalties:</div>
+                                    <div class="text-red-200">  -5.0  bankruptcy (net worth < -$10k)</div>
+                                    <div class="text-red-200">  -(debt × APR/12) / 1000</div>
+                                </div>
+                            </div>
+                            
+                            <!-- Right: Example + Explanation -->
+                            <div class="space-y-2">
+                                <div class="bg-blue-50 p-3 rounded-lg">
+                                    <p class="font-bold text-sm mb-2 text-blue-800">Example (Month 120, Age 35, w=0.5):</p>
+                                    <div class="text-xs space-y-1 font-mono">
+                                        <div>Net Worth: $250k → wealth = 0.25</div>
+                                        <div>Return: 1.2%, Vol: 3% → sharpe = 0.34</div>
+                                        <div>Emergency: $15k → bonus = +0.2</div>
+                                        <div>Debt: $0 → bonus = +0.3</div>
+                                        <div class="border-t border-blue-300 mt-1 pt-1 font-bold">
+                                            Reward = 0.5(0.25) + 0.5(0.34) + 0.5 = 0.795
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-purple-50 p-3 rounded-lg">
+                                    <p class="font-bold text-sm mb-2 text-purple-800">Why Sharpe Ratio?</p>
+                                    <div class="text-xs space-y-1">
+                                        <div>✓ Prevents reckless gambling</div>
+                                        <div>✓ Rewards consistent growth over lucky streaks</div>
+                                        <div>✓ Teaches risk-adjusted thinking</div>
+                                        <div class="mt-2 bg-white p-2 rounded text-xs">
+                                            <span class="font-bold">Example:</span> 20% return with 15% volatility (Sharpe=1.2) beats 25% return with 25% volatility (Sharpe=0.92)
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
