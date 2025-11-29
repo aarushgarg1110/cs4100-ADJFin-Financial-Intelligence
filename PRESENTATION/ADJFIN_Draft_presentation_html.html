@@ -114,63 +114,21 @@
                     <!-- Action Space -->
                     <div class="bg-green-50 p-4 rounded-lg">
                         <h3 class="text-lg font-bold mb-3 text-green-700">Action Space: 90 Discrete Strategies</h3>
-                        <div class="grid grid-cols-2 gap-3 text-[10px]">
-                            <!-- 10 Money Allocations -->
+                        <div class="text-xs space-y-2">
                             <div class="bg-white p-2 rounded">
-                                <p class="font-bold text-xs mb-2 text-center">10 Money Allocations</p>
-                                <table class="w-full text-center">
-                                    <thead>
-                                        <tr class="border-b border-gray-300">
-                                            <th class="p-1">Invest</th>
-                                            <th class="p-1">Debt</th>
-                                            <th class="p-1">Emergency</th>
-                                            <th class="p-1">Type</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-red-100"><td>80%</td><td>10%</td><td>10%</td><td class="font-semibold">Aggressive</td></tr>
-                                        <tr class="bg-red-50"><td>70%</td><td>15%</td><td>15%</td><td class="font-semibold">Aggressive</td></tr>
-                                        <tr class="bg-red-50"><td>60%</td><td>20%</td><td>20%</td><td class="font-semibold">Aggressive</td></tr>
-                                        <tr class="bg-yellow-100"><td>60%</td><td>30%</td><td>10%</td><td class="font-semibold">Moderate</td></tr>
-                                        <tr class="bg-yellow-100"><td>50%</td><td>25%</td><td>25%</td><td class="font-semibold">Moderate</td></tr>
-                                        <tr class="bg-yellow-50"><td>50%</td><td>40%</td><td>10%</td><td class="font-semibold">Moderate</td></tr>
-                                        <tr class="bg-yellow-50"><td>40%</td><td>30%</td><td>30%</td><td class="font-semibold">Moderate</td></tr>
-                                        <tr class="bg-green-100"><td>40%</td><td>50%</td><td>10%</td><td class="font-semibold">Conservative</td></tr>
-                                        <tr class="bg-green-100"><td>40%</td><td>20%</td><td>40%</td><td class="font-semibold">Conservative</td></tr>
-                                        <tr class="bg-green-50"><td>40%</td><td>10%</td><td>50%</td><td class="font-semibold">Conservative</td></tr>
-                                    </tbody>
-                                </table>
+                                <p class="font-semibold">10 Money Allocations:</p>
+                                <p class="text-gray-600">invest% / debt% / emergency%</p>
+                                <p class="text-[10px] text-gray-500 mt-1">80/10/10, 70/15/15, 60/20/20, ..., 40/10/50</p>
                             </div>
-                            
-                            <!-- 9 Investment Portfolios -->
                             <div class="bg-white p-2 rounded">
-                                <p class="font-bold text-xs mb-2 text-center">9 Investment Portfolios</p>
-                                <table class="w-full text-center">
-                                    <thead>
-                                        <tr class="border-b border-gray-300">
-                                            <th class="p-1">Stocks</th>
-                                            <th class="p-1">Bonds</th>
-                                            <th class="p-1">RE</th>
-                                            <th class="p-1">Type</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr class="bg-red-100"><td>80%</td><td>15%</td><td>5%</td><td class="font-semibold">Aggressive</td></tr>
-                                        <tr class="bg-red-50"><td>70%</td><td>20%</td><td>10%</td><td class="font-semibold">Aggressive</td></tr>
-                                        <tr class="bg-red-50"><td>60%</td><td>30%</td><td>10%</td><td class="font-semibold">Aggressive</td></tr>
-                                        <tr class="bg-yellow-100"><td>50%</td><td>40%</td><td>10%</td><td class="font-semibold">Moderate</td></tr>
-                                        <tr class="bg-yellow-100"><td>50%</td><td>30%</td><td>20%</td><td class="font-semibold">Moderate</td></tr>
-                                        <tr class="bg-yellow-50"><td>40%</td><td>50%</td><td>10%</td><td class="font-semibold">Moderate</td></tr>
-                                        <tr class="bg-yellow-50"><td>40%</td><td>40%</td><td>20%</td><td class="font-semibold">Moderate</td></tr>
-                                        <tr class="bg-green-100"><td>30%</td><td>60%</td><td>10%</td><td class="font-semibold">Conservative</td></tr>
-                                        <tr class="bg-green-50"><td>30%</td><td>50%</td><td>20%</td><td class="font-semibold">Conservative</td></tr>
-                                    </tbody>
-                                </table>
+                                <p class="font-semibold">9 Investment Portfolios:</p>
+                                <p class="text-gray-600">stocks% / bonds% / real_estate%</p>
+                                <p class="text-[10px] text-gray-500 mt-1">80/15/5, 70/20/10, 60/30/10, ..., 30/60/10</p>
                             </div>
-                        </div>
-                        <div class="bg-blue-100 p-2 rounded text-center mt-2">
-                            <p class="font-mono text-xs">action_id = money_idx × 9 + portfolio_idx</p>
-                            <p class="text-[10px] mt-1">Example: Action 22 = (2×9 + 4) = Moderate invest + Balanced portfolio</p>
+                            <div class="bg-blue-100 p-2 rounded text-center">
+                                <p class="font-mono text-sm">action_id = money_idx × 9 + portfolio_idx</p>
+                                <p class="text-[10px] mt-1">Example: Action 22 = Balanced + Conservative</p>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -514,15 +472,15 @@
 
                     <!-- Performance Charts - 2 Column Layout -->
                     <div class="grid grid-cols-2 gap-4">
-                        <div class="bg-white rounded-lg shadow-lg p-3">
+                        <div class="bg-white rounded-lg shadow-lg p-2">
                             <p class="text-sm font-bold text-center mb-2">Performance Comparison</p>
-                            <img src="performance_with_error_bars.png" alt="Performance with Error Bars" class="rounded-lg w-full">
+                            <img src="performance_with_error_bars.png" alt="Performance with Error Bars" class="rounded-lg">
                             <p class="text-center text-xs text-gray-600 mt-1">Mean ± Std Dev (n=5 seeds)</p>
                         </div>
-                        <div class="bg-white rounded-lg shadow-lg p-3">
+                        <div class="bg-white rounded-lg shadow-lg p-2">
                             <p class="text-sm font-bold text-center mb-2">95% Confidence Intervals</p>
-                            <img src="confidence_intervals.png" alt="Confidence Intervals" class="rounded-lg w-full">
-                            <p class="text-center text-xs text-gray-600 mt-1">Error bars show statistical uncertainty</p>
+                            <iframe src="confidence_intervals.html" width="100%" height="450" frameborder="0" class="rounded-lg"></iframe>
+                            <p class="text-center text-xs text-gray-600 mt-1">Interactive - Hover for details!</p>
                         </div>
                     </div>
 
@@ -566,63 +524,48 @@
                 <h1 class="text-3xl font-bold text-gray-800 mb-3">Behavioral Analysis: What Actions Do Agents Use?</h1>
                 
                 <div class="space-y-3">
-                    <!-- Action Space Explanation -->
+                    <div class="bg-orange-50 p-3 rounded-lg border-2 border-orange-300">
+                        <p class="text-center font-bold text-orange-700">
+                            Action heatmaps reveal which of the 90 strategies each agent prefers
+                        </p>
+                    </div>
+
+                    <!-- Heatmap Images -->
                     <div class="grid grid-cols-2 gap-3">
-                        <div class="bg-blue-50 p-3 rounded-lg border-2 border-blue-300">
-                            <h3 class="font-bold text-blue-700 mb-1 text-sm">Action Space (90 discrete strategies)</h3>
-                            <p class="text-xs text-gray-700">Each action = combination of:</p>
-                            <ul class="text-xs text-gray-700 ml-3 mt-1">
-                                <li>• Investment % (low/mid/high)</li>
-                                <li>• Stock allocation (conservative/balanced/aggressive)</li>
-                                <li>• Debt payment priority</li>
-                            </ul>
+                        <div>
+                            <img src="action_usage_heatmap_sharpe60.png" alt="Sharpe 60% Heatmap" class="rounded-lg shadow">
+                            <p class="text-center text-xs text-gray-600 mt-1">Sharpe 60% (Winner): Low diversity, focused on aggressive actions</p>
                         </div>
-                        <div class="bg-orange-50 p-3 rounded-lg border-2 border-orange-300">
-                            <h3 class="font-bold text-orange-700 mb-1 text-sm">Why Diversity Matters</h3>
-                            <p class="text-xs text-gray-700">High diversity = agent adapts to:</p>
-                            <ul class="text-xs text-gray-700 ml-3 mt-1">
-                                <li>• Age (risk reduction over time)</li>
-                                <li>• Market conditions (bull/bear)</li>
-                                <li>• Personal state (debt, income)</li>
-                            </ul>
+                        <div>
+                            <img src="action_usage_heatmap_sharpe30.png" alt="Sharpe 30% Heatmap" class="rounded-lg shadow">
+                            <p class="text-center text-xs text-gray-600 mt-1">Sharpe 30%: High diversity, balanced strategies</p>
                         </div>
                     </div>
 
-                    <!-- Heatmap Images - Top/Bottom -->
-                    <div class="space-y-2">
-                        <div class="bg-red-50 p-2 rounded-lg">
-                            <p class="text-center text-sm font-bold text-red-700 mb-1">Sharpe 60% (Winner): 22% Action Diversity</p>
-                            <img src="action_usage_heatmap_sharpe60.png" alt="Sharpe 60% Heatmap" class="rounded-lg shadow w-full">
-                        </div>
-                        <div class="bg-green-50 p-2 rounded-lg">
-                            <p class="text-center text-sm font-bold text-green-700 mb-1">Sharpe 30%: 53% Action Diversity</p>
-                            <img src="action_usage_heatmap_sharpe30.png" alt="Sharpe 30% Heatmap" class="rounded-lg shadow w-full">
-                        </div>
-                    </div>
-
-                    <!-- Key Insights -->
                     <div class="grid grid-cols-2 gap-3 text-xs">
-                        <div class="bg-red-50 p-2 rounded border-l-4 border-red-500">
-                            <h3 class="font-bold text-red-700 mb-1">🚨 Sharpe 60% Red Flags</h3>
+                        <div class="bg-red-50 p-3 rounded">
+                            <h3 class="font-bold text-red-700 mb-1">Sharpe 60% Pattern</h3>
                             <ul class="space-y-1 text-gray-700">
-                                <li>• Dominated by Action 1 (19% usage)</li>
-                                <li>• Same strategy regardless of context</li>
-                                <li>• <strong class="text-red-600">No age/market adaptation</strong></li>
+                                <li>• Uses only 22% unique actions</li>
+                                <li>• Heavily concentrated on Action 1 (70% invest, 70% stocks)</li>
+                                <li>• Rarely changes strategy across scenarios</li>
+                                <li>• <strong class="text-red-600">No adaptation to age or market</strong></li>
                             </ul>
                         </div>
-                        <div class="bg-green-50 p-2 rounded border-l-4 border-green-500">
-                            <h3 class="font-bold text-green-700 mb-1">✓ Sharpe 30% Strengths</h3>
+                        <div class="bg-green-50 p-3 rounded">
+                            <h3 class="font-bold text-green-700 mb-1">Sharpe 30% Pattern</h3>
                             <ul class="space-y-1 text-gray-700">
-                                <li>• Balanced action distribution</li>
-                                <li>• Context-dependent decisions</li>
-                                <li>• <strong class="text-green-600">Adaptive behavior</strong></li>
+                                <li>• Uses 53% unique actions</li>
+                                <li>• Diversified across money and investment strategies</li>
+                                <li>• Changes behavior based on context</li>
+                                <li>• <strong class="text-green-600">Adapts to age and market conditions</strong></li>
                             </ul>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 8: Regime Adaptation -->
+            <!-- Slide 7: Regime Adaptation -->
             <div class="slide" id="slide-7">
                 <h1 class="text-3xl font-bold text-gray-800 mb-3">Market Regime Adaptation</h1>
                 
@@ -636,22 +579,21 @@
                     <div class="grid grid-cols-3 gap-3 text-xs">
                         <div class="bg-blue-50 p-3 rounded">
                             <h3 class="font-bold text-blue-700 mb-2">Normal Market</h3>
-                            <p class="text-gray-700 mb-1">Most agents maintain moderate allocations</p>
-                            <p class="text-gray-600">Sharpe 60%: <strong>70% stocks</strong></p>
-                            <p class="text-gray-600">Sharpe 30%: <strong>~50% stocks</strong></p>
+                            <p class="text-gray-700">Most agents maintain moderate allocations</p>
+                            <p class="text-gray-600 mt-1">Sharpe 60%: Still 70% stocks</p>
+                            <p class="text-gray-600">Sharpe 30%: ~50% stocks</p>
                         </div>
                         <div class="bg-green-50 p-3 rounded">
                             <h3 class="font-bold text-green-700 mb-2">Bull Market</h3>
-                            <p class="text-gray-700 mb-1">Agents increase stock exposure</p>
-                            <p class="text-green-600">Sharpe 30-50%: <strong>60-70% stocks</strong></p>
+                            <p class="text-gray-700">Agents increase stock exposure</p>
+                            <p class="text-green-600 mt-1">Sharpe 30-50%: Ramp to 60-70% stocks</p>
                             <p class="text-gray-600">Markowitz: Aggressive positioning</p>
                         </div>
                         <div class="bg-red-50 p-3 rounded">
-                            <h3 class="font-bold text-red-700 mb-2">Bear Market 🚨</h3>
-                            <p class="text-gray-700 mb-1">Smart agents reduce risk:</p>
-                            <p class="text-green-600">Sharpe 30%: <strong>35% stocks</strong> ✓</p>
-                            <p class="text-red-600">Sharpe 60%: <strong>70% stocks</strong> ✗</p>
-                            <p class="text-xs text-gray-600 mt-1 italic">No change = no market timing!</p>
+                            <h3 class="font-bold text-red-700 mb-2">Bear Market</h3>
+                            <p class="text-gray-700">Sharpe 30-80% reduce risk appropriately</p>
+                            <p class="text-red-600 mt-1">Sharpe 60%: Still 70% stocks!</p>
+                            <p class="text-red-600">Age-Based: Doesn't adapt to markets</p>
                         </div>
                     </div>
 
@@ -661,7 +603,7 @@
                 </div>
             </div>
 
-            <!-- Slide 9: Ablation Study -->
+            <!-- Slide 8: Ablation Study -->
             <div class="slide" id="slide-8">
                 <h1 class="text-3xl font-bold text-gray-800 mb-3">Ablation Study: Impact of Market Volatility</h1>
                 
@@ -691,34 +633,29 @@
                             <p>All agents perform 30-40% WORSE without market volatility</p>
                             <p class="text-gray-600 mt-1">Volatility creates opportunities for gain</p>
                         </div>
-                        <div class="bg-red-50 p-3 rounded border-l-4 border-red-500">
-                            <h3 class="font-bold text-red-700">🚨 Sharpe 60% Most Vulnerable</h3>
-                            <p><strong>47% performance drop</strong> without volatility</p>
-                            <p class="text-gray-600 mt-1">Highest drawdown (32%) + fragile strategy</p>
+                        <div class="bg-blue-50 p-3 rounded">
+                            <h3 class="font-bold text-blue-700">Risk Metrics</h3>
+                            <p>Sharpe 60% has highest drawdown (32%)</p>
+                            <p class="text-gray-600 mt-1">Sharpe 30-50% balance risk and return</p>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Slide 10: Top Actions Analysis -->
+            <!-- Slide 9: Top Actions Analysis -->
             <div class="slide" id="slide-9">
                 <h1 class="text-3xl font-bold text-gray-800 mb-3">Most Frequently Used Actions</h1>
                 
                 <div class="space-y-3">
-                    <!-- What is Action 1? -->
-                    <div class="bg-yellow-50 p-3 rounded-lg border-2 border-yellow-400">
-                        <p class="text-center text-sm"><strong class="text-yellow-700">Action 1 (Sharpe 60%'s favorite):</strong> 70% invest + 70% stocks = <span class="text-red-600 font-bold">Very Aggressive Growth Strategy</span></p>
-                    </div>
-
                     <!-- Top Actions Charts -->
-                    <div class="space-y-2">
-                        <div class="bg-red-50 p-2 rounded-lg">
-                            <p class="text-center text-sm font-bold text-red-700 mb-1">Sharpe 60%: Dominated by Action 1 (19%)</p>
-                            <img src="top_actions_sharpe60.png" alt="Sharpe 60% Top Actions" class="rounded-lg shadow w-full">
+                    <div class="space-y-3">
+                        <div>
+                            <img src="top_actions_sharpe60.png" alt="Sharpe 60% Top Actions" class="rounded-lg shadow">
+                            <p class="text-center text-xs text-gray-600 mt-1">Sharpe 60%: Dominated by Action 1 (19%)</p>
                         </div>
-                        <div class="bg-green-50 p-2 rounded-lg">
-                            <p class="text-center text-sm font-bold text-green-700 mb-1">Sharpe 30%: More distributed usage</p>
-                            <img src="top_actions_sharpe30.png" alt="Sharpe 30% Top Actions" class="rounded-lg shadow w-full">
+                        <div>
+                            <img src="top_actions_sharpe30.png" alt="Sharpe 30% Top Actions" class="rounded-lg shadow">
+                            <p class="text-center text-xs text-gray-600 mt-1">Sharpe 30%: More distributed usage</p>
                         </div>
                     </div>
 
@@ -760,62 +697,11 @@
                 </div>
             </div>
 
-            <!-- Slide 11: The Paradox -->
+            <!-- Slide 10: The Paradox -->
             <div class="slide" id="slide-10">
-                <h1 class="text-4xl font-bold text-gray-800 mb-3">The Paradox: Highest Returns ≠ Best Strategy</h1>
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">The Paradox: Highest Returns ≠ Best Strategy</h1>
                 
-                <div class="space-y-3">
-                    <!-- Comparison Table -->
-                    <div class="bg-white rounded-lg shadow-lg p-3">
-                        <table class="w-full text-xs">
-                            <thead>
-                                <tr class="border-b-2 border-gray-300">
-                                    <th class="text-left p-2 font-bold">Metric</th>
-                                    <th class="text-center p-2 font-bold text-red-700">Sharpe 60%</th>
-                                    <th class="text-center p-2 font-bold text-green-700">Sharpe 30%</th>
-                                    <th class="text-center p-2 font-bold">Winner?</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-center">
-                                <tr class="border-b border-gray-200">
-                                    <td class="text-left p-2 font-semibold">Net Worth</td>
-                                    <td class="p-2 text-green-600">$2.22M ✓</td>
-                                    <td class="p-2">$1.92M</td>
-                                    <td class="p-2 text-red-600">60%</td>
-                                </tr>
-                                <tr class="border-b border-gray-200">
-                                    <td class="text-left p-2 font-semibold">Action Diversity</td>
-                                    <td class="p-2 text-red-600">22% ✗</td>
-                                    <td class="p-2 text-green-600">53% ✓</td>
-                                    <td class="p-2 text-green-600">30%</td>
-                                </tr>
-                                <tr class="border-b border-gray-200">
-                                    <td class="text-left p-2 font-semibold">Age Adaptation</td>
-                                    <td class="p-2 text-red-600">No ✗</td>
-                                    <td class="p-2 text-green-600">Yes ✓</td>
-                                    <td class="p-2 text-green-600">30%</td>
-                                </tr>
-                                <tr class="border-b border-gray-200">
-                                    <td class="text-left p-2 font-semibold">Market Timing</td>
-                                    <td class="p-2 text-red-600">No ✗</td>
-                                    <td class="p-2 text-green-600">Yes ✓</td>
-                                    <td class="p-2 text-green-600">30%</td>
-                                </tr>
-                                <tr class="border-b border-gray-200">
-                                    <td class="text-left p-2 font-semibold">Max Drawdown</td>
-                                    <td class="p-2 text-red-600">32% ✗</td>
-                                    <td class="p-2 text-green-600">18% ✓</td>
-                                    <td class="p-2 text-green-600">30%</td>
-                                </tr>
-                                <tr>
-                                    <td class="text-left p-2 font-semibold">Real-world Safety</td>
-                                    <td class="p-2 text-red-600">✗</td>
-                                    <td class="p-2 text-green-600">✓</td>
-                                    <td class="p-2 text-green-600">30%</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="space-y-4">
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-red-50 p-4 rounded-lg border-2 border-red-400">
                             <h3 class="text-xl font-bold mb-3 text-red-700">Sharpe 60%: $2.22M</h3>
@@ -877,53 +763,160 @@
                 </div>
             </div>
 
-            <!-- Slide 12: Key Findings -->
-            <div class="slide" id="slide-11">
-                <h1 class="text-4xl font-bold text-gray-800 mb-6">What We Learned</h1>
-                
-                <div class="space-y-4">
-                    <div class="bg-green-50 p-5 rounded-lg border-l-4 border-green-500">
-                        <h3 class="text-lg font-bold mb-2 text-green-700">1. RL Has Potential</h3>
-                        <p class="text-gray-700">Can exceed human performance ($2.22M vs $2.08M, +6.7%)</p>
-                        <p class="text-gray-700">Learns complex strategies from experience without explicit programming</p>
+            <!-- Slide 11: Key Findings -->
+            <!-- Slide 11: Key Findings -->
+<div class="slide" id="slide-11">
+    <h1 class="text-4xl font-bold text-gray-800 mb-4">What We Learned</h1>
+    
+    <div class="space-y-3">
+        <div class="bg-green-50 p-4 rounded-lg border-l-4 border-green-500">
+            <h3 class="text-lg font-bold mb-2 text-green-700">1. RL Has Potential - But Statistical Significance Varies</h3>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <p class="text-gray-700 mb-1 text-sm">Can exceed human performance ($2.22M vs $2.08M, +6.7%)</p>
+                    <p class="text-gray-700 text-sm mb-2">Learns complex strategies from experience without explicit programming</p>
+                    <div class="bg-white p-2 rounded text-xs">
+                        <p class="font-bold mb-1">Statistical Testing (vs Age-Based):</p>
+                        <div class="space-y-1 font-mono text-[10px]">
+                            <div class="flex justify-between">
+                                <span>Sharpe 60%:</span>
+                                <span>Cohen's d = 0.42 (small)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Sharpe 30%:</span>
+                                <span>Cohen's d = -0.58 (medium)</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Markowitz:</span>
+                                <span>Cohen's d = -0.15 (negligible)</span>
+                            </div>
+                        </div>
+                        <p class="text-gray-600 mt-2 text-xs">Effect sizes: |d| < 0.2 = negligible, 0.2-0.5 = small, 0.5-0.8 = medium, >0.8 = large</p>
                     </div>
-                    
-                    <div class="bg-yellow-50 p-5 rounded-lg border-l-4 border-yellow-500">
-                        <h3 class="text-lg font-bold mb-2 text-yellow-700">2. Reward Engineering is Critical</h3>
-                        <ul class="text-gray-700 space-y-1 ml-4">
-                            <li>• 60% Sharpe weight → highest returns but reckless behavior</li>
-                            <li>• 30-50% Sharpe weight → balanced, appropriate strategies</li>
-                            <li>• Wrong reward = dangerous agent despite high performance</li>
-                            <li>• Action diversity strongly correlates with reward balance</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-red-50 p-5 rounded-lg border-l-4 border-red-500">
-                        <h3 class="text-lg font-bold mb-2 text-red-700">3. Evaluation Must Go Beyond Returns</h3>
-                        <p class="text-gray-700 mb-2">Traditional metrics (net worth, total reward) are insufficient</p>
-                        <p class="text-gray-700">Essential behavioral analysis:</p>
-                        <ul class="text-gray-700 ml-4 space-y-1">
-                            <li>• Action diversity across scenarios</li>
-                            <li>• Age-appropriate risk reduction</li>
-                            <li>• Market regime adaptation</li>
-                            <li>• Risk-adjusted metrics (Sharpe, drawdown)</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="bg-purple-50 p-5 rounded-lg border-l-4 border-purple-500">
-                        <h3 class="text-lg font-bold mb-2 text-purple-700">4. The RL Advantage (When Done Right)</h3>
-                        <p class="text-gray-700">Unlike rule-based strategies, RL can learn nuanced policies that adapt to:</p>
-                        <ul class="text-gray-700 ml-4 space-y-1">
-                            <li>• Current debt levels and income</li>
-                            <li>• Life events (job loss, medical emergencies)</li>
-                            <li>• Market conditions and volatility regimes</li>
-                            <li>• Personal financial state holistically</li>
-                        </ul>
+                </div>
+                <div class="bg-white p-2 rounded text-xs">
+                    <p class="font-bold mb-1">Concrete Example:</p>
+                    <p class="text-gray-600 mb-2">Sharpe 60% learned to maintain 70% stock allocation during bull markets while Age-Based conservatively reduced to 50% - capturing 18% extra annual returns during 2020-2024 bull run</p>
+                    <div class="bg-yellow-50 p-2 rounded border-l-2 border-yellow-500">
+                        <p class="font-bold text-yellow-800"> Important:</p>
+                        <p class="text-gray-700">Small effect size (d=0.42) means improvement is <strong>not highly significant</strong> with n=5 seeds. High variance suggests strategy is risky.</p>
                     </div>
                 </div>
             </div>
+        </div>
+        
+        <div class="bg-yellow-50 p-4 rounded-lg border-l-4 border-yellow-500">
+            <h3 class="text-lg font-bold mb-2 text-yellow-700">2. Reward Engineering is Critical</h3>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <ul class="text-gray-700 space-y-1 ml-4 text-sm">
+                        <li>• 60% Sharpe weight → highest returns but reckless behavior</li>
+                        <li>• 30-50% Sharpe weight → balanced, appropriate strategies</li>
+                        <li>• Wrong reward = dangerous agent despite high performance</li>
+                        <li>• Action diversity strongly correlates with reward balance</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-2 rounded text-xs">
+                    <p class="font-bold mb-1 text-yellow-800">Quantitative Evidence:</p>
+                    <div class="space-y-1 text-gray-700">
+                        <div class="flex justify-between border-b border-gray-200 pb-1">
+                            <span>Sharpe 50%:</span>
+                            <span><strong>55% diversity</strong>, $1.77M</span>
+                        </div>
+                        <div class="flex justify-between border-b border-gray-200 pb-1">
+                            <span>Sharpe 60%:</span>
+                            <span><strong>22% diversity</strong>, $2.22M</span>
+                        </div>
+                        <div class="flex justify-between">
+                            <span>Sharpe 80%:</span>
+                            <span><strong>46% diversity</strong>, $2.06M</span>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mt-2 italic">Inverse correlation: higher diversity = lower returns (in our reward setup)</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+            <h3 class="text-lg font-bold mb-2 text-red-700">3. Evaluation Must Go Beyond Returns</h3>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <p class="text-gray-700 mb-2 text-sm">Traditional metrics (net worth, total reward) are insufficient</p>
+                    <p class="text-gray-700 text-sm">Essential behavioral analysis:</p>
+                    <ul class="text-gray-700 ml-4 space-y-1 text-sm">
+                        <li>• Action diversity across scenarios</li>
+                        <li>• Age-appropriate risk reduction</li>
+                        <li>• Market regime adaptation</li>
+                        <li>• Risk-adjusted metrics (Sharpe, drawdown)</li>
+                        <li>• <strong>Statistical significance (Cohen's d, p-values)</strong></li>
+                    </ul>
+                </div>
+                <div class="bg-white p-2 rounded text-xs">
+                    <p class="font-bold mb-1 text-red-800">Q-Policy Analysis Revealed:</p>
+                    <div class="bg-red-100 p-2 rounded mb-2">
+                        <p class="font-bold text-red-700">Scenario: Old (55), Bear Market, No Debt</p>
+                        <div class="mt-1 space-y-1">
+                            <div class="flex justify-between">
+                                <span>Sharpe 60%:</span>
+                                <span class="text-red-600 font-bold">Action 46 (Q=6656) ✗</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span>Sharpe 30%:</span>
+                                <span class="text-green-600 font-bold">Action 86 (Q=6094) ✓</span>
+                            </div>
+                        </div>
+                        <p class="text-xs text-gray-600 mt-2 italic">Action 46 = 70% invest, 70% stocks (DANGEROUS for elderly in crisis)</p>
+                        <p class="text-xs text-gray-600">Action 86 = 30% invest, maximum safety (APPROPRIATE)</p>
+                    </div>
+                    <p class="text-gray-700"><strong>Result:</strong> Net worth alone would pick Sharpe 60%. Behavioral analysis reveals it's unsafe.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+            <h3 class="text-lg font-bold mb-2 text-purple-700">4. The RL Advantage (When Done Right)</h3>
+            <div class="grid grid-cols-2 gap-3">
+                <div>
+                    <p class="text-gray-700 text-sm">Unlike rule-based strategies, RL can learn nuanced policies that adapt to:</p>
+                    <ul class="text-gray-700 ml-4 space-y-1 text-sm">
+                        <li>• Current debt levels and income</li>
+                        <li>• Life events (job loss, medical emergencies)</li>
+                        <li>• Market conditions and volatility regimes</li>
+                        <li>• Personal financial state holistically</li>
+                    </ul>
+                </div>
+                <div class="bg-white p-2 rounded text-xs">
+                    <p class="font-bold mb-1 text-purple-800">Example: Sharpe 30% Adaptation</p>
+                    <div class="space-y-2">
+                        <div class="bg-purple-100 p-2 rounded">
+                            <p class="font-bold">Young (25), Bull, High Debt:</p>
+                            <p>Action 11 (Aggressive Invest + Growth Stocks)</p>
+                            <p class="text-gray-600 mt-1">✓ Appropriate - can take risk</p>
+                        </div>
+                        <div class="bg-purple-100 p-2 rounded">
+                            <p class="font-bold">Old (55), Bear, No Debt:</p>
+                            <p>Action 86 (Maximum Safety)</p>
+                            <p class="text-gray-600 mt-1">✓ Appropriate - preserve wealth</p>
+                        </div>
+                    </div>
+                    <p class="text-gray-700 mt-2 font-bold">Learned context-dependent decision making!</p>
+                </div>
+            </div>
+        </div>
 
-            <!-- Slide 13: Future Work -->
+        <!-- Summary Box -->
+        <div class="bg-gray-800 text-white p-4 rounded-lg">
+            <p class="text-center text-lg font-bold">
+                Best Model ≠ Best Strategy | Performance Metrics ≠ Safety | High Returns ≠ Trustworthy Agent
+            </p>
+            <p class="text-center text-sm mt-2">
+                Cohen's d and behavioral analysis are essential for safe RL deployment
+            </p>
+        </div>
+    </div>
+</div>
+
+            <!-- Slide 12: Future Work -->
             <div class="slide" id="slide-12">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">The Path Forward</h1>
                 
