@@ -530,15 +530,15 @@
                         </p>
                     </div>
 
-                    <!-- Heatmap Images -->
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <img src="action_usage_heatmap_sharpe60.png" alt="Sharpe 60% Heatmap" class="rounded-lg shadow">
-                            <p class="text-center text-xs text-gray-600 mt-1">Sharpe 60% (Winner): Low diversity, focused on aggressive actions</p>
+                    <!-- Heatmap Images - Top/Bottom -->
+                    <div class="space-y-2">
+                        <div class="bg-red-50 p-2 rounded-lg">
+                            <p class="text-center text-sm font-bold text-red-700 mb-1">Sharpe 60% (Winner): 22% Action Diversity</p>
+                            <img src="action_usage_heatmap_sharpe60.png" alt="Sharpe 60% Heatmap" class="rounded-lg shadow w-full">
                         </div>
-                        <div>
-                            <img src="action_usage_heatmap_sharpe30.png" alt="Sharpe 30% Heatmap" class="rounded-lg shadow">
-                            <p class="text-center text-xs text-gray-600 mt-1">Sharpe 30%: High diversity, balanced strategies</p>
+                        <div class="bg-green-50 p-2 rounded-lg">
+                            <p class="text-center text-sm font-bold text-green-700 mb-1">Sharpe 30%: 53% Action Diversity</p>
+                            <img src="action_usage_heatmap_sharpe30.png" alt="Sharpe 30% Heatmap" class="rounded-lg shadow w-full">
                         </div>
                     </div>
 
@@ -697,8 +697,108 @@
                 </div>
             </div>
 
-            <!-- Slide 10: The Paradox -->
+            <!-- Slide 10: Q-Value Analysis -->
             <div class="slide" id="slide-10">
+                <h1 class="text-3xl font-bold text-gray-800 mb-3">Why Action 1? Q-Value Analysis Reveals the Truth</h1>
+                
+                <div class="space-y-3">
+                    <!-- Context -->
+                    <div class="bg-blue-50 p-3 rounded-lg border-2 border-blue-400 text-center">
+                        <p class="text-sm font-semibold text-blue-800">
+                            Sharpe 60% isn't broken - it's optimized for the wrong objective. Let's examine what the agent actually learned...
+                        </p>
+                    </div>
+
+                    <!-- Q-Value Table -->
+                    <div class="bg-white rounded-lg shadow-lg p-3">
+                        <table class="w-full text-xs">
+                            <thead>
+                                <tr class="border-b-2 border-gray-300">
+                                    <th class="text-left p-2">Scenario</th>
+                                    <th class="text-center p-2">Best Action</th>
+                                    <th class="text-center p-2">Q-Value</th>
+                                    <th class="text-center p-2">2nd Best</th>
+                                    <th class="text-center p-2">Q-Value</th>
+                                    <th class="text-left p-2">What This Means</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr class="border-b border-gray-200 bg-green-50">
+                                    <td class="p-2 font-semibold">Young, Bull Market</td>
+                                    <td class="p-2 text-center text-red-600 font-bold">Action 1</td>
+                                    <td class="p-2 text-center">4114</td>
+                                    <td class="p-2 text-center">Action 88</td>
+                                    <td class="p-2 text-center">3841</td>
+                                    <td class="p-2 text-gray-700">Aggression wins in growth</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 bg-red-50">
+                                    <td class="p-2 font-semibold">Young, Bear Market</td>
+                                    <td class="p-2 text-center text-red-600 font-bold">Action 1</td>
+                                    <td class="p-2 text-center">3326</td>
+                                    <td class="p-2 text-center">Action 88</td>
+                                    <td class="p-2 text-center">3294</td>
+                                    <td class="p-2 text-red-700 font-semibold">STILL aggressive in downturns!</td>
+                                </tr>
+                                <tr class="border-b border-gray-200 bg-red-50">
+                                    <td class="p-2 font-semibold">Old, Normal Market</td>
+                                    <td class="p-2 text-center text-red-600 font-bold">Action 1</td>
+                                    <td class="p-2 text-center">4213</td>
+                                    <td class="p-2 text-center">Action 88</td>
+                                    <td class="p-2 text-center">4200</td>
+                                    <td class="p-2 text-red-700 font-semibold">No age-based de-risking</td>
+                                </tr>
+                                <tr class="bg-yellow-50">
+                                    <td class="p-2 font-semibold">Old, Bear Market</td>
+                                    <td class="p-2 text-center text-yellow-600 font-bold">Action 46</td>
+                                    <td class="p-2 text-center">6656</td>
+                                    <td class="p-2 text-center">Action 43</td>
+                                    <td class="p-2 text-center">6624</td>
+                                    <td class="p-2 text-gray-700">Rare exception - but too late</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Action Decoder -->
+                    <div class="bg-gray-100 p-2 rounded text-xs">
+                        <p class="font-bold mb-1">Action Decoder:</p>
+                        <div class="grid grid-cols-3 gap-2">
+                            <div><strong>Action 1:</strong> 70% invest + 70% stocks (Aggressive)</div>
+                            <div><strong>Action 46:</strong> 50% invest + 40% stocks (Moderate)</div>
+                            <div><strong>Action 88:</strong> 40% invest + 30% stocks (Conservative)</div>
+                        </div>
+                    </div>
+
+                    <!-- Bottom Insights -->
+                    <div class="grid grid-cols-2 gap-3">
+                        <div class="bg-green-50 p-3 rounded-lg border-l-4 border-green-500">
+                            <h3 class="text-sm font-bold text-green-700 mb-2"> The Agent Learned Correctly</h3>
+                            <ul class="text-xs text-gray-700 space-y-1">
+                                <li>• Action 1 maximizes wealth (Q-values prove it)</li>
+                                <li>• Agent understands aggressive = high returns</li>
+                                <li>• Not a learning failure - it's reward misalignment</li>
+                                <li>• Did EXACTLY what we asked: maximize wealth + Sharpe</li>
+                            </ul>
+                        </div>
+                        <div class="bg-red-50 p-3 rounded-lg border-l-4 border-red-500">
+                            <h3 class="text-sm font-bold text-red-700 mb-2">But Wealth ≠ Wisdom</h3>
+                            <ul class="text-xs text-gray-700 space-y-1">
+                                <li>• High Q-values = high expected returns</li>
+                                <li>• But also = high risk, no adaptation, no safety</li>
+                                <li>• Human advisor: NEVER 70% stocks at age 55</li>
+                                <li>• Reward function didn't penalize recklessness</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-800 text-white p-3 rounded-lg text-center">
+                        <p class="text-sm font-bold">The agent is RIGHT (for maximizing wealth) but also WRONG (for financial prudence)</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Slide 11: The Paradox -->
+            <div class="slide" id="slide-11">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">The Paradox: Highest Returns ≠ Best Strategy</h1>
                 
                 <div class="space-y-4">
@@ -764,8 +864,8 @@
             </div>
 
             <!-- Slide 11: Key Findings -->
-            <!-- Slide 11: Key Findings -->
-<div class="slide" id="slide-11">
+            <!-- Slide 12: Key Findings -->
+<div class="slide" id="slide-12">
     <h1 class="text-4xl font-bold text-gray-800 mb-4">What We Learned</h1>
     
     <div class="space-y-3">
@@ -916,8 +1016,8 @@
     </div>
 </div>
 
-            <!-- Slide 12: Future Work -->
-            <div class="slide" id="slide-12">
+            <!-- Slide 13: Future Work -->
+            <div class="slide" id="slide-13">
                 <h1 class="text-4xl font-bold text-gray-800 mb-4">The Path Forward</h1>
                 
                 <div class="space-y-3">
@@ -1008,7 +1108,7 @@
             </button>
             
             <div class="text-lg" id="slideCounter">
-                Slide 1 of 12
+                Slide 1 of 13
             </div>
             
             <button onclick="nextSlide()" id="nextBtn" class="px-4 py-2 bg-blue-600 rounded hover:bg-blue-700 transition disabled:bg-gray-600 disabled:cursor-not-allowed">
@@ -1019,7 +1119,7 @@
 
     <script>
         let currentSlide = 1;
-        const totalSlides = 12;
+        const totalSlides = 13;
 
         function showSlide(n) {
             const slides = document.querySelectorAll('.slide');
