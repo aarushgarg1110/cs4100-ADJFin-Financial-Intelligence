@@ -32,12 +32,14 @@ def train_trial(agent_type, config, env, num_episodes, trial_num, print_freq=50)
         )
     
     elif agent_type == 'ppo':
-        print(f"  lr={config['lr']:.6f}, gamma={config['gamma']:.3f}, clip_epsilon={config['clip_epsilon']:.2f}, epochs={config['epochs']}")
+        print(f"  lr={config['lr']:.6f}, gamma={config['gamma']:.3f}, clip_epsilon={config['clip_epsilon']:.2f}, epochs={config['epochs']}, batch_size={config['batch_size']}, entropy_coef={config['entropy_coef']:.3f}")
         agent = DiscretePPOAgent(
             lr=config['lr'],
             gamma=config['gamma'],
             clip_epsilon=config['clip_epsilon'],
-            epochs=config['epochs']
+            epochs=config['epochs'],
+            batch_size=config['batch_size'],
+            entropy_coef=config['entropy_coef']
         )
     
     # Train using agent's method
@@ -72,10 +74,12 @@ def objective_dqn(trial, env, num_episodes, print_freq):
 def objective_ppo(trial, env, num_episodes, print_freq):
     """Optuna objective for PPO"""
     config = {
-        'lr': trial.suggest_categorical('lr', [1e-4, 3e-4, 1e-3, 3e-3]),
-        'gamma': trial.suggest_categorical('gamma', [0.95, 0.98, 0.99, 1.0]),
+        'lr': trial.suggest_categorical('lr', [3e-06, 1e-05, 3e-05]),
+        'gamma': trial.suggest_categorical('gamma', [0.95, 0.98, 0.99]),
         'clip_epsilon': trial.suggest_categorical('clip_epsilon', [0.1, 0.2, 0.3]),
-        'epochs': trial.suggest_categorical('epochs', [5, 10, 15, 20])
+        'epochs': trial.suggest_categorical('epochs', [5, 10, 15]),
+        'batch_size': trial.suggest_categorical('batch_size', [64, 128, 256]),
+        'entropy_coef': trial.suggest_categorical('entropy_coef', [0.0, 0.01, 0.05])
     }
     return train_trial('ppo', config, env, num_episodes, trial.number, print_freq)
 
