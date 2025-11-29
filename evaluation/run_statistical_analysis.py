@@ -1,6 +1,7 @@
 """
 Statistical Analysis Script
 Runs multiple seeds per agent and performs statistical significance testing
+Tests DQN models with different Sharpe ratio weights + human baselines
 """
 
 import numpy as np
@@ -20,9 +21,6 @@ from agents import (
     SixtyFortyAgent, DebtAvalancheAgent, EqualWeightAgent,
     AgeBasedAgent, MarkowitzAgent
 )
-
-# Import discrete RL agents (you'll need to create these)
-# For now, we'll just use baselines
 
 
 def calculate_net_worth(state):
@@ -63,27 +61,23 @@ class StatisticalAnalyzer:
             'markowitz': MarkowitzAgent()
         }
         
-        if agent_name == 'ppo':
-            from agents.discrete_ppo_agent import DiscretePPOAgent
-            agent = DiscretePPOAgent()
-            if os.path.exists('../models/ppo_best_model.pth'):
-                agent.load('../models/ppo_best_model.pth')
-                agent.training = False
-                print(f"Loaded discrete PPO model")
-            else:
-                print(f"No discrete PPO model found")
-            return agent
-    
-        elif agent_name == 'dqn':
+        # Check if it's a DQN model with sharpe ratio
+        if agent_name.startswith('dqn_sharpe'):
             from agents.discrete_dqn_agent import DiscreteDQNAgent
-            agent = DiscreteDQNAgent()
-            if os.path.exists('../models/dqn_best_model.pth'):
-                agent.load('../models/dqn_best_model.pth')
+            
+            # Extract sharpe percentage (e.g., 'dqn_sharpe60' -> 60)
+            sharpe_pct = agent_name.replace('dqn_sharpe', '')
+            model_path = f'../models/dqn_sharpe{sharpe_pct}.pth'
+            
+            if os.path.exists(model_path):
+                agent = DiscreteDQNAgent()
+                agent.load(model_path)
                 agent.training = False
-                print(f"Loaded discrete DQN model")
+                print(f"Loaded DQN model: {model_path}")
+                return agent
             else:
-                print(f"No discrete DQN model found")
-            return agent
+                print(f"Warning: Model not found: {model_path}")
+                return None
         
         return agent_map.get(agent_name)
     
@@ -91,6 +85,9 @@ class StatisticalAnalyzer:
         """Run one evaluation for an agent with given seed"""
         env = FinanceEnv(seed=seed)
         agent = self._get_agent(agent_name)
+        
+        if agent is None:
+            return None
         
         state, _ = env.reset(seed=seed)
         done = False
@@ -132,10 +129,11 @@ class StatisticalAnalyzer:
     
     def run_all_experiments(self):
         """Run all agents with multiple seeds"""
-        # Only baseline agents for now (no trained RL agents yet)
+        # DQN models with different sharpe ratios + human baselines
         agents = [
-            '60_40', 'debt_avalanche', 'equal_weight',
-            'age_based', 'markowitz', 'ppo', 'dqn'
+            'dqn_sharpe10', 'dqn_sharpe20', 'dqn_sharpe30', 'dqn_sharpe40',
+            'dqn_sharpe50', 'dqn_sharpe60', 'dqn_sharpe70', 'dqn_sharpe80',
+            '60_40', 'age_based', 'markowitz', 'equal_weight'
         ]
         
         print(f"Running {len(agents)} agents with {self.n_seeds} seeds each...")
@@ -153,15 +151,19 @@ class StatisticalAnalyzer:
                 
                 try:
                     result = self.run_single_evaluation(agent_name, seed=10000 + seed)
-                    agent_results.append(result)
-                    print(f"Final NW: ${result['final_net_worth']:,.0f}")
+                    if result is not None:
+                        agent_results.append(result)
+                        print(f"Final NW: ${result['final_net_worth']:,.0f}")
+                    else:
+                        print("SKIPPED (agent not found)")
                 except Exception as e:
                     print(f"ERROR: {e}")
                     import traceback
                     traceback.print_exc()
                     continue
             
-            self.results[agent_name] = agent_results
+            if agent_results:
+                self.results[agent_name] = agent_results
             
             # Save intermediate results
             self.save_results()
@@ -234,7 +236,7 @@ class StatisticalAnalyzer:
         
         return df
     
-    def pairwise_comparisons(self, baseline_agent: str = '60_40') -> pd.DataFrame:
+    def pairwise_comparisons(self, baseline_agent: str = 'age_based') -> pd.DataFrame:
         """Perform pairwise statistical tests against baseline"""
         comparison_data = []
         
@@ -301,6 +303,7 @@ class StatisticalAnalyzer:
         agents = []
         means = []
         stds = []
+        colors = []
         
         for agent_name, runs in self.results.items():
             if not runs:
@@ -311,6 +314,12 @@ class StatisticalAnalyzer:
             agents.append(agent_name)
             means.append(np.mean(net_worths))
             stds.append(np.std(net_worths, ddof=1))
+            
+            # Color coding: DQN models in blue, human baselines in purple
+            if agent_name.startswith('dqn_sharpe'):
+                colors.append('#2E86AB')  # Blue for DQN
+            else:
+                colors.append('#A23B72')  # Purple for humans
         
         if not agents:
             print("No data to plot")
@@ -321,12 +330,10 @@ class StatisticalAnalyzer:
         agents = [agents[i] for i in sorted_indices]
         means = [means[i] for i in sorted_indices]
         stds = [stds[i] for i in sorted_indices]
+        colors = [colors[i] for i in sorted_indices]
         
         # Create figure
-        fig, ax = plt.subplots(figsize=(12, 6))
-        
-        # Color coding
-        colors = ['#A23B72'] * len(agents)  # All purple for baselines
+        fig, ax = plt.subplots(figsize=(14, 7))
         
         # Bar plot with error bars
         bars = ax.bar(range(len(agents)), means, yerr=stds, 
@@ -334,7 +341,7 @@ class StatisticalAnalyzer:
         
         ax.set_xlabel('Agent', fontsize=14, fontweight='bold')
         ax.set_ylabel('Final Net Worth ($)', fontsize=14, fontweight='bold')
-        ax.set_title('Baseline Agent Performance (Mean ± Std, n=5)', 
+        ax.set_title('Agent Performance: DQN Sharpe Ratios vs Human Baselines (Mean ± Std, n=5)', 
                     fontsize=16, fontweight='bold')
         ax.set_xticks(range(len(agents)))
         ax.set_xticklabels(agents, rotation=45, ha='right')
@@ -342,6 +349,14 @@ class StatisticalAnalyzer:
         
         # Format y-axis
         ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x/1e6:.1f}M'))
+        
+        # Add legend
+        from matplotlib.patches import Patch
+        legend_elements = [
+            Patch(facecolor='#2E86AB', edgecolor='black', label='DQN Models'),
+            Patch(facecolor='#A23B72', edgecolor='black', label='Human Baselines')
+        ]
+        ax.legend(handles=legend_elements, loc='upper right')
         
         plt.tight_layout()
         plt.savefig(self.output_dir / "performance_with_error_bars.png", dpi=300)
@@ -355,6 +370,7 @@ class StatisticalAnalyzer:
         means = []
         ci_lower = []
         ci_upper = []
+        colors = []
         
         for agent_name, runs in self.results.items():
             if not runs:
@@ -366,6 +382,12 @@ class StatisticalAnalyzer:
             means.append(np.mean(net_worths))
             ci_lower.append(np.percentile(net_worths, 2.5))
             ci_upper.append(np.percentile(net_worths, 97.5))
+            
+            # Color coding
+            if agent_name.startswith('dqn_sharpe'):
+                colors.append('#2E86AB')
+            else:
+                colors.append('#A23B72')
         
         if not agents:
             print("No data to plot")
@@ -377,19 +399,21 @@ class StatisticalAnalyzer:
         means = [means[i] for i in sorted_indices]
         ci_lower = [ci_lower[i] for i in sorted_indices]
         ci_upper = [ci_upper[i] for i in sorted_indices]
+        colors = [colors[i] for i in sorted_indices]
         
         # Calculate error bars
         yerr_lower = [means[i] - ci_lower[i] for i in range(len(means))]
         yerr_upper = [ci_upper[i] - means[i] for i in range(len(means))]
         
         # Create figure
-        fig, ax = plt.subplots(figsize=(12, 6))
+        fig, ax = plt.subplots(figsize=(14, 7))
         
         # Point plot with error bars
-        ax.errorbar(range(len(agents)), means, 
-                   yerr=[yerr_lower, yerr_upper],
-                   fmt='o', markersize=10, capsize=7, capthick=2,
-                   color='#A23B72', ecolor='#666666', linewidth=2)
+        for i in range(len(agents)):
+            ax.errorbar(i, means[i], 
+                       yerr=[[yerr_lower[i]], [yerr_upper[i]]],
+                       fmt='o', markersize=10, capsize=7, capthick=2,
+                       color=colors[i], ecolor='#666666', linewidth=2)
         
         ax.set_xlabel('Agent', fontsize=14, fontweight='bold')
         ax.set_ylabel('Final Net Worth ($)', fontsize=14, fontweight='bold')
@@ -401,6 +425,14 @@ class StatisticalAnalyzer:
         
         # Format y-axis
         ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x/1e6:.1f}M'))
+        
+        # Add legend
+        from matplotlib.patches import Patch
+        legend_elements = [
+            Patch(facecolor='#2E86AB', edgecolor='black', label='DQN Models'),
+            Patch(facecolor='#A23B72', edgecolor='black', label='Human Baselines')
+        ]
+        ax.legend(handles=legend_elements, loc='upper right')
         
         plt.tight_layout()
         plt.savefig(self.output_dir / "confidence_intervals.png", dpi=300)
@@ -455,10 +487,10 @@ class StatisticalAnalyzer:
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description='Run statistical analysis for ADJFin (discrete)')
+    parser = argparse.ArgumentParser(description='Run statistical analysis for ADJFin (DQN Sharpe models)')
     parser.add_argument('--seeds', type=int, default=5, help='Number of seeds per agent')
     parser.add_argument('--run', action='store_true', help='Run experiments (otherwise load existing)')
-    parser.add_argument('--baseline', type=str, default='60_40', help='Baseline agent for comparisons')
+    parser.add_argument('--baseline', type=str, default='age_based', help='Baseline agent for comparisons')
     
     args = parser.parse_args()
     

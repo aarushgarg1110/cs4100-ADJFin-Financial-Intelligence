@@ -1,139 +1,120 @@
 ================================================================================
-ABLATION STUDY REPORT: Market Volatility Impact (Discrete Actions)
+ABLATION STUDY: Market Volatility Impact (DQN Sharpe Models)
 ================================================================================
 
+
+============================================================
+Agent: DQN_SHARPE30
+============================================================
+
+Final Net Worth:
+  With Volatility:    $1,924,960 ± $100,255
+  Without Volatility: $2,689,865 ± $242,310
+  Impact: -28.4%
+
+Financial Metrics (With Volatility):
+  Sharpe Ratio:   0.268
+  Max Drawdown:   10.9%
+  Volatility:     152.1%
+
+Financial Metrics (Without Volatility):
+  Sharpe Ratio:   0.302
+  Max Drawdown:   10.6%
+  Volatility:     792.8%
+
+============================================================
+Agent: DQN_SHARPE60
+============================================================
+
+Final Net Worth:
+  With Volatility:    $2,219,506 ± $93,735
+  Without Volatility: $3,339,185 ± $226,212
+  Impact: -33.5%
+
+Financial Metrics (With Volatility):
+  Sharpe Ratio:   0.250
+  Max Drawdown:   12.6%
+  Volatility:     741.5%
+
+Financial Metrics (Without Volatility):
+  Sharpe Ratio:   0.333
+  Max Drawdown:   9.7%
+  Volatility:     900.1%
+
+============================================================
+Agent: DQN_SHARPE80
+============================================================
+
+Final Net Worth:
+  With Volatility:    $1,471,344 ± $149,674
+  Without Volatility: $2,370,355 ± $263,971
+  Impact: -37.9%
+
+Financial Metrics (With Volatility):
+  Sharpe Ratio:   0.277
+  Max Drawdown:   9.7%
+  Volatility:     526.7%
+
+Financial Metrics (Without Volatility):
+  Sharpe Ratio:   0.240
+  Max Drawdown:   10.5%
+  Volatility:     1186.4%
 
 ============================================================
 Agent: 60_40
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $2,001,150 ± $44,943
-  Without Volatility: $3,292,159 ± $237,936
-  Impact: -39.2%
+  With Volatility:    $1,995,311 ± $41,204
+  Without Volatility: $3,212,545 ± $218,019
+  Impact: -37.9%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.083
-  Max Drawdown:   13.0%
-  Volatility:     1109.9%
+  Sharpe Ratio:   0.297
+  Max Drawdown:   12.9%
+  Volatility:     656.3%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.160
-  Max Drawdown:   8.9%
-  Volatility:     400.9%
+  Sharpe Ratio:   0.340
+  Max Drawdown:   10.2%
+  Volatility:     240.1%
 
 ============================================================
 Agent: AGE_BASED
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $2,137,332 ± $51,020
-  Without Volatility: $3,725,009 ± $311,345
-  Impact: -42.6%
+  With Volatility:    $2,133,631 ± $46,575
+  Without Volatility: $3,622,773 ± $287,415
+  Impact: -41.1%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.064
-  Max Drawdown:   14.4%
-  Volatility:     735.4%
+  Sharpe Ratio:   0.245
+  Max Drawdown:   32.2%
+  Volatility:     457.7%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.163
-  Max Drawdown:   8.4%
-  Volatility:     449.2%
+  Sharpe Ratio:   0.344
+  Max Drawdown:   9.7%
+  Volatility:     263.8%
 
 ============================================================
 Agent: MARKOWITZ
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $2,044,825 ± $44,305
-  Without Volatility: $3,161,601 ± $223,271
-  Impact: -35.3%
+  With Volatility:    $2,039,918 ± $40,646
+  Without Volatility: $3,086,528 ± $204,265
+  Impact: -33.9%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.013
+  Sharpe Ratio:   0.290
   Max Drawdown:   11.8%
-  Volatility:     16847.3%
+  Volatility:     3909.5%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.159
-  Max Drawdown:   8.9%
-  Volatility:     390.3%
-
-============================================================
-Agent: DEBT_AVALANCHE
-============================================================
-
-Final Net Worth:
-  With Volatility:    $1,159,941 ± $30,192
-  Without Volatility: $1,660,786 ± $116,506
-  Impact: -30.2%
-
-Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.196
-  Max Drawdown:   9.2%
-  Volatility:     256.0%
-
-Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.245
-  Max Drawdown:   13.7%
-  Volatility:     166.4%
-
-============================================================
-Agent: EQUAL_WEIGHT
-============================================================
-
-Final Net Worth:
-  With Volatility:    $2,029,897 ± $45,841
-  Without Volatility: $2,989,308 ± $203,770
-  Impact: -32.1%
-
-Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.085
-  Max Drawdown:   20.5%
-  Volatility:     308.6%
-
-Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.008
-  Max Drawdown:   9.1%
-  Volatility:     7780.6%
-
-============================================================
-Agent: PPO
-============================================================
-
-Final Net Worth:
-  With Volatility:    $1,819,475 ± $41,197
-  Without Volatility: $3,053,556 ± $215,393
-  Impact: -40.4%
-
-Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.079
-  Max Drawdown:   11.1%
-  Volatility:     450.3%
-
-Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.158
-  Max Drawdown:   9.0%
-  Volatility:     389.7%
-
-============================================================
-Agent: DQN
-============================================================
-
-Final Net Worth:
-  With Volatility:    $2,418,040 ± $56,069
-  Without Volatility: $4,562,607 ± $350,081
-  Impact: -47.0%
-
-Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.096
-  Max Drawdown:   16.1%
-  Volatility:     662.5%
-
-Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.166
-  Max Drawdown:   8.3%
-  Volatility:     411.4%
+  Sharpe Ratio:   0.339
+  Max Drawdown:   10.2%
+  Volatility:     235.2%
 
 ================================================================================

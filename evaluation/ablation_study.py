@@ -1,6 +1,7 @@
 """
-Ablation Study Script for ADJFin RL Project (DISCRETE ACTION SPACE)
+Ablation Study Script for ADJFin
 Tests impact of market volatility on RL performance
+Tests DQN models with different Sharpe ratios + human baselines
 """
 
 import numpy as np
@@ -127,37 +128,37 @@ class AblationStudy:
             'equal_weight': EqualWeightAgent()
         }
         
-        if agent_name == 'ppo':
-            from agents.discrete_ppo_agent import DiscretePPOAgent
-            agent = DiscretePPOAgent()
-            if os.path.exists('../models/ppo_best_model.pth'):
-                agent.load('../models/ppo_best_model.pth')
-                agent.training = False
-                print(f"Loaded discrete PPO model")
-            else:
-                print(f"No discrete PPO model found")
-            return agent
-    
-        elif agent_name == 'dqn':
+        # Check if it's a DQN model with sharpe ratio
+        if agent_name.startswith('dqn_sharpe'):
             from agents.discrete_dqn_agent import DiscreteDQNAgent
-            agent = DiscreteDQNAgent()
-            if os.path.exists('../models/dqn_best_model.pth'):
-                agent.load('../models/dqn_best_model.pth')
+            
+            # Extract sharpe percentage (e.g., 'dqn_sharpe60' -> 60)
+            sharpe_pct = agent_name.replace('dqn_sharpe', '')
+            model_path = f'../models/dqn_sharpe{sharpe_pct}.pth'
+            
+            if os.path.exists(model_path):
+                agent = DiscreteDQNAgent()
+                agent.load(model_path)
                 agent.training = False
-                print(f"Loaded discrete DQN model")
+                print(f"Loaded DQN model: {model_path}")
+                return agent
             else:
-                print(f"No discrete DQN model found")
-            return agent
+                print(f"Warning: Model not found: {model_path}")
+                return None
 
         return agent_map.get(agent_name)
     
     def run_ablation_experiment(self, n_seeds: int = 5):
         """Run agents in both normal and stable market conditions"""
         
-        agents = ['60_40', 'age_based', 'markowitz', 'debt_avalanche', 'equal_weight', 'ppo', 'dqn']
+        # Focus on key agents: select DQN models + human baselines
+        agents = [
+            'dqn_sharpe30', 'dqn_sharpe60', 'dqn_sharpe80',
+            '60_40', 'age_based', 'markowitz'
+        ]
         
         print("="*60)
-        print("ABLATION STUDY: Market Volatility Impact")
+        print("ABLATION STUDY: Market Volatility Impact (DQN Sharpe Models)")
         print("="*60)
         
         for agent_name in agents:
@@ -166,25 +167,33 @@ class AblationStudy:
             # Normal market (with volatility)
             print("  Running with market volatility...")
             normal_results = self._run_agent_seeds(agent_name, n_seeds, stable=False)
-            self.results['normal_market'][agent_name] = normal_results
+            if normal_results:
+                self.results['normal_market'][agent_name] = normal_results
             
             # Stable market (no volatility)
             print("  Running without market volatility...")
             stable_results = self._run_agent_seeds(agent_name, n_seeds, stable=True)
-            self.results['stable_market'][agent_name] = stable_results
+            if stable_results:
+                self.results['stable_market'][agent_name] = stable_results
             
             # Calculate impact
-            normal_mean = np.mean([r['final_net_worth'] for r in normal_results])
-            stable_mean = np.mean([r['final_net_worth'] for r in stable_results])
-            impact = ((normal_mean - stable_mean) / stable_mean) * 100
-            
-            print(f"    Normal market: ${normal_mean:,.0f}")
-            print(f"    Stable market: ${stable_mean:,.0f}")
-            print(f"    Impact: {impact:+.1f}%")
+            if normal_results and stable_results:
+                normal_mean = np.mean([r['final_net_worth'] for r in normal_results])
+                stable_mean = np.mean([r['final_net_worth'] for r in stable_results])
+                impact = ((normal_mean - stable_mean) / stable_mean) * 100
+                
+                print(f"    Normal market: ${normal_mean:,.0f}")
+                print(f"    Stable market: ${stable_mean:,.0f}")
+                print(f"    Impact: {impact:+.1f}%")
     
     def _run_agent_seeds(self, agent_name: str, n_seeds: int, stable: bool) -> List[Dict]:
         """Run agent for multiple seeds"""
         results = []
+        
+        agent = self._get_agent(agent_name)
+        if agent is None:
+            print(f"    Skipping {agent_name} - agent not found")
+            return None
         
         for seed in range(n_seeds):
             # Create environment
@@ -192,9 +201,6 @@ class AblationStudy:
                 env = StableMarketEnvironment(seed=10000 + seed)
             else:
                 env = FinanceEnv(seed=10000 + seed)
-            
-            # Load agent
-            agent = self._get_agent(agent_name)
             
             # Run episode
             state, _ = env.reset(seed=10000 + seed)
@@ -229,6 +235,7 @@ class AblationStudy:
         normal_means = []
         stable_means = []
         improvements = []
+        colors = []
         
         for agent_name in self.results['normal_market'].keys():
             normal_results = self.results['normal_market'][agent_name]
@@ -241,6 +248,12 @@ class AblationStudy:
             normal_means.append(normal_mean)
             stable_means.append(stable_mean)
             improvements.append(((normal_mean - stable_mean) / stable_mean) * 100)
+            
+            # Color coding
+            if agent_name.startswith('dqn_sharpe'):
+                colors.append('#2E86AB')
+            else:
+                colors.append('#A23B72')
         
         # Create figure
         fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
@@ -259,14 +272,14 @@ class AblationStudy:
         ax1.set_title('Performance: Normal vs Stable Markets', 
                      fontsize=14, fontweight='bold')
         ax1.set_xticks(x)
-        ax1.set_xticklabels(agents)
+        ax1.set_xticklabels(agents, rotation=45, ha='right')
         ax1.legend()
         ax1.grid(axis='y', alpha=0.3)
         ax1.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x/1e6:.1f}M'))
         
         # Plot 2: Relative improvement
-        colors = ['#2E86AB' if imp > 0 else '#C73E1D' for imp in improvements]
-        ax2.barh(agents, improvements, color=colors, alpha=0.7, edgecolor='black')
+        bar_colors = ['#2E86AB' if imp > 0 else '#C73E1D' for imp in improvements]
+        ax2.barh(agents, improvements, color=bar_colors, alpha=0.7, edgecolor='black')
         
         ax2.set_xlabel('Performance Change (%)', fontsize=12, fontweight='bold')
         ax2.set_ylabel('Agent', fontsize=12, fontweight='bold')
@@ -338,7 +351,7 @@ class AblationStudy:
         
         report = []
         report.append("="*80)
-        report.append("ABLATION STUDY REPORT: Market Volatility Impact (Discrete Actions)")
+        report.append("ABLATION STUDY: Market Volatility Impact (DQN Sharpe Models)")
         report.append("="*80)
         report.append("")
         
@@ -385,7 +398,7 @@ class AblationStudy:
 if __name__ == "__main__":
     import argparse
     
-    parser = argparse.ArgumentParser(description='Ablation study for ADJFin (discrete)')
+    parser = argparse.ArgumentParser(description='Ablation study for ADJFin (DQN Sharpe models)')
     parser.add_argument('--seeds', type=int, default=5, 
                        help='Number of seeds per condition')
     
@@ -394,7 +407,7 @@ if __name__ == "__main__":
     study = AblationStudy()
     
     print("="*60)
-    print("ABLATION STUDY: MARKET VOLATILITY IMPACT (Discrete Actions)")
+    print("ABLATION STUDY: MARKET VOLATILITY (DQN Sharpe Models)")
     print("="*60)
     
     study.run_ablation_experiment(n_seeds=args.seeds)

@@ -4,6 +4,254 @@ BEHAVIORAL ANALYSIS REPORT (Discrete Action Space)
 
 
 ============================================================
+Agent: DQN_SHARPE10
+============================================================
+
+Market Timing Score: 0.0%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 24.0%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 52 (19.4%): Debt-Heavy + Equal Weight
+  2. Action 24 (16.6%): Balanced Classic + Classic 60/40
+  3. Action 85 (15.7%): Income Protection + Conservative Bonds
+  4. Action 86 (15.1%): Income Protection + Real Estate Focus
+  5. Action 50 (13.3%): Debt-Heavy + Real Estate Focus
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 46% invest, 26% debt, 28% emergency
+    Invest: 43% stocks, 34% bonds, 22% RE
+
+  BULL Market:
+    Money: 45% invest, 21% debt, 34% emergency
+    Invest: 41% stocks, 36% bonds, 24% RE
+
+  BEAR Market:
+    Money: 48% invest, 22% debt, 30% emergency
+    Invest: 45% stocks, 34% bonds, 21% RE
+
+============================================================
+Agent: DQN_SHARPE20
+============================================================
+
+Market Timing Score: 0.8%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 15.5%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 66 (34.2%): Maximum Safety + Balanced Portfolio
+  2. Action 2 (19.4%): Very Aggressive Invest + Moderate Growth
+  3. Action 10 (17.6%): Aggressive Invest + Growth Stocks
+  4. Action 82 (11.4%): Income Protection + Growth Stocks
+  5. Action 83 (8.9%): Income Protection + Moderate Growth
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 51% invest, 16% debt, 33% emergency
+    Invest: 59% stocks, 31% bonds, 10% RE
+
+  BULL Market:
+    Money: 48% invest, 15% debt, 37% emergency
+    Invest: 59% stocks, 30% bonds, 11% RE
+
+  BEAR Market:
+    Money: 48% invest, 16% debt, 37% emergency
+    Invest: 59% stocks, 31% bonds, 10% RE
+
+============================================================
+Agent: DQN_SHARPE30
+============================================================
+
+Market Timing Score: 0.0%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 20.6%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 26 (22.6%): Balanced Classic + Bond Heavy
+  2. Action 84 (17.4%): Income Protection + Balanced Portfolio
+  3. Action 54 (16.5%): Maximum Debt Reduction + Very Aggressive Stocks
+  4. Action 85 (9.4%): Income Protection + Conservative Bonds
+  5. Action 5 (7.3%): Very Aggressive Invest + Real Estate Focus
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 49% invest, 21% debt, 29% emergency
+    Invest: 49% stocks, 39% bonds, 12% RE
+
+  BULL Market:
+    Money: 50% invest, 19% debt, 30% emergency
+    Invest: 48% stocks, 41% bonds, 11% RE
+
+  BEAR Market:
+    Money: 53% invest, 19% debt, 28% emergency
+    Invest: 49% stocks, 40% bonds, 11% RE
+
+============================================================
+Agent: DQN_SHARPE40
+============================================================
+
+Market Timing Score: 2.3%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 22.3%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 5 (31.2%): Very Aggressive Invest + Real Estate Focus
+  2. Action 72 (23.4%): Conservative Both + Very Aggressive Stocks
+  3. Action 83 (11.9%): Income Protection + Moderate Growth
+  4. Action 62 (11.3%): Maximum Debt Reduction + Bond Heavy
+  5. Action 89 (8.3%): Income Protection + Bond Heavy
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 49% invest, 23% debt, 28% emergency
+    Invest: 49% stocks, 32% bonds, 19% RE
+
+  BULL Market:
+    Money: 45% invest, 23% debt, 32% emergency
+    Invest: 46% stocks, 36% bonds, 18% RE
+
+  BEAR Market:
+    Money: 52% invest, 19% debt, 28% emergency
+    Invest: 43% stocks, 35% bonds, 21% RE
+
+============================================================
+Agent: DQN_SHARPE50
+============================================================
+
+Market Timing Score: 0.0%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 29.5%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 51 (39.3%): Debt-Heavy + Classic 60/40
+  2. Action 83 (13.3%): Income Protection + Moderate Growth
+  3. Action 45 (9.7%): Debt-Heavy + Very Aggressive Stocks
+  4. Action 46 (8.4%): Debt-Heavy + Growth Stocks
+  5. Action 70 (5.3%): Maximum Safety + Equal Weight
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 41% invest, 31% debt, 29% emergency
+    Invest: 60% stocks, 33% bonds, 7% RE
+
+  BULL Market:
+    Money: 40% invest, 26% debt, 34% emergency
+    Invest: 53% stocks, 35% bonds, 12% RE
+
+  BEAR Market:
+    Money: 39% invest, 30% debt, 31% emergency
+    Invest: 55% stocks, 34% bonds, 10% RE
+
+============================================================
+Agent: DQN_SHARPE60
+============================================================
+
+Market Timing Score: 1.1%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 14.0%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 3 (69.5%): Very Aggressive Invest + Balanced Portfolio
+  2. Action 1 (11.2%): Very Aggressive Invest + Growth Stocks
+  3. Action 20 (7.0%): Balanced Classic + Moderate Growth
+  4. Action 62 (6.4%): Maximum Debt Reduction + Bond Heavy
+  5. Action 63 (1.9%): Maximum Safety + Very Aggressive Stocks
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 73% invest, 14% debt, 13% emergency
+    Invest: 52% stocks, 38% bonds, 10% RE
+
+  BULL Market:
+    Money: 72% invest, 14% debt, 14% emergency
+    Invest: 54% stocks, 36% bonds, 10% RE
+
+  BEAR Market:
+    Money: 74% invest, 13% debt, 13% emergency
+    Invest: 53% stocks, 37% bonds, 10% RE
+
+============================================================
+Agent: DQN_SHARPE70
+============================================================
+
+Market Timing Score: 0.0%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 19.4%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 37 (42.9%): Moderate Safety-Focused + Growth Stocks
+  2. Action 26 (14.4%): Balanced Classic + Bond Heavy
+  3. Action 81 (10.1%): Income Protection + Very Aggressive Stocks
+  4. Action 78 (8.2%): Conservative Both + Classic 60/40
+  5. Action 14 (5.8%): Aggressive Invest + Real Estate Focus
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 48% invest, 20% debt, 33% emergency
+    Invest: 60% stocks, 29% bonds, 11% RE
+
+  BULL Market:
+    Money: 47% invest, 19% debt, 34% emergency
+    Invest: 58% stocks, 29% bonds, 13% RE
+
+  BEAR Market:
+    Money: 49% invest, 20% debt, 32% emergency
+    Invest: 59% stocks, 30% bonds, 11% RE
+
+============================================================
+Agent: DQN_SHARPE80
+============================================================
+
+Market Timing Score: 0.6%
+  (Stock % reduction from bull to bear markets)
+
+Debt Priority Score: 26.3%
+  (Average % of income allocated to debt)
+
+Top 5 Most Used Strategies:
+  1. Action 26 (25.4%): Balanced Classic + Bond Heavy
+  2. Action 74 (17.4%): Conservative Both + Moderate Growth
+  3. Action 59 (10.4%): Maximum Debt Reduction + Real Estate Focus
+  4. Action 83 (9.5%): Income Protection + Moderate Growth
+  5. Action 77 (6.3%): Conservative Both + Real Estate Focus
+
+Average Allocations by Market Regime:
+
+  NORMAL Market:
+    Money: 40% invest, 26% debt, 34% emergency
+    Invest: 44% stocks, 40% bonds, 16% RE
+
+  BULL Market:
+    Money: 39% invest, 26% debt, 35% emergency
+    Invest: 46% stocks, 38% bonds, 16% RE
+
+  BEAR Market:
+    Money: 40% invest, 27% debt, 33% emergency
+    Invest: 46% stocks, 39% bonds, 16% RE
+
+============================================================
 Agent: 60_40
 ============================================================
 
@@ -29,33 +277,6 @@ Average Allocations by Market Regime:
   BEAR Market:
     Money: 60% invest, 20% debt, 20% emergency
     Invest: 60% stocks, 40% bonds, 0% RE
-
-============================================================
-Agent: DEBT_AVALANCHE
-============================================================
-
-Market Timing Score: 0.0%
-  (Stock % reduction from bull to bear markets)
-
-Debt Priority Score: 50.0%
-  (Average % of income allocated to debt)
-
-Top 5 Most Used Strategies:
-  1. Action 58 (100.0%): Maximum Debt Reduction + Conservative Bonds
-
-Average Allocations by Market Regime:
-
-  NORMAL Market:
-    Money: 30% invest, 50% debt, 20% emergency
-    Invest: 40% stocks, 50% bonds, 10% RE
-
-  BULL Market:
-    Money: 30% invest, 50% debt, 20% emergency
-    Invest: 40% stocks, 50% bonds, 10% RE
-
-  BEAR Market:
-    Money: 30% invest, 50% debt, 20% emergency
-    Invest: 40% stocks, 50% bonds, 10% RE
 
 ============================================================
 Agent: AGE_BASED
@@ -117,7 +338,7 @@ Average Allocations by Market Regime:
     Invest: 30% stocks, 60% bonds, 10% RE
 
 ============================================================
-Agent: PPO
+Agent: EQUAL_WEIGHT
 ============================================================
 
 Market Timing Score: 0.0%
@@ -127,47 +348,20 @@ Debt Priority Score: 20.0%
   (Average % of income allocated to debt)
 
 Top 5 Most Used Strategies:
-  1. Action 38 (100.0%): Moderate Safety-Focused + Moderate Growth
+  1. Action 25 (100.0%): Balanced Classic + Equal Weight
 
 Average Allocations by Market Regime:
 
   NORMAL Market:
-    Money: 50% invest, 20% debt, 30% emergency
-    Invest: 60% stocks, 30% bonds, 10% RE
+    Money: 60% invest, 20% debt, 20% emergency
+    Invest: 33% stocks, 33% bonds, 33% RE
 
   BULL Market:
-    Money: 50% invest, 20% debt, 30% emergency
-    Invest: 60% stocks, 30% bonds, 10% RE
+    Money: 60% invest, 20% debt, 20% emergency
+    Invest: 33% stocks, 33% bonds, 33% RE
 
   BEAR Market:
-    Money: 50% invest, 20% debt, 30% emergency
-    Invest: 60% stocks, 30% bonds, 10% RE
-
-============================================================
-Agent: DQN
-============================================================
-
-Market Timing Score: 0.0%
-  (Stock % reduction from bull to bear markets)
-
-Debt Priority Score: 10.0%
-  (Average % of income allocated to debt)
-
-Top 5 Most Used Strategies:
-  1. Action 1 (100.0%): Very Aggressive Invest + Growth Stocks
-
-Average Allocations by Market Regime:
-
-  NORMAL Market:
-    Money: 80% invest, 10% debt, 10% emergency
-    Invest: 70% stocks, 20% bonds, 10% RE
-
-  BULL Market:
-    Money: 80% invest, 10% debt, 10% emergency
-    Invest: 70% stocks, 20% bonds, 10% RE
-
-  BEAR Market:
-    Money: 80% invest, 10% debt, 10% emergency
-    Invest: 70% stocks, 20% bonds, 10% RE
+    Money: 60% invest, 20% debt, 20% emergency
+    Invest: 33% stocks, 33% bonds, 33% RE
 
 ================================================================================

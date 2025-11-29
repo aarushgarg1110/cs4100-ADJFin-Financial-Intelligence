@@ -1,13 +1,18 @@
 Agent Performance with Statistical Significance
 ================================================================================
 
-         Agent Mean_Formatted     CI_Formatted   cohens_d Significance
-           dqn         $2.34M [$2.29M, $2.43M]   7.078035          ***
-     age_based         $2.08M [$2.04M, $2.17M]   2.519297             
-  equal_weight         $2.03M [$1.99M, $2.11M]   1.572340          ***
-     markowitz         $2.01M [$1.97M, $2.08M]   1.156055             
-         60_40         $1.95M [$1.92M, $2.03M]        NaN             
-           ppo         $1.78M [$1.75M, $1.85M]  -3.671531          ***
-debt_avalanche         $1.15M [$1.12M, $1.20M] -19.395907          ***
+       Agent Mean_Formatted     CI_Formatted   cohens_d Significance
+dqn_sharpe60         $2.18M [$2.03M, $2.30M]   1.270582          ***
+   age_based         $2.08M [$2.03M, $2.17M]        NaN             
+equal_weight         $2.03M [$1.98M, $2.11M]  -1.192824          ***
+   markowitz         $2.00M [$1.96M, $2.09M]  -1.704585          ***
+       60_40         $1.95M [$1.90M, $2.03M]  -2.975935          ***
+dqn_sharpe30         $1.91M [$1.74M, $2.00M]  -2.255291          ***
+dqn_sharpe20         $1.88M [$1.79M, $2.03M]  -3.194334             
+dqn_sharpe70         $1.78M [$1.72M, $1.97M]  -4.336949          ***
+dqn_sharpe10         $1.70M [$1.65M, $1.75M]  -9.600080          ***
+dqn_sharpe40         $1.67M [$1.62M, $1.71M] -10.082919          ***
+dqn_sharpe50         $1.51M [$1.42M, $1.67M]  -8.354453          ***
+dqn_sharpe80         $1.46M [$1.26M, $1.68M]  -5.337940             
 
 *** = Significant after Bonferroni correction (p < 0.05/n)

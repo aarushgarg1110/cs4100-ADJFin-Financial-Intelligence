@@ -1,5 +1,5 @@
 """
-Behavioral Analysis Script for ADJFin RL Project (DISCRETE ACTION SPACE)
+Behavioral Analysis Script for ADJFin
 Analyzes agent decision-making patterns across market regimes
 Tracks which of the 90 discrete strategies agents prefer
 """
@@ -65,28 +65,24 @@ class BehavioralAnalyzer:
             'markowitz': MarkowitzAgent()
         }
         
-        if agent_name == 'ppo':
-            from agents.discrete_ppo_agent import DiscretePPOAgent
-            agent = DiscretePPOAgent()
-            if os.path.exists('../models/ppo_best_model.pth'):
-                agent.load('../models/ppo_best_model.pth')
-                agent.training = False
-                print(f"Loaded discrete PPO model")
-            else:
-                print(f"No discrete PPO model found")
-            return agent
-    
-        elif agent_name == 'dqn':
+        # Check if it's a DQN model with sharpe ratio
+        if agent_name.startswith('dqn_sharpe'):
             from agents.discrete_dqn_agent import DiscreteDQNAgent
-            agent = DiscreteDQNAgent()
-            if os.path.exists('../models/dqn_best_model.pth'):
-                agent.load('../models/dqn_best_model.pth')
+            
+            # Extract sharpe percentage (e.g., 'dqn_sharpe60' -> 60)
+            sharpe_pct = agent_name.replace('dqn_sharpe', '')
+            model_path = f'../models/dqn_sharpe{sharpe_pct}.pth'
+            
+            if os.path.exists(model_path):
+                agent = DiscreteDQNAgent()
+                agent.load(model_path)
                 agent.training = False
-                print(f"Loaded discrete DQN model")
+                print(f"Loaded DQN model: {model_path}")
+                return agent
             else:
-                print(f"No discrete DQN model found")
-            return agent
-
+                print(f"Warning: Model not found: {model_path}")
+                return None
+        
         return agent_map.get(agent_name)
     
     def run_agent_analysis(self, agent_name: str, n_episodes: int = 5):
@@ -94,6 +90,9 @@ class BehavioralAnalyzer:
         print(f"\nAnalyzing {agent_name}...")
         
         agent = self._get_agent(agent_name)
+        if agent is None:
+            print(f"Skipping {agent_name} - agent not found")
+            return None
         
         agent_behavior = {
             'actions_by_regime': {0: [], 1: [], 2: []},  # Normal, Bull, Bear
@@ -195,18 +194,17 @@ class BehavioralAnalyzer:
     
     def plot_action_frequency_heatmap(self):
         """Plot heatmap of action usage (10 money × 9 investment grid)"""
-        agents_to_plot = ['60_40', 'age_based', 'markowitz', 'debt_avalanche']
-        agents_in_data = [a for a in agents_to_plot if a in self.behavioral_data]
+        agents_to_plot = list(self.behavioral_data.keys())
         
-        if not agents_in_data:
+        if not agents_to_plot:
             print("No agents with behavioral data")
             return
         
-        fig, axes = plt.subplots(len(agents_in_data), 1, figsize=(14, 4*len(agents_in_data)))
-        if len(agents_in_data) == 1:
+        fig, axes = plt.subplots(len(agents_to_plot), 1, figsize=(14, 4*len(agents_to_plot)))
+        if len(agents_to_plot) == 1:
             axes = [axes]
         
-        for idx, agent_name in enumerate(agents_in_data):
+        for idx, agent_name in enumerate(agents_to_plot):
             ax = axes[idx]
             
             # Create 10×9 grid (money allocation × investment allocation)
@@ -237,8 +235,7 @@ class BehavioralAnalyzer:
     
     def plot_regime_preferences(self):
         """Plot how agents change strategies by market regime"""
-        agents_to_plot = ['60_40', 'age_based', 'markowitz']
-        agents_in_data = [a for a in agents_to_plot if a in self.behavioral_data]
+        agents_to_plot = list(self.behavioral_data.keys())
         
         fig, axes = plt.subplots(1, 3, figsize=(18, 6))
         regime_names = ['Normal', 'Bull', 'Bear']
@@ -246,7 +243,7 @@ class BehavioralAnalyzer:
         for regime_idx, (regime, regime_name) in enumerate([(0, 'Normal'), (1, 'Bull'), (2, 'Bear')]):
             ax = axes[regime_idx]
             
-            for agent_name in agents_in_data:
+            for agent_name in agents_to_plot:
                 decoded_actions = self.behavioral_data[agent_name]['decoded_actions_by_regime'][regime]
                 
                 if not decoded_actions:
@@ -381,12 +378,16 @@ if __name__ == "__main__":
     
     analyzer = BehavioralAnalyzer()
     
-    # Default agents to analyze
-    default_agents = ['60_40', 'debt_avalanche', 'age_based', 'markowitz', 'ppo', 'dqn']
+    # DQN models with different sharpe ratios + human baselines
+    default_agents = [
+        'dqn_sharpe10', 'dqn_sharpe20', 'dqn_sharpe30', 'dqn_sharpe40',
+        'dqn_sharpe50', 'dqn_sharpe60', 'dqn_sharpe70', 'dqn_sharpe80',
+        '60_40', 'age_based', 'markowitz', 'equal_weight'
+    ]
     agents_to_analyze = args.agents if args.agents else default_agents
     
     print("="*60)
-    print("RUNNING BEHAVIORAL ANALYSIS (Discrete Actions)")
+    print("RUNNING BEHAVIORAL ANALYSIS (DQN Sharpe Ratios + Baselines)")
     print("="*60)
     
     for agent_name in agents_to_analyze:

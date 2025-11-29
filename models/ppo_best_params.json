@@ -1,0 +1,6 @@
+{
+  "lr": 0.0003,
+  "gamma": 0.95,
+  "clip_epsilon": 0.1,
+  "epochs": 10
+}

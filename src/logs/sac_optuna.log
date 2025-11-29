@@ -1,0 +1,180 @@
+Logging to: logs/sac_optuna.log
+
+Creating environment...
+Loading market data (one-time setup)...
+Downloading market data...
+SUCCESS stocks: 310 months of data
+SUCCESS bonds: 223 months of data
+SUCCESS real_estate: 254 months of data
+Market data loaded successfully!
+Using local SQLite storage: sqlite:///sac_optuna.db
+
+============================================================
+Starting Optuna optimization for SAC
+Trials: 15 | Episodes per trial: 75
+============================================================
+
+
+Trial 13:
+  lr=0.001000, alpha=0.20, tau=0.001000, batch_size=128
+  Ep 25/75 | Reward: 7377.10 | Actor Loss: 28344.3102 | Critic Loss: 13023741.4459
+  Ep 50/75 | Reward: 7252.40 | Actor Loss: 29658.6365 | Critic Loss: 12225549.5632
+  Ep 75/75 | Reward: 7371.51 | Actor Loss: 30313.0134 | Critic Loss: 11605145.6109
+  Trial 13 complete: 7386.11
+
+  Trial 13 saved to hpo/sac_hpo_13.pth
+[32m[I 2025-11-24 22:55:35,213][0m Trial 13 finished with value: 7386.110790979348 and parameters: {'lr': 0.001, 'alpha': 0.2, 'tau': 0.001, 'batch_size': 128}. Best is trial 4 with value: 7638.92339900259.[0m
+
+Trial 17:
+  lr=0.000100, alpha=0.30, tau=0.001000, batch_size=64
+  Ep 25/75 | Reward: 4011.78 | Actor Loss: 17553.4347 | Critic Loss: 5222871.5738
+  Ep 50/75 | Reward: 3952.63 | Actor Loss: 17667.2145 | Critic Loss: 876282.7780
+  Ep 75/75 | Reward: 4106.70 | Actor Loss: 17705.1343 | Critic Loss: 1270995.3694
+  Trial 17 complete: 4439.29
+
+  Trial 17 saved to hpo/sac_hpo_17.pth
+[32m[I 2025-11-24 22:56:09,758][0m Trial 17 finished with value: 4439.285298684753 and parameters: {'lr': 0.0001, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 64}. Best is trial 4 with value: 7638.92339900259.[0m
+
+Trial 22:
+  lr=0.001000, alpha=0.20, tau=0.003000, batch_size=128
+  Ep 25/75 | Reward: 4167.67 | Actor Loss: 10012.6495 | Critic Loss: 1351165.4939
+  Ep 50/75 | Reward: 4081.75 | Actor Loss: 9670.3984 | Critic Loss: 1832654.3039
+  Ep 75/75 | Reward: 4240.00 | Actor Loss: 9815.1902 | Critic Loss: 1088767.8174
+  Trial 22 complete: 4571.90
+
+  Trial 22 saved to hpo/sac_hpo_22.pth
+[32m[I 2025-11-24 22:56:46,545][0m Trial 22 finished with value: 4571.8958253513465 and parameters: {'lr': 0.001, 'alpha': 0.2, 'tau': 0.003, 'batch_size': 128}. Best is trial 20 with value: 7830.651014309677.[0m
+
+Trial 28:
+  lr=0.000100, alpha=0.20, tau=0.001000, batch_size=64
+  Ep 25/75 | Reward: 6967.20 | Actor Loss: -2811.4516 | Critic Loss: 2005068.9354
+  Ep 50/75 | Reward: 7539.39 | Actor Loss: -4651.8358 | Critic Loss: 6373801.4463
+  Ep 75/75 | Reward: 7462.55 | Actor Loss: -5834.4481 | Critic Loss: 992890.8376
+  Trial 28 complete: 7350.17
+
+  Trial 28 saved to hpo/sac_hpo_28.pth
+[32m[I 2025-11-24 22:57:21,652][0m Trial 28 finished with value: 7350.174974185718 and parameters: {'lr': 0.0001, 'alpha': 0.2, 'tau': 0.001, 'batch_size': 64}. Best is trial 20 with value: 7830.651014309677.[0m
+
+Trial 33:
+  lr=0.001000, alpha=0.50, tau=0.003000, batch_size=128
+  Ep 25/75 | Reward: 7413.55 | Actor Loss: 7661.4369 | Critic Loss: 1337059.9064
+  Ep 50/75 | Reward: 7252.40 | Actor Loss: 7877.3709 | Critic Loss: 961130.0392
+  Ep 75/75 | Reward: 7371.51 | Actor Loss: 8253.8618 | Critic Loss: 874298.6324
+  Trial 33 complete: 7386.11
+
+  Trial 33 saved to hpo/sac_hpo_33.pth
+[32m[I 2025-11-24 22:57:56,750][0m Trial 33 finished with value: 7386.110790979348 and parameters: {'lr': 0.001, 'alpha': 0.5, 'tau': 0.003, 'batch_size': 128}. Best is trial 30 with value: 7892.071173517233.[0m
+
+Trial 38:
+  lr=0.001000, alpha=0.50, tau=0.010000, batch_size=128
+  Ep 25/75 | Reward: 7350.98 | Actor Loss: 9453.6920 | Critic Loss: 1865214.3336
+  Ep 50/75 | Reward: 7252.40 | Actor Loss: 9346.9058 | Critic Loss: 883011.1058
+  Ep 75/75 | Reward: 7371.51 | Actor Loss: 9677.7806 | Critic Loss: 833953.4709
+  Trial 38 complete: 7386.11
+
+  Trial 38 saved to hpo/sac_hpo_38.pth
+[32m[I 2025-11-24 22:58:30,004][0m Trial 38 finished with value: 7386.110790979348 and parameters: {'lr': 0.001, 'alpha': 0.5, 'tau': 0.01, 'batch_size': 128}. Best is trial 30 with value: 7892.071173517233.[0m
+
+Trial 43:
+  lr=0.001000, alpha=0.20, tau=0.005000, batch_size=128
+  Ep 25/75 | Reward: 4031.87 | Actor Loss: 10327.3767 | Critic Loss: 3316459.5369
+  Ep 50/75 | Reward: 3800.54 | Actor Loss: 9364.6322 | Critic Loss: 2083047.7028
+  Ep 75/75 | Reward: 3963.16 | Actor Loss: 9573.7116 | Critic Loss: 2359400.4491
+  Trial 43 complete: 4304.24
+
+  Trial 43 saved to hpo/sac_hpo_43.pth
+[32m[I 2025-11-24 22:59:15,737][0m Trial 43 finished with value: 4304.240359252492 and parameters: {'lr': 0.001, 'alpha': 0.2, 'tau': 0.005, 'batch_size': 128}. Best is trial 30 with value: 7892.071173517233.[0m
+
+Trial 47:
+  lr=0.000100, alpha=0.40, tau=0.003000, batch_size=256
+  Ep 25/75 | Reward: 6176.52 | Actor Loss: 9147.7937 | Critic Loss: 1146383.8822
+  Ep 50/75 | Reward: 4952.08 | Actor Loss: 6958.3586 | Critic Loss: 1056201.4606
+  Ep 75/75 | Reward: 5001.80 | Actor Loss: 9228.2299 | Critic Loss: 2307919.3613
+  Trial 47 complete: 4590.19
+
+  Trial 47 saved to hpo/sac_hpo_47.pth
+[32m[I 2025-11-24 22:59:52,405][0m Trial 47 finished with value: 4590.185800634921 and parameters: {'lr': 0.0001, 'alpha': 0.4, 'tau': 0.003, 'batch_size': 256}. Best is trial 30 with value: 7892.071173517233.[0m
+
+Trial 51:
+  lr=0.000100, alpha=0.10, tau=0.001000, batch_size=64
+  Ep 25/75 | Reward: 5686.48 | Actor Loss: 10243.3570 | Critic Loss: 2061157.7951
+  Ep 50/75 | Reward: 7119.99 | Actor Loss: 10283.3131 | Critic Loss: 1090919.8445
+  Ep 75/75 | Reward: 7234.73 | Actor Loss: 10097.1841 | Critic Loss: 1571764.2761
+  Trial 51 complete: 7247.71
+
+  Trial 51 saved to hpo/sac_hpo_51.pth
+[32m[I 2025-11-24 23:00:25,353][0m Trial 51 finished with value: 7247.706338823789 and parameters: {'lr': 0.0001, 'alpha': 0.1, 'tau': 0.001, 'batch_size': 64}. Best is trial 30 with value: 7892.071173517233.[0m
+
+Trial 55:
+  lr=0.000100, alpha=0.10, tau=0.003000, batch_size=256
+  Ep 25/75 | Reward: 6963.62 | Actor Loss: 8931.9658 | Critic Loss: 1141300.3433
+  Ep 50/75 | Reward: 6909.62 | Actor Loss: 8708.3510 | Critic Loss: 783574.5036
+  Ep 75/75 | Reward: 4666.05 | Actor Loss: 17615.5900 | Critic Loss: 19889927.5800
+  Trial 55 complete: 4097.32
+
+  Trial 55 saved to hpo/sac_hpo_55.pth
+[32m[I 2025-11-24 23:01:18,436][0m Trial 55 finished with value: 4097.321165895807 and parameters: {'lr': 0.0001, 'alpha': 0.1, 'tau': 0.003, 'batch_size': 256}. Best is trial 30 with value: 7892.071173517233.[0m
+
+Trial 59:
+  lr=0.000300, alpha=0.20, tau=0.001000, batch_size=64
+  Ep 25/75 | Reward: 4476.46 | Actor Loss: -559.8076 | Critic Loss: 3258659.9087
+  Ep 50/75 | Reward: 4165.12 | Actor Loss: -1886.3894 | Critic Loss: 1476871.9781
+  Ep 75/75 | Reward: 4324.92 | Actor Loss: -2079.7514 | Critic Loss: 992642.0253
+  Trial 59 complete: 4667.65
+
+  Trial 59 saved to hpo/sac_hpo_59.pth
+[32m[I 2025-11-24 23:02:00,075][0m Trial 59 finished with value: 4667.654481433885 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.001, 'batch_size': 64}. Best is trial 58 with value: 8774.730016140955.[0m
+
+Trial 63:
+  lr=0.000300, alpha=0.20, tau=0.001000, batch_size=64
+  Ep 25/75 | Reward: 5882.92 | Actor Loss: 10989.5253 | Critic Loss: 3727559.3950
+  Ep 50/75 | Reward: 5593.53 | Actor Loss: 12449.3037 | Critic Loss: 6167524.7500
+  Ep 75/75 | Reward: 5144.99 | Actor Loss: 13430.4257 | Critic Loss: 6449401.1787
+  Trial 63 complete: 5490.52
+
+  Trial 63 saved to hpo/sac_hpo_63.pth
+[32m[I 2025-11-24 23:02:42,200][0m Trial 63 finished with value: 5490.5211680591965 and parameters: {'lr': 0.0003, 'alpha': 0.2, 'tau': 0.001, 'batch_size': 64}. Best is trial 58 with value: 8774.730016140955.[0m
+
+Trial 67:
+  lr=0.000100, alpha=0.30, tau=0.001000, batch_size=64
+  Ep 25/75 | Reward: 5607.95 | Actor Loss: -5233.3676 | Critic Loss: 1327159.8841
+  Ep 50/75 | Reward: 4454.34 | Actor Loss: -5641.3907 | Critic Loss: 1132775.7650
+  Ep 75/75 | Reward: 4620.92 | Actor Loss: -5530.3395 | Critic Loss: 1264651.2700
+  Trial 67 complete: 4967.49
+
+  Trial 67 saved to hpo/sac_hpo_67.pth
+[32m[I 2025-11-24 23:03:26,180][0m Trial 67 finished with value: 4967.494187684928 and parameters: {'lr': 0.0001, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 64}. Best is trial 58 with value: 8774.730016140955.[0m
+
+Trial 71:
+  lr=0.000100, alpha=0.30, tau=0.001000, batch_size=64
+  Ep 25/75 | Reward: 6373.22 | Actor Loss: 4297.8527 | Critic Loss: 1216831.0880
+  Ep 50/75 | Reward: 6324.36 | Actor Loss: 4525.8002 | Critic Loss: 553293.8425
+  Ep 75/75 | Reward: 6995.28 | Actor Loss: 4449.5101 | Critic Loss: 1046384.0773
+  Trial 71 complete: 7052.20
+
+  Trial 71 saved to hpo/sac_hpo_71.pth
+[32m[I 2025-11-24 23:04:09,031][0m Trial 71 finished with value: 7052.20327774907 and parameters: {'lr': 0.0001, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 64}. Best is trial 58 with value: 8774.730016140955.[0m
+
+Trial 74:
+  lr=0.000100, alpha=0.30, tau=0.001000, batch_size=64
+  Ep 25/75 | Reward: 6633.19 | Actor Loss: -1235.4964 | Critic Loss: 1659377.6987
+  Ep 50/75 | Reward: 5163.55 | Actor Loss: -4505.1452 | Critic Loss: 1598750.6313
+  Ep 75/75 | Reward: 4654.20 | Actor Loss: -3446.0370 | Critic Loss: 2354882.4934
+  Trial 74 complete: 4916.11
+
+  Trial 74 saved to hpo/sac_hpo_74.pth
+[32m[I 2025-11-24 23:04:39,964][0m Trial 74 finished with value: 4916.1107599878615 and parameters: {'lr': 0.0001, 'alpha': 0.3, 'tau': 0.001, 'batch_size': 64}. Best is trial 58 with value: 8774.730016140955.[0m
+
+============================================================
+OPTIMIZATION COMPLETE
+============================================================
+Best trial: 58
+Best value: 8774.73
+
+Best hyperparameters:
+  lr: 0.0001
+  alpha: 0.2
+  tau: 0.001
+  batch_size: 64
+
+Best parameters saved to models/sac_best_params.json

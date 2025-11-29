@@ -1,0 +1,196 @@
+Logging to: logs/dqn_optuna.log
+
+Creating environment...
+Loading market data (one-time setup)...
+Downloading market data...
+SUCCESS stocks: 310 months of data
+SUCCESS bonds: 223 months of data
+SUCCESS real_estate: 254 months of data
+Market data loaded successfully!
+Using local SQLite storage: sqlite:///dqn_optuna.db
+
+============================================================
+Starting Optuna optimization for DQN
+Trials: 15 | Episodes per trial: 100
+============================================================
+
+
+Trial 45:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.995
+  Ep 25/100 | Reward: 8837.17 | Actor Loss: 9739.5855 | Critic Loss: 2263850.2662
+  Ep 50/100 | Reward: 8648.50 | Actor Loss: 10441.3141 | Critic Loss: 1448547.4400
+  Ep 75/100 | Reward: 8741.48 | Actor Loss: 10451.1527 | Critic Loss: 2240623.3519
+  Ep 100/100 | Reward: 8548.55 | Actor Loss: 10399.3374 | Critic Loss: 2653504.5938
+  Trial 45 complete: 8456.14
+
+  Trial 45 saved to hpo/dqn_hpo_45.pth
+[32m[I 2025-11-24 22:28:26,007][0m Trial 45 finished with value: 8456.138520810699 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.995}. Best is trial 34 with value: 9096.88092685897.[0m
+
+Trial 46:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.999
+  Ep 25/100 | Reward: 7241.99 | Actor Loss: -19885.1846 | Critic Loss: 4775009.5775
+  Ep 50/100 | Reward: 7098.02 | Actor Loss: -20159.5749 | Critic Loss: 3474941.4122
+  Ep 75/100 | Reward: 7175.59 | Actor Loss: -20965.0135 | Critic Loss: 4070084.7281
+  Ep 100/100 | Reward: 7001.22 | Actor Loss: -20861.3025 | Critic Loss: 5926172.4891
+  Trial 46 complete: 6888.78
+
+  Trial 46 saved to hpo/dqn_hpo_46.pth
+[32m[I 2025-11-24 22:28:40,899][0m Trial 46 finished with value: 6888.779386083293 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.999}. Best is trial 34 with value: 9096.88092685897.[0m
+
+Trial 47:
+  lr=0.000300, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.990
+  Ep 25/100 | Reward: 8720.35 | Actor Loss: -1377.6129 | Critic Loss: 1346711.2925
+  Ep 50/100 | Reward: 8420.63 | Actor Loss: -499.6688 | Critic Loss: 264962.5725
+  Ep 75/100 | Reward: 8463.34 | Actor Loss: -711.5931 | Critic Loss: 282168.8731
+  Ep 100/100 | Reward: 7873.76 | Actor Loss: -525.3286 | Critic Loss: 285204.2481
+  Trial 47 complete: 7519.01
+
+  Trial 47 saved to hpo/dqn_hpo_47.pth
+[32m[I 2025-11-24 22:28:55,585][0m Trial 47 finished with value: 7519.012051726383 and parameters: {'lr': 0.0003, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.99}. Best is trial 34 with value: 9096.88092685897.[0m
+
+Trial 48:
+  lr=0.003000, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.998
+  Ep 25/100 | Reward: 8584.46 | Actor Loss: 920.6890 | Critic Loss: 40786.1674
+  Ep 50/100 | Reward: 8459.21 | Actor Loss: 781.5595 | Critic Loss: 19347.0639
+  Ep 75/100 | Reward: 8582.19 | Actor Loss: 615.6799 | Critic Loss: 10053.5839
+  Ep 100/100 | Reward: 8412.11 | Actor Loss: 545.3816 | Critic Loss: 7802.8119
+  Trial 48 complete: 8341.04
+
+  Trial 48 saved to hpo/dqn_hpo_48.pth
+[32m[I 2025-11-24 22:29:08,884][0m Trial 48 finished with value: 8341.040404154459 and parameters: {'lr': 0.003, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.998}. Best is trial 34 with value: 9096.88092685897.[0m
+
+Trial 49:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.998
+  Ep 25/100 | Reward: 8641.53 | Actor Loss: 12862.3624 | Critic Loss: 3130271.0362
+  Ep 50/100 | Reward: 8750.82 | Actor Loss: 9253.8057 | Critic Loss: 7164630.8475
+  Ep 75/100 | Reward: 9399.93 | Actor Loss: -27007.8051 | Critic Loss: 28833081.0400
+  Ep 100/100 | Reward: 9233.28 | Actor Loss: -30388.2623 | Critic Loss: 22439085.5000
+  Trial 49 complete: 9126.81
+
+  Trial 49 saved to hpo/dqn_hpo_49.pth
+[32m[I 2025-11-24 22:29:21,840][0m Trial 49 finished with value: 9126.813610770147 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.998}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 50:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.995
+  Ep 25/100 | Reward: 8369.70 | Actor Loss: 7860.6483 | Critic Loss: 1645044.3119
+  Ep 50/100 | Reward: 8176.49 | Actor Loss: 8791.3428 | Critic Loss: 1353955.0034
+  Ep 75/100 | Reward: 8322.77 | Actor Loss: 7341.3424 | Critic Loss: 728197.3206
+  Ep 100/100 | Reward: 8051.82 | Actor Loss: 7116.8320 | Critic Loss: 835728.6916
+  Trial 50 complete: 7923.62
+
+  Trial 50 saved to hpo/dqn_hpo_50.pth
+[32m[I 2025-11-24 22:29:34,652][0m Trial 50 finished with value: 7923.619779666534 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.995}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 51:
+  lr=0.001000, batch_size=128, tau=0.001000, noise_std=0.15, noise_decay=0.998
+  Ep 25/100 | Reward: 8490.16 | Actor Loss: 16783.6890 | Critic Loss: 6985889.5425
+  Ep 50/100 | Reward: 8306.35 | Actor Loss: 17006.1310 | Critic Loss: 6442631.2575
+  Ep 75/100 | Reward: 8441.52 | Actor Loss: 17008.1285 | Critic Loss: 5160234.1525
+  Ep 100/100 | Reward: 8229.65 | Actor Loss: 17084.3458 | Critic Loss: 7674064.9750
+  Trial 51 complete: 8032.34
+
+  Trial 51 saved to hpo/dqn_hpo_51.pth
+[32m[I 2025-11-24 22:29:46,855][0m Trial 51 finished with value: 8032.343940200977 and parameters: {'lr': 0.001, 'batch_size': 128, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.998}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 52:
+  lr=0.000100, batch_size=256, tau=0.010000, noise_std=0.15, noise_decay=0.999
+  Ep 25/100 | Reward: 7454.74 | Actor Loss: 4499.9178 | Critic Loss: 213304.6384
+  Ep 50/100 | Reward: 7350.55 | Actor Loss: 4280.9202 | Critic Loss: 218849.5647
+  Ep 75/100 | Reward: 7465.46 | Actor Loss: 4078.1255 | Critic Loss: 158846.6852
+  Ep 100/100 | Reward: 7309.49 | Actor Loss: 3968.9657 | Critic Loss: 134209.7917
+  Trial 52 complete: 7255.41
+
+  Trial 52 saved to hpo/dqn_hpo_52.pth
+[32m[I 2025-11-24 22:29:59,724][0m Trial 52 finished with value: 7255.40630590898 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.01, 'noise_std': 0.15, 'noise_decay': 0.999}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 53:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.998
+  Ep 25/100 | Reward: 8616.81 | Actor Loss: -6239.4092 | Critic Loss: 935124.2731
+  Ep 50/100 | Reward: 8660.86 | Actor Loss: -2718.7021 | Critic Loss: 1070781.4950
+  Ep 75/100 | Reward: 8835.63 | Actor Loss: -2343.8310 | Critic Loss: 1019775.1525
+  Ep 100/100 | Reward: 8598.15 | Actor Loss: -2276.5238 | Critic Loss: 966615.0875
+  Trial 53 complete: 8399.21
+
+  Trial 53 saved to hpo/dqn_hpo_53.pth
+[32m[I 2025-11-24 22:30:13,061][0m Trial 53 finished with value: 8399.213339662982 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.998}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 54:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.998
+  Ep 25/100 | Reward: 8085.57 | Actor Loss: 3411.7447 | Critic Loss: 218944.5006
+  Ep 50/100 | Reward: 9059.54 | Actor Loss: 2139.1255 | Critic Loss: 142538.8752
+  Ep 75/100 | Reward: 9275.87 | Actor Loss: 1930.4945 | Critic Loss: 90427.2644
+  Ep 100/100 | Reward: 8695.70 | Actor Loss: 2187.8011 | Critic Loss: 60204.5411
+  Trial 54 complete: 8109.81
+
+  Trial 54 saved to hpo/dqn_hpo_54.pth
+[32m[I 2025-11-24 22:30:26,526][0m Trial 54 finished with value: 8109.806196252497 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.998}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 55:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.998
+  Ep 25/100 | Reward: 9201.73 | Actor Loss: -4480.9105 | Critic Loss: 487664.7525
+  Ep 50/100 | Reward: 9019.52 | Actor Loss: -4432.7905 | Critic Loss: 493609.2400
+  Ep 75/100 | Reward: 9153.24 | Actor Loss: -4475.2903 | Critic Loss: 428567.5463
+  Ep 100/100 | Reward: 8928.45 | Actor Loss: -4453.3953 | Critic Loss: 426925.6031
+  Trial 55 complete: 8799.95
+
+  Trial 55 saved to hpo/dqn_hpo_55.pth
+[32m[I 2025-11-24 22:30:39,869][0m Trial 55 finished with value: 8799.952372261458 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.998}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 56:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.998
+  Ep 25/100 | Reward: 7175.18 | Actor Loss: -3202.2196 | Critic Loss: 89755.1377
+  Ep 50/100 | Reward: 7028.52 | Actor Loss: -3089.2574 | Critic Loss: 101040.9237
+  Ep 75/100 | Reward: 7177.40 | Actor Loss: -3182.8524 | Critic Loss: 100698.7937
+  Ep 100/100 | Reward: 6946.57 | Actor Loss: -3232.0963 | Critic Loss: 83253.9748
+  Trial 56 complete: 6808.56
+
+  Trial 56 saved to hpo/dqn_hpo_56.pth
+[32m[I 2025-11-24 22:30:52,688][0m Trial 56 finished with value: 6808.564364377495 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.998}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 57:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.990
+  Ep 25/100 | Reward: 7172.90 | Actor Loss: 719.4781 | Critic Loss: 9761.1992
+  Ep 50/100 | Reward: 6919.75 | Actor Loss: 747.8025 | Critic Loss: 5765.4617
+  Ep 75/100 | Reward: 6969.29 | Actor Loss: 864.0356 | Critic Loss: 12626.9387
+  Ep 100/100 | Reward: 6680.25 | Actor Loss: 967.8369 | Critic Loss: 21828.1309
+  Trial 57 complete: 6516.79
+
+  Trial 57 saved to hpo/dqn_hpo_57.pth
+[32m[I 2025-11-24 22:31:05,568][0m Trial 57 finished with value: 6516.791185668941 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.99}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 58:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.15, noise_decay=0.995
+  Ep 25/100 | Reward: 7194.16 | Actor Loss: -4451.8249 | Critic Loss: 161583.8659
+  Ep 50/100 | Reward: 6971.59 | Actor Loss: -4411.7528 | Critic Loss: 338954.9968
+  Ep 75/100 | Reward: 7079.01 | Actor Loss: -4428.5326 | Critic Loss: 178903.5593
+  Ep 100/100 | Reward: 6884.40 | Actor Loss: -4545.8514 | Critic Loss: 195192.1826
+  Trial 58 complete: 6725.48
+
+  Trial 58 saved to hpo/dqn_hpo_58.pth
+[32m[I 2025-11-24 22:31:18,347][0m Trial 58 finished with value: 6725.481568719803 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.15, 'noise_decay': 0.995}. Best is trial 49 with value: 9126.813610770147.[0m
+
+Trial 59:
+  lr=0.000100, batch_size=256, tau=0.001000, noise_std=0.05, noise_decay=0.998
+  Ep 25/100 | Reward: 7031.34 | Actor Loss: -14855.3406 | Critic Loss: 2389757.9409
+  Ep 50/100 | Reward: 6654.11 | Actor Loss: -14549.1060 | Critic Loss: 2470937.8055
+  Ep 75/100 | Reward: 6810.57 | Actor Loss: -14728.3899 | Critic Loss: 3599307.1197
+  Ep 100/100 | Reward: 6613.62 | Actor Loss: -14518.0570 | Critic Loss: 2688744.2380
+  Trial 59 complete: 6459.52
+
+  Trial 59 saved to hpo/dqn_hpo_59.pth
+[32m[I 2025-11-24 22:31:31,338][0m Trial 59 finished with value: 6459.51847696171 and parameters: {'lr': 0.0001, 'batch_size': 256, 'tau': 0.001, 'noise_std': 0.05, 'noise_decay': 0.998}. Best is trial 49 with value: 9126.813610770147.[0m
+
+============================================================
+OPTIMIZATION COMPLETE
+============================================================
+Best trial: 49
+Best value: 9126.81
+
+Best hyperparameters:
+  lr: 0.0001
+  batch_size: 256
+  tau: 0.001
+  noise_std: 0.15
+  noise_decay: 0.998
+
+Best parameters saved to models/dqn_best_params.json
