@@ -925,54 +925,83 @@
 
             <!-- Slide 13: Future Work -->
             <div class="slide" id="slide-12">
-                <h1 class="text-4xl font-bold text-gray-800 mb-6">The Path Forward</h1>
+                <h1 class="text-4xl font-bold text-gray-800 mb-4">The Path Forward</h1>
                 
-                <div class="space-y-5">
-                    <div class="bg-gradient-to-r from-blue-50 to-purple-50 p-5 rounded-lg">
-                        <h3 class="text-2xl font-bold text-center mb-4 text-blue-700">Future Directions</h3>
-                    </div>
-                    
-                    <div class="grid grid-cols-2 gap-5">
-                        <div class="bg-blue-50 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold mb-3 text-blue-700">1. Age-Aware Rewards</h3>
-                            <p class="text-sm text-gray-700 mb-2">Explicitly penalize age-inappropriate risk</p>
-                            <div class="bg-white p-3 rounded text-xs font-mono">
+                <div class="space-y-3">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-blue-50 p-3 rounded-lg border-l-4 border-blue-500">
+                            <h3 class="text-base font-bold mb-2 text-blue-700">1. Age-Aware Reward Functions</h3>
+                            <p class="text-xs text-gray-700 mb-2">Explicitly penalize age-inappropriate risk in reward calculation:</p>
+                            <div class="bg-white p-2 rounded text-[10px] font-mono mb-2">
                                 penalty = max(0, stock_pct - (100 - age))
                             </div>
-                            <p class="text-xs text-gray-600 mt-2">Force de-risking with age</p>
+                            <ul class="text-xs text-gray-700 space-y-1">
+                                <li>• Force gradual de-risking over lifecycle</li>
+                                <li>• Prevent 70% stocks at age 55</li>
+                                <li>• Align with financial advisor best practices</li>
+                            </ul>
                         </div>
                         
-                        <div class="bg-green-50 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold mb-3 text-green-700">2. Constrained RL</h3>
-                            <p class="text-sm text-gray-700 mb-2">Hard limits on allocation</p>
-                            <div class="bg-white p-3 rounded text-xs">
+                        <div class="bg-green-50 p-3 rounded-lg border-l-4 border-green-500">
+                            <h3 class="text-base font-bold mb-2 text-green-700">2. Constrained RL (Safe RL)</h3>
+                            <p class="text-xs text-gray-700 mb-2">Hard constraints on action space to guarantee safety:</p>
+                            <div class="bg-white p-2 rounded text-[10px] space-y-1 mb-2">
                                 <p>• stocks ≤ (100 - age)%</p>
-                                <p>• emergency_fund ≥ 6 months</p>
-                                <p>• cc_debt payment ≥ min_payment</p>
+                                <p>• emergency_fund ≥ 6 months expenses</p>
+                                <p>• debt_payment ≥ minimum required</p>
+                                <p>• total_allocation ≤ 100%</p>
                             </div>
+                            <p class="text-xs text-gray-700">Prevents catastrophic failures in deployment</p>
                         </div>
                         
-                        <div class="bg-purple-50 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold mb-3 text-purple-700">3. Multi-Objective RL</h3>
-                            <p class="text-sm text-gray-700">Optimize Pareto frontier of wealth, safety, and adaptability</p>
-                            <p class="text-xs text-gray-600 mt-2">Find policies that balance competing objectives optimally</p>
+                        <div class="bg-purple-50 p-3 rounded-lg border-l-4 border-purple-500">
+                            <h3 class="text-base font-bold mb-2 text-purple-700">3. Multi-Objective Optimization</h3>
+                            <p class="text-xs text-gray-700 mb-2">Optimize multiple competing objectives simultaneously:</p>
+                            <ul class="text-xs text-gray-700 space-y-1 mb-2">
+                                <li>• <strong>Wealth:</strong> Maximize final net worth</li>
+                                <li>• <strong>Safety:</strong> Minimize max drawdown</li>
+                                <li>• <strong>Adaptability:</strong> Maximize action diversity</li>
+                                <li>• <strong>Stability:</strong> Minimize volatility</li>
+                            </ul>
+                            <p class="text-xs text-gray-700">Find Pareto-optimal policies, let users choose risk tolerance</p>
                         </div>
                         
-                        <div class="bg-yellow-50 p-4 rounded-lg">
-                            <h3 class="text-lg font-bold mb-3 text-yellow-700">4. Alternative Algorithms</h3>
-                            <p class="text-sm text-gray-700">Compare PPO, SAC, TD3</p>
-                            <p class="text-xs text-gray-600 mt-2">Policy gradient methods may learn smoother, more stable policies</p>
+                        <div class="bg-yellow-50 p-3 rounded-lg border-l-4 border-yellow-500">
+                            <h3 class="text-base font-bold mb-2 text-yellow-700">4. Alternative RL Algorithms</h3>
+                            <p class="text-xs text-gray-700 mb-2">Compare continuous control methods:</p>
+                            <ul class="text-xs text-gray-700 space-y-1 mb-2">
+                                <li>• <strong>PPO:</strong> Stable policy gradients</li>
+                                <li>• <strong>SAC:</strong> Maximum entropy RL (exploration)</li>
+                                <li>• <strong>TD3:</strong> Twin delayed DDPG (robustness)</li>
+                            </ul>
+                            <p class="text-xs text-gray-700">May learn smoother, more generalizable policies than DQN</p>
                         </div>
-                    </div>
-                    
-                    <div class="bg-gray-800 text-white p-5 rounded-lg">
-                        <h3 class="text-xl font-bold mb-3">Conclusion</h3>
-                        <p class="text-base">
-                            RL can learn competitive financial strategies, but naive reward functions produce reckless behavior. 
-                            Success requires careful reward engineering, multi-dimensional evaluation, and behavioral analysis. 
-                            Our work demonstrates both the <span class="text-green-400 font-bold">promise</span> and 
-                            <span class="text-red-400 font-bold">pitfalls</span> of RL in personal finance.
-                        </p>
+                        
+                        <div class="bg-red-50 p-3 rounded-lg border-l-4 border-red-500">
+                            <h3 class="text-base font-bold mb-2 text-red-700">5. Real-World Deployment</h3>
+                            <p class="text-xs text-gray-700 mb-2">Bridge simulation-to-reality gap:</p>
+                            <ul class="text-xs text-gray-700 space-y-1 mb-2">
+                                <li>• Transaction costs (0.1-0.5% per trade)</li>
+                                <li>• Tax implications (capital gains, dividends)</li>
+                                <li>• Rebalancing frequency constraints</li>
+                                <li>• Human-in-the-loop validation</li>
+                            </ul>
+                            <p class="text-xs text-gray-700">Add real-world frictions to simulation</p>
+                        </div>
+
+                        <div class="bg-gray-800 text-white p-3 rounded-lg border-l-4 border-gray-600">
+                            <h3 class="text-base font-bold mb-2">Conclusion</h3>
+                            <p class="text-xs mb-2">
+                                RL can learn competitive financial strategies, but naive reward functions produce reckless behavior.
+                            </p>
+                            <p class="text-xs">
+                                Success requires careful reward engineering, multi-dimensional evaluation, and behavioral analysis.
+                            </p>
+                            <p class="text-xs mt-2">
+                                Our work demonstrates both the <span class="text-green-400 font-bold">promise</span> and 
+                                <span class="text-red-400 font-bold">pitfalls</span> of RL in personal finance.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
