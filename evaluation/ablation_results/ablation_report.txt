@@ -8,113 +8,113 @@ Agent: DQN_SHARPE30
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $1,924,960 ± $100,255
-  Without Volatility: $2,689,865 ± $242,310
-  Impact: -28.4%
+  With Volatility:    $1,925,617 ± $114,588
+  Without Volatility: $2,697,904 ± $236,170
+  Impact: -28.6%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.268
+  Sharpe Ratio:   0.026
   Max Drawdown:   10.9%
-  Volatility:     152.1%
+  Volatility:     230.9%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.302
-  Max Drawdown:   10.6%
-  Volatility:     792.8%
+  Sharpe Ratio:   0.085
+  Max Drawdown:   9.2%
+  Volatility:     1490.9%
 
 ============================================================
 Agent: DQN_SHARPE60
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $2,219,506 ± $93,735
-  Without Volatility: $3,339,185 ± $226,212
-  Impact: -33.5%
+  With Volatility:    $2,223,109 ± $102,875
+  Without Volatility: $3,385,352 ± $258,045
+  Impact: -34.3%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.250
+  Sharpe Ratio:   0.059
   Max Drawdown:   12.6%
-  Volatility:     741.5%
+  Volatility:     1396.6%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.333
-  Max Drawdown:   9.7%
-  Volatility:     900.1%
+  Sharpe Ratio:   0.146
+  Max Drawdown:   8.3%
+  Volatility:     1694.1%
 
 ============================================================
 Agent: DQN_SHARPE80
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $1,471,344 ± $149,674
-  Without Volatility: $2,370,355 ± $263,971
-  Impact: -37.9%
+  With Volatility:    $1,506,808 ± $159,685
+  Without Volatility: $2,422,934 ± $305,449
+  Impact: -37.8%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.277
-  Max Drawdown:   9.7%
-  Volatility:     526.7%
+  Sharpe Ratio:   0.075
+  Max Drawdown:   10.0%
+  Volatility:     982.0%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.240
-  Max Drawdown:   10.5%
-  Volatility:     1186.4%
+  Sharpe Ratio:   0.062
+  Max Drawdown:   9.2%
+  Volatility:     2130.4%
 
 ============================================================
 Agent: 60_40
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $1,995,311 ± $41,204
-  Without Volatility: $3,212,545 ± $218,019
-  Impact: -37.9%
+  With Volatility:    $2,010,912 ± $45,350
+  Without Volatility: $3,292,159 ± $237,936
+  Impact: -38.9%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.297
-  Max Drawdown:   12.9%
-  Volatility:     656.3%
+  Sharpe Ratio:   0.083
+  Max Drawdown:   13.0%
+  Volatility:     1250.8%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.340
-  Max Drawdown:   10.2%
-  Volatility:     240.1%
+  Sharpe Ratio:   0.160
+  Max Drawdown:   8.9%
+  Volatility:     400.9%
 
 ============================================================
 Agent: AGE_BASED
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $2,133,631 ± $46,575
-  Without Volatility: $3,622,773 ± $287,415
-  Impact: -41.1%
+  With Volatility:    $2,151,266 ± $51,576
+  Without Volatility: $3,725,009 ± $311,345
+  Impact: -42.2%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.245
-  Max Drawdown:   32.2%
-  Volatility:     457.7%
+  Sharpe Ratio:   0.063
+  Max Drawdown:   14.4%
+  Volatility:     807.9%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.344
-  Max Drawdown:   9.7%
-  Volatility:     263.8%
+  Sharpe Ratio:   0.163
+  Max Drawdown:   8.4%
+  Volatility:     449.2%
 
 ============================================================
 Agent: MARKOWITZ
 ============================================================
 
 Final Net Worth:
-  With Volatility:    $2,039,918 ± $40,646
-  Without Volatility: $3,086,528 ± $204,265
-  Impact: -33.9%
+  With Volatility:    $2,055,301 ± $44,690
+  Without Volatility: $3,161,601 ± $223,271
+  Impact: -35.0%
 
 Financial Metrics (With Volatility):
-  Sharpe Ratio:   0.290
+  Sharpe Ratio:   0.086
   Max Drawdown:   11.8%
-  Volatility:     3909.5%
+  Volatility:     7719.4%
 
 Financial Metrics (Without Volatility):
-  Sharpe Ratio:   0.339
-  Max Drawdown:   10.2%
-  Volatility:     235.2%
+  Sharpe Ratio:   0.159
+  Max Drawdown:   8.9%
+  Volatility:     390.3%
 
 ================================================================================
