@@ -119,51 +119,114 @@
                 </div>
             </div>
 
-            <!-- Slide 3: Human Baselines with Visualizations -->
+           <!-- Slide 3: Human Baselines -->
             <div class="slide" id="slide-3">
-                <h1 class="text-3xl font-bold text-gray-800 mb-4">Human Baseline Strategies</h1>
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">What Are We Competing Against?</h1>
+                <h2 class="text-2xl text-gray-600 mb-4">Human Baseline Strategies</h2>
                 
-                <!-- Performance Chart -->
-                <div class="mb-4">
-                    <img src="performance_with_error_bars.png" alt="Agent Performance Comparison" class="rounded-lg shadow-lg">
-                    <p class="text-center text-sm text-gray-600 mt-2">Performance across 5 seeds (Mean ± Std Dev)</p>
-                </div>
-
-                <!-- Strategy Descriptions -->
-                <div class="grid grid-cols-5 gap-2 text-[10px]">
-                    <div class="bg-blue-50 p-2 rounded">
-                        <h3 class="font-bold text-blue-700">Age-Based</h3>
-                        <p class="font-semibold">$2.08M</p>
-                        <p class="text-gray-600">(100-age)% stocks</p>
-                        <p class="text-gray-600">Auto de-risks</p>
+                <div class="space-y-4">
+                    <!-- Embedded Plotly Charts - Two Columns -->
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="bg-white rounded-lg shadow-lg p-2">
+                            <p class="text-sm font-bold text-center mb-2">Net Worth Trajectories (30 Years)</p>
+                            <iframe src="human_only_net_worth_trajectories.html" width="100%" height="450" frameborder="0"></iframe>
+                        </div>
+                        <div class="bg-white rounded-lg shadow-lg p-2">
+                            <p class="text-sm font-bold text-center mb-2">Portfolio Composition at Milestones</p>
+                            <iframe src="human_only_portfolio_snapshots.html" width="100%" height="450" frameborder="0"></iframe>
+                        </div>
                     </div>
                     
-                    <div class="bg-green-50 p-2 rounded">
-                        <h3 class="font-bold text-green-700">Markowitz</h3>
-                        <p class="font-semibold">$2.01M</p>
-                        <p class="text-gray-600">MPT optimization</p>
-                        <p class="text-gray-600">Market adaptive</p>
+                    <!-- Strategy Descriptions - 5 Columns -->
+                    <div class="grid grid-cols-5 gap-3 text-xs">
+                        <div class="bg-blue-50 p-3 rounded-lg">
+                            <h3 class="text-sm font-bold mb-1 text-blue-700">Age-Based</h3>
+                            <p class="font-semibold mb-2">$2.08M</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• (100-age)% stocks</li>
+                                    <li>• Age 25: 70/15/15</li>
+                                    <li>• → 70/20/10 stocks</li>
+                                </ul>
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• Age 55: 50/20/30</li>
+                                    <li>• → 40/50/10 stocks</li>
+                                    <li>• Auto de-risks</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-green-50 p-3 rounded-lg">
+                            <h3 class="text-sm font-bold mb-1 text-green-700">Markowitz</h3>
+                            <p class="font-semibold mb-2">$2.01M</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• MPT optimization</li>
+                                    <li>• Bull: 70/15/15</li>
+                                    <li>• → 70/20/10 stocks</li>
+                                </ul>
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• Bear: 50/20/30</li>
+                                    <li>• → 30/60/10 stocks</li>
+                                    <li>• Market adaptive</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-red-50 p-3 rounded-lg">
+                            <h3 class="text-sm font-bold mb-1 text-red-700">Equal Weight</h3>
+                            <p class="font-semibold mb-2">$2.03M</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• Money: 60/20/20</li>
+                                    <li>• Invest: 33/33/33</li>
+                                    <li>• Max diversification</li>
+                                </ul>
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• No market timing</li>
+                                    <li>• Static allocation</li>
+                                    <li>• Risk spreading</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-yellow-50 p-3 rounded-lg">
+                            <h3 class="text-sm font-bold mb-1 text-yellow-700">60/40 Rule</h3>
+                            <p class="font-semibold mb-2">$1.95M</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• Money: 60/20/20</li>
+                                    <li>• Invest: 60/40/0</li>
+                                    <li>• Classic balanced</li>
+                                </ul>
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• Institutional std</li>
+                                    <li>• No rebalancing</li>
+                                    <li>• Simple & effective</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="bg-purple-50 p-3 rounded-lg">
+                            <h3 class="text-sm font-bold mb-1 text-purple-700">Debt Avalanche</h3>
+                            <p class="font-semibold mb-2">$1.16M</p>
+                            <div class="grid grid-cols-2 gap-2">
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• Money: 30/50/20</li>
+                                    <li>• Invest: 40/50/10</li>
+                                    <li>• Highest APR first</li>
+                                </ul>
+                                <ul class="space-y-0.5 text-gray-600">
+                                    <li>• Debt-free year 5</li>
+                                    <li>• Conservative mix</li>
+                                    <li>• Misses 25yr growth</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                     
-                    <div class="bg-yellow-50 p-2 rounded">
-                        <h3 class="font-bold text-yellow-700">Equal Weight</h3>
-                        <p class="font-semibold">$2.03M</p>
-                        <p class="text-gray-600">33/33/33 mix</p>
-                        <p class="text-gray-600">Max diversification</p>
-                    </div>
-                    
-                    <div class="bg-red-50 p-2 rounded">
-                        <h3 class="font-bold text-red-700">60/40 Rule</h3>
-                        <p class="font-semibold">$1.95M</p>
-                        <p class="text-gray-600">60% stocks, 40% bonds</p>
-                        <p class="text-gray-600">Static allocation</p>
-                    </div>
-                    
-                    <div class="bg-purple-50 p-2 rounded">
-                        <h3 class="font-bold text-purple-700">Debt Avalanche</h3>
-                        <p class="font-semibold">$1.16M</p>
-                        <p class="text-gray-600">Max debt focus</p>
-                        <p class="text-gray-600">Misses growth</p>
+                    <div class="bg-gray-800 text-white p-3 rounded-lg text-center">
+                        <p class="text-lg font-bold">Goal: Can RL learn strategies that match or beat these?</p>
                     </div>
                 </div>
             </div>
