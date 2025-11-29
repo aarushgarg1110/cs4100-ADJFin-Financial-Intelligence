@@ -1,5 +1,5 @@
 """
-Ablation Study Script for ADJFin
+Ablation Study Script for ADJFin 
 Tests impact of market volatility on RL performance
 Tests DQN models with different Sharpe ratios + human baselines
 """
@@ -228,7 +228,9 @@ class AblationStudy:
         return results
     
     def plot_ablation_results(self):
-        """Visualize ablation study results"""
+        """Visualize ablation study results using Plotly"""
+        import plotly.graph_objects as go
+        from plotly.subplots import make_subplots
         
         # Prepare data
         agents = []
@@ -255,60 +257,90 @@ class AblationStudy:
             else:
                 colors.append('#A23B72')
         
-        # Create figure
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 6))
+        # Create subplots
+        fig = make_subplots(
+            rows=1, cols=2,
+            subplot_titles=['Performance: Normal vs Stable Markets', 'Impact of Market Volatility'],
+            horizontal_spacing=0.12
+        )
         
-        # Plot 1: Absolute performance
-        x = np.arange(len(agents))
-        width = 0.35
+        # Plot 1: Absolute performance (grouped bars)
+        fig.add_trace(
+            go.Bar(
+                name='With Volatility',
+                x=agents,
+                y=normal_means,
+                marker=dict(color='#2E86AB', line=dict(color='black', width=1)),
+                hovertemplate='<b>%{x}</b><br>With Volatility: $%{y:,.0f}<extra></extra>'
+            ),
+            row=1, col=1
+        )
         
-        ax1.bar(x - width/2, normal_means, width, 
-               label='With Volatility', color='#2E86AB', alpha=0.7)
-        ax1.bar(x + width/2, stable_means, width,
-               label='Without Volatility', color='#A23B72', alpha=0.7)
+        fig.add_trace(
+            go.Bar(
+                name='Without Volatility',
+                x=agents,
+                y=stable_means,
+                marker=dict(color='#A23B72', line=dict(color='black', width=1)),
+                hovertemplate='<b>%{x}</b><br>Without Volatility: $%{y:,.0f}<extra></extra>'
+            ),
+            row=1, col=1
+        )
         
-        ax1.set_xlabel('Agent', fontsize=12, fontweight='bold')
-        ax1.set_ylabel('Final Net Worth ($)', fontsize=12, fontweight='bold')
-        ax1.set_title('Performance: Normal vs Stable Markets', 
-                     fontsize=14, fontweight='bold')
-        ax1.set_xticks(x)
-        ax1.set_xticklabels(agents, rotation=45, ha='right')
-        ax1.legend()
-        ax1.grid(axis='y', alpha=0.3)
-        ax1.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x/1e6:.1f}M'))
-        
-        # Plot 2: Relative improvement
+        # Plot 2: Relative improvement (horizontal bars)
         bar_colors = ['#2E86AB' if imp > 0 else '#C73E1D' for imp in improvements]
-        ax2.barh(agents, improvements, color=bar_colors, alpha=0.7, edgecolor='black')
         
-        ax2.set_xlabel('Performance Change (%)', fontsize=12, fontweight='bold')
-        ax2.set_ylabel('Agent', fontsize=12, fontweight='bold')
-        ax2.set_title('Impact of Market Volatility', fontsize=14, fontweight='bold')
-        ax2.axvline(x=0, color='black', linestyle='--', linewidth=1)
-        ax2.grid(axis='x', alpha=0.3)
+        fig.add_trace(
+            go.Bar(
+                y=agents,
+                x=improvements,
+                orientation='h',
+                marker=dict(color=bar_colors, line=dict(color='black', width=1)),
+                text=[f'{imp:+.1f}%' for imp in improvements],
+                textposition='outside',
+                hovertemplate='<b>%{y}</b><br>Impact: %{x:+.1f}%<extra></extra>',
+                showlegend=False
+            ),
+            row=1, col=2
+        )
         
-        # Add value labels
-        for i, (val) in enumerate(improvements):
-            ax2.text(val + (1 if val > 0 else -1), i, f'{val:+.1f}%', 
-                    va='center', ha='left' if val > 0 else 'right',
-                    fontweight='bold')
+        # Add vertical line at x=0 for second plot
+        fig.add_vline(x=0, line=dict(color='black', dash='dash', width=1), row=1, col=2)
         
-        plt.tight_layout()
-        plt.savefig(self.output_dir / "ablation_comparison.png", dpi=300)
-        print("\nAblation comparison plot saved!")
-        plt.close()
+        # Update axes
+        fig.update_xaxes(title_text='Agent', row=1, col=1, tickangle=-45)
+        fig.update_yaxes(title_text='Final Net Worth ($)', tickformat='$,.0f', row=1, col=1)
+        fig.update_xaxes(title_text='Performance Change (%)', row=1, col=2)
+        fig.update_yaxes(title_text='Agent', row=1, col=2)
+        
+        fig.update_layout(
+            height=600,
+            width=1600,
+            template='plotly_white',
+            font=dict(size=12),
+            showlegend=True,
+            legend=dict(x=0.25, y=1.1, orientation='h')
+        )
+        
+        output_file = self.output_dir / "ablation_comparison.html"
+        fig.write_html(str(output_file))
+        print(f"\nAblation comparison plot saved: {output_file}")
     
     def plot_financial_metrics(self):
-        """Plot financial performance metrics"""
+        """Plot financial performance metrics using Plotly"""
+        import plotly.graph_objects as go
+        from plotly.subplots import make_subplots
         
         metrics_to_plot = ['sharpe_ratio', 'max_drawdown', 'volatility']
         metric_names = ['Sharpe Ratio', 'Max Drawdown', 'Volatility']
         
-        fig, axes = plt.subplots(1, 3, figsize=(18, 5))
+        fig = make_subplots(
+            rows=1, cols=3,
+            subplot_titles=metric_names,
+            horizontal_spacing=0.1
+        )
         
         for idx, (metric, name) in enumerate(zip(metrics_to_plot, metric_names)):
-            ax = axes[idx]
-            
             agents = []
             normal_vals = []
             stable_vals = []
@@ -321,30 +353,53 @@ class AblationStudy:
                 normal_vals.append(np.mean([r[metric] for r in normal_results]))
                 stable_vals.append(np.mean([r[metric] for r in stable_results]))
             
-            x = np.arange(len(agents))
-            width = 0.35
+            # Add grouped bars
+            fig.add_trace(
+                go.Bar(
+                    name='With Volatility',
+                    x=agents,
+                    y=normal_vals,
+                    marker=dict(color='#2E86AB', line=dict(color='black', width=1)),
+                    showlegend=(idx == 0),
+                    legendgroup='normal',
+                    hovertemplate='<b>%{x}</b><br>With Volatility: %{y:.3f}<extra></extra>'
+                ),
+                row=1, col=idx+1
+            )
             
-            ax.bar(x - width/2, normal_vals, width, 
-                  label='With Volatility', color='#2E86AB', alpha=0.7)
-            ax.bar(x + width/2, stable_vals, width,
-                  label='Without Volatility', color='#A23B72', alpha=0.7)
+            fig.add_trace(
+                go.Bar(
+                    name='Without Volatility',
+                    x=agents,
+                    y=stable_vals,
+                    marker=dict(color='#A23B72', line=dict(color='black', width=1)),
+                    showlegend=(idx == 0),
+                    legendgroup='stable',
+                    hovertemplate='<b>%{x}</b><br>Without Volatility: %{y:.3f}<extra></extra>'
+                ),
+                row=1, col=idx+1
+            )
             
-            ax.set_xlabel('Agent', fontsize=11, fontweight='bold')
-            ax.set_ylabel(name, fontsize=11, fontweight='bold')
-            ax.set_title(name, fontsize=13, fontweight='bold')
-            ax.set_xticks(x)
-            ax.set_xticklabels(agents, rotation=45, ha='right')
-            ax.legend()
-            ax.grid(axis='y', alpha=0.3)
+            fig.update_xaxes(title_text='Agent', row=1, col=idx+1, tickangle=-45)
+            fig.update_yaxes(title_text=name, row=1, col=idx+1)
             
-            # Format specific metrics
+            # Format drawdown and volatility as percentages
             if 'drawdown' in metric or 'volatility' in metric:
-                ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'{x:.1%}'))
+                fig.update_yaxes(tickformat='.1%', row=1, col=idx+1)
         
-        plt.tight_layout()
-        plt.savefig(self.output_dir / "financial_metrics.png", dpi=300)
-        print("Financial metrics plot saved!")
-        plt.close()
+        fig.update_layout(
+            height=600,
+            width=1800,
+            template='plotly_white',
+            font=dict(size=11),
+            title_text='Financial Metrics: With vs Without Market Volatility',
+            showlegend=True,
+            legend=dict(x=0.4, y=1.15, orientation='h')
+        )
+        
+        output_file = self.output_dir / "financial_metrics.html"
+        fig.write_html(str(output_file))
+        print(f"Financial metrics plot saved: {output_file}")
     
     def generate_ablation_report(self):
         """Generate comprehensive ablation study report"""

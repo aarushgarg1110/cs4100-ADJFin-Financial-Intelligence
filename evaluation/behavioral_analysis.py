@@ -1,5 +1,5 @@
 """
-Behavioral Analysis Script for ADJFin
+Behavioral Analysis Script for ADJFin 
 Analyzes agent decision-making patterns across market regimes
 Tracks which of the 90 discrete strategies agents prefer
 """
@@ -193,20 +193,31 @@ class BehavioralAnalyzer:
         return avg_debt_pct  # Higher = more focus on debt
     
     def plot_action_frequency_heatmap(self):
-        """Plot heatmap of action usage (10 money × 9 investment grid)"""
+        """Plot heatmap of action usage (10 money × 9 investment grid) using Plotly"""
+        import plotly.graph_objects as go
+        from plotly.subplots import make_subplots
+        
         agents_to_plot = list(self.behavioral_data.keys())
         
         if not agents_to_plot:
             print("No agents with behavioral data")
             return
         
-        fig, axes = plt.subplots(len(agents_to_plot), 1, figsize=(14, 4*len(agents_to_plot)))
-        if len(agents_to_plot) == 1:
-            axes = [axes]
+        # Calculate appropriate vertical spacing
+        n_agents = len(agents_to_plot)
+        if n_agents > 1:
+            vertical_spacing = min(0.05, 1.0 / (n_agents - 1) * 0.8)
+        else:
+            vertical_spacing = 0.1
+        
+        # Create subplots
+        fig = make_subplots(
+            rows=n_agents, cols=1,
+            subplot_titles=[f'{agent.upper()} Action Usage' for agent in agents_to_plot],
+            vertical_spacing=vertical_spacing
+        )
         
         for idx, agent_name in enumerate(agents_to_plot):
-            ax = axes[idx]
-            
             # Create 10×9 grid (money allocation × investment allocation)
             grid = np.zeros((len(MONEY_ALLOC), len(INVEST_ALLOC)))
             
@@ -218,31 +229,54 @@ class BehavioralAnalyzer:
                 invest_idx = action_idx % len(INVEST_ALLOC)
                 grid[money_idx, invest_idx] = (count / total_actions) * 100
             
-            # Plot heatmap
-            sns.heatmap(grid, ax=ax, cmap='YlOrRd', annot=True, fmt='.1f',
-                       xticklabels=[desc for _, desc in INVEST_ALLOC],
-                       yticklabels=[desc for _, desc in MONEY_ALLOC],
-                       cbar_kws={'label': 'Usage %'})
-            
-            ax.set_title(f'{agent_name.upper()} Action Usage Heatmap', fontweight='bold')
-            ax.set_xlabel('Investment Allocation')
-            ax.set_ylabel('Money Allocation')
+            # Add heatmap
+            fig.add_trace(
+                go.Heatmap(
+                    z=grid,
+                    x=[desc for _, desc in INVEST_ALLOC],
+                    y=[desc for _, desc in MONEY_ALLOC],
+                    colorscale='YlOrRd',
+                    text=np.round(grid, 1),
+                    texttemplate='%{text:.1f}',
+                    textfont={"size": 10},
+                    colorbar=dict(title='Usage %', x=1.02),
+                    hovertemplate='Money: %{y}<br>Investment: %{x}<br>Usage: %{z:.1f}%<extra></extra>'
+                ),
+                row=idx+1, col=1
+            )
         
-        plt.tight_layout()
-        plt.savefig(self.output_dir / "action_usage_heatmap.png", dpi=300)
-        print("Action usage heatmap saved!")
-        plt.close()
+        fig.update_layout(
+            height=400 * n_agents,
+            width=1400,
+            title_text="Action Usage Heatmaps (10 Money Strategies × 9 Investment Portfolios)",
+            showlegend=False,
+            template='plotly_white'
+        )
+        
+        # Update all x and y axes
+        for i in range(n_agents):
+            fig.update_xaxes(title_text="Investment Allocation", row=i+1, col=1)
+            fig.update_yaxes(title_text="Money Allocation", row=i+1, col=1)
+        
+        output_file = self.output_dir / "action_usage_heatmap.html"
+        fig.write_html(str(output_file))
+        print(f"Action usage heatmap saved: {output_file}")
     
     def plot_regime_preferences(self):
-        """Plot how agents change strategies by market regime"""
+        """Plot how agents change strategies by market regime using Plotly"""
+        import plotly.graph_objects as go
+        from plotly.subplots import make_subplots
+        
         agents_to_plot = list(self.behavioral_data.keys())
         
-        fig, axes = plt.subplots(1, 3, figsize=(18, 6))
+        fig = make_subplots(
+            rows=1, cols=3,
+            subplot_titles=['Normal Market', 'Bull Market', 'Bear Market']
+        )
+        
         regime_names = ['Normal', 'Bull', 'Bear']
         
-        for regime_idx, (regime, regime_name) in enumerate([(0, 'Normal'), (1, 'Bull'), (2, 'Bear')]):
-            ax = axes[regime_idx]
-            
+        for regime_idx, regime in enumerate([0, 1, 2]):
             for agent_name in agents_to_plot:
                 decoded_actions = self.behavioral_data[agent_name]['decoded_actions_by_regime'][regime]
                 
@@ -254,57 +288,94 @@ class BehavioralAnalyzer:
                 avg_bond = np.mean([a['bond_pct'] for a in decoded_actions])
                 avg_re = np.mean([a['re_pct'] for a in decoded_actions])
                 
-                x = [0, 1, 2]
-                values = [avg_stock, avg_bond, avg_re]
-                ax.plot(x, values, marker='o', label=agent_name, linewidth=2)
+                fig.add_trace(
+                    go.Scatter(
+                        x=['Stocks', 'Bonds', 'Real Estate'],
+                        y=[avg_stock, avg_bond, avg_re],
+                        mode='lines+markers',
+                        name=agent_name,
+                        showlegend=(regime_idx == 0),  # Only show legend once
+                        legendgroup=agent_name,
+                        line=dict(width=3),
+                        marker=dict(size=10),
+                        hovertemplate=f'<b>{agent_name}</b><br>%{{x}}: %{{y:.1f}}%<extra></extra>'
+                    ),
+                    row=1, col=regime_idx+1
+                )
             
-            ax.set_xticks(x)
-            ax.set_xticklabels(['Stocks', 'Bonds', 'Real Estate'])
-            ax.set_ylabel('Allocation %', fontsize=11)
-            ax.set_title(f'{regime_name} Market', fontsize=13, fontweight='bold')
-            ax.legend()
-            ax.grid(alpha=0.3)
-            ax.set_ylim([0, 100])
+            fig.update_yaxes(title_text='Allocation %', range=[0, 100], row=1, col=regime_idx+1)
+            fig.update_xaxes(row=1, col=regime_idx+1)
         
-        plt.tight_layout()
-        plt.savefig(self.output_dir / "regime_preferences.png", dpi=300)
-        print("Regime preferences plot saved!")
-        plt.close()
+        fig.update_layout(
+            height=600,
+            width=1800,
+            title_text="Investment Allocation by Market Regime",
+            template='plotly_white',
+            hovermode='closest'
+        )
+        
+        output_file = self.output_dir / "regime_preferences.html"
+        fig.write_html(str(output_file))
+        print(f"Regime preferences plot saved: {output_file}")
     
     def plot_top_actions(self):
-        """Plot most frequently used actions for each agent"""
-        agents_in_data = list(self.behavioral_data.keys())
+        """Plot most frequently used actions for each agent using Plotly"""
+        import plotly.graph_objects as go
+        from plotly.subplots import make_subplots
         
-        fig, axes = plt.subplots(len(agents_in_data), 1, figsize=(14, 4*len(agents_in_data)))
-        if len(agents_in_data) == 1:
-            axes = [axes]
+        agents_in_data = list(self.behavioral_data.keys())
+        n_agents = len(agents_in_data)
+        
+        # Calculate appropriate vertical spacing
+        if n_agents > 1:
+            vertical_spacing = min(0.05, 1.0 / (n_agents - 1) * 0.8)
+        else:
+            vertical_spacing = 0.1
+        
+        fig = make_subplots(
+            rows=n_agents, cols=1,
+            subplot_titles=[f'{agent.upper()} Top 10 Actions' for agent in agents_in_data],
+            vertical_spacing=vertical_spacing
+        )
         
         for idx, agent_name in enumerate(agents_in_data):
-            ax = axes[idx]
-            
             action_counts = self.behavioral_data[agent_name]['action_counts']
             
             # Get top 10 actions
             top_actions = sorted(action_counts.items(), key=lambda x: x[1], reverse=True)[:10]
             
-            action_labels = [f"Action {a}\n{ACTION_DESCRIPTIONS[a][:30]}..." for a, _ in top_actions]
+            action_labels = [f"Action {a}: {ACTION_DESCRIPTIONS[a][:40]}" for a, _ in top_actions]
             counts = [c for _, c in top_actions]
             total = sum(action_counts.values())
             percentages = [(c/total)*100 for c in counts]
             
-            ax.barh(action_labels, percentages, color='#2E86AB', alpha=0.7)
-            ax.set_xlabel('Usage %', fontsize=11)
-            ax.set_title(f'{agent_name.upper()} Top 10 Actions', fontsize=13, fontweight='bold')
-            ax.grid(axis='x', alpha=0.3)
+            fig.add_trace(
+                go.Bar(
+                    y=action_labels,
+                    x=percentages,
+                    orientation='h',
+                    marker=dict(color='#2E86AB', line=dict(color='black', width=1)),
+                    text=[f'{p:.1f}%' for p in percentages],
+                    textposition='outside',
+                    hovertemplate='<b>%{y}</b><br>Usage: %{x:.1f}%<extra></extra>',
+                    showlegend=False
+                ),
+                row=idx+1, col=1
+            )
             
-            # Add percentage labels
-            for i, pct in enumerate(percentages):
-                ax.text(pct + 0.5, i, f'{pct:.1f}%', va='center', fontweight='bold')
+            fig.update_xaxes(title_text='Usage %', row=idx+1, col=1, gridcolor='lightgray')
+            fig.update_yaxes(row=idx+1, col=1)
         
-        plt.tight_layout()
-        plt.savefig(self.output_dir / "top_actions.png", dpi=300)
-        print("Top actions plot saved!")
-        plt.close()
+        fig.update_layout(
+            height=350 * n_agents,
+            width=1400,
+            title_text="Top 10 Most Used Actions by Agent",
+            template='plotly_white'
+        )
+        
+        output_file = self.output_dir / "top_actions.html"
+        fig.write_html(str(output_file))
+        print(f"Top actions plot saved: {output_file}")
     
     def generate_behavioral_report(self):
         """Generate comprehensive behavioral analysis report"""

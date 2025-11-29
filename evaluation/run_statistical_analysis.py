@@ -298,7 +298,9 @@ class StatisticalAnalyzer:
         return df
     
     def plot_results_with_error_bars(self):
-        """Create publication-quality plots with error bars"""
+        """Create publication-quality plots with error bars using Plotly"""
+        import plotly.graph_objects as go
+        
         # Prepare data
         agents = []
         means = []
@@ -332,39 +334,80 @@ class StatisticalAnalyzer:
         stds = [stds[i] for i in sorted_indices]
         colors = [colors[i] for i in sorted_indices]
         
-        # Create figure
-        fig, ax = plt.subplots(figsize=(14, 7))
+        # Create Plotly figure
+        fig = go.Figure()
         
-        # Bar plot with error bars
-        bars = ax.bar(range(len(agents)), means, yerr=stds, 
-                      capsize=5, color=colors, alpha=0.7, edgecolor='black')
-        
-        ax.set_xlabel('Agent', fontsize=14, fontweight='bold')
-        ax.set_ylabel('Final Net Worth ($)', fontsize=14, fontweight='bold')
-        ax.set_title('Agent Performance: DQN Sharpe Ratios vs Human Baselines (Mean ± Std, n=5)', 
-                    fontsize=16, fontweight='bold')
-        ax.set_xticks(range(len(agents)))
-        ax.set_xticklabels(agents, rotation=45, ha='right')
-        ax.grid(axis='y', alpha=0.3)
-        
-        # Format y-axis
-        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x/1e6:.1f}M'))
+        fig.add_trace(go.Bar(
+            x=agents,
+            y=means,
+            error_y=dict(
+                type='data',
+                array=stds,
+                visible=True,
+                color='rgba(0,0,0,0.5)',
+                thickness=2,
+                width=8
+            ),
+            marker=dict(
+                color=colors,
+                line=dict(color='black', width=1.5)
+            ),
+            text=[f'${v/1e6:.2f}M' for v in means],
+            textposition='outside',
+            hovertemplate='<b>%{x}</b><br>' +
+                         'Mean: $%{y:,.0f}<br>' +
+                         'Std Dev: $%{error_y.array:,.0f}<br>' +
+                         '<extra></extra>'
+        ))
         
         # Add legend
-        from matplotlib.patches import Patch
-        legend_elements = [
-            Patch(facecolor='#2E86AB', edgecolor='black', label='DQN Models'),
-            Patch(facecolor='#A23B72', edgecolor='black', label='Human Baselines')
-        ]
-        ax.legend(handles=legend_elements, loc='upper right')
+        fig.add_trace(go.Scatter(
+            x=[None], y=[None], mode='markers',
+            marker=dict(size=15, color='#2E86AB', symbol='square'),
+            name='DQN Models', showlegend=True
+        ))
+        fig.add_trace(go.Scatter(
+            x=[None], y=[None], mode='markers',
+            marker=dict(size=15, color='#A23B72', symbol='square'),
+            name='Human Baselines', showlegend=True
+        ))
         
-        plt.tight_layout()
-        plt.savefig(self.output_dir / "performance_with_error_bars.png", dpi=300)
-        print("\nPlot with error bars saved!")
-        plt.close()
+        fig.update_layout(
+            title=dict(
+                text='Agent Performance: DQN Sharpe Ratios vs Human Baselines<br><sub>Mean ± Std (n=5)</sub>',
+                x=0.5,
+                xanchor='center',
+                font=dict(size=20)
+            ),
+            xaxis_title='Agent',
+            yaxis_title='Final Net Worth ($)',
+            template='plotly_white',
+            height=700,
+            width=1400,
+            font=dict(size=14),
+            xaxis=dict(tickangle=-45),
+            hovermode='closest',
+            legend=dict(x=1.02, y=1, xanchor='left')
+        )
+        
+        # Format y-axis as currency
+        fig.update_yaxes(tickformat='$,.0f')
+        
+        # Save as HTML
+        output_file = self.output_dir / "performance_with_error_bars.html"
+        fig.write_html(str(output_file))
+        print(f"\nInteractive plot saved: {output_file}")
+        
+        # Also save as static PNG for backup
+        try:
+            fig.write_image(str(self.output_dir / "performance_with_error_bars.png"), width=1400, height=700)
+        except:
+            print("Note: Install kaleido for PNG export: pip install kaleido")
     
     def plot_confidence_intervals(self):
-        """Plot with 95% confidence intervals"""
+        """Plot with 95% confidence intervals using Plotly"""
+        import plotly.graph_objects as go
+        
         # Prepare data
         agents = []
         means = []
@@ -401,43 +444,74 @@ class StatisticalAnalyzer:
         ci_upper = [ci_upper[i] for i in sorted_indices]
         colors = [colors[i] for i in sorted_indices]
         
-        # Calculate error bars
-        yerr_lower = [means[i] - ci_lower[i] for i in range(len(means))]
-        yerr_upper = [ci_upper[i] - means[i] for i in range(len(means))]
-        
         # Create figure
-        fig, ax = plt.subplots(figsize=(14, 7))
+        fig = go.Figure()
         
-        # Point plot with error bars
+        # Add error bars and points
         for i in range(len(agents)):
-            ax.errorbar(i, means[i], 
-                       yerr=[[yerr_lower[i]], [yerr_upper[i]]],
-                       fmt='o', markersize=10, capsize=7, capthick=2,
-                       color=colors[i], ecolor='#666666', linewidth=2)
-        
-        ax.set_xlabel('Agent', fontsize=14, fontweight='bold')
-        ax.set_ylabel('Final Net Worth ($)', fontsize=14, fontweight='bold')
-        ax.set_title('Agent Performance with 95% Confidence Intervals (n=5)', 
-                    fontsize=16, fontweight='bold')
-        ax.set_xticks(range(len(agents)))
-        ax.set_xticklabels(agents, rotation=45, ha='right')
-        ax.grid(axis='y', alpha=0.3)
-        
-        # Format y-axis
-        ax.yaxis.set_major_formatter(plt.FuncFormatter(lambda x, p: f'${x/1e6:.1f}M'))
+            fig.add_trace(go.Scatter(
+                x=[agents[i]],
+                y=[means[i]],
+                error_y=dict(
+                    type='data',
+                    symmetric=False,
+                    array=[ci_upper[i] - means[i]],
+                    arrayminus=[means[i] - ci_lower[i]],
+                    color='rgba(100,100,100,0.5)',
+                    thickness=3,
+                    width=10
+                ),
+                mode='markers',
+                marker=dict(size=15, color=colors[i], line=dict(color='black', width=2)),
+                name=agents[i],
+                showlegend=False,
+                hovertemplate='<b>%{x}</b><br>' +
+                             'Mean: $%{y:,.0f}<br>' +
+                             f'95% CI: [${ci_lower[i]:,.0f}, ${ci_upper[i]:,.0f}]<br>' +
+                             '<extra></extra>'
+            ))
         
         # Add legend
-        from matplotlib.patches import Patch
-        legend_elements = [
-            Patch(facecolor='#2E86AB', edgecolor='black', label='DQN Models'),
-            Patch(facecolor='#A23B72', edgecolor='black', label='Human Baselines')
-        ]
-        ax.legend(handles=legend_elements, loc='upper right')
+        fig.add_trace(go.Scatter(
+            x=[None], y=[None], mode='markers',
+            marker=dict(size=15, color='#2E86AB', symbol='circle'),
+            name='DQN Models', showlegend=True
+        ))
+        fig.add_trace(go.Scatter(
+            x=[None], y=[None], mode='markers',
+            marker=dict(size=15, color='#A23B72', symbol='circle'),
+            name='Human Baselines', showlegend=True
+        ))
         
-        plt.tight_layout()
-        plt.savefig(self.output_dir / "confidence_intervals.png", dpi=300)
-        print("Confidence interval plot saved!")
-        plt.close()
+        fig.update_layout(
+            title=dict(
+                text='Agent Performance with 95% Confidence Intervals<br><sub>(n=5 seeds)</sub>',
+                x=0.5,
+                xanchor='center',
+                font=dict(size=20)
+            ),
+            xaxis_title='Agent',
+            yaxis_title='Final Net Worth ($)',
+            template='plotly_white',
+            height=700,
+            width=1400,
+            font=dict(size=14),
+            xaxis=dict(tickangle=-45),
+            hovermode='closest',
+            legend=dict(x=1.02, y=1)
+        )
+        
+        fig.update_yaxes(tickformat='$,.0f')
+        
+        # Save
+        output_file = self.output_dir / "confidence_intervals.html"
+        fig.write_html(str(output_file))
+        print(f"Interactive plot saved: {output_file}")
+        
+        try:
+            fig.write_image(str(self.output_dir / "confidence_intervals.png"), width=1400, height=700)
+        except:
+            pass
     
     def create_significance_table(self):
         """Create LaTeX-formatted significance table"""
