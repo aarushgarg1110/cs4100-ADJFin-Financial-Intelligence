@@ -84,15 +84,16 @@ def main():
     parser.add_argument('--sharpe-ratio', type=float, default=0.5, help='Sharpe ratio weight for reward calculation')
     
     # DQN hyperparameters
-    parser.add_argument('--lr', type=float, default=1e-5, help='Learning rate')
-    parser.add_argument('--gamma', type=float, default=0.99, help='Discount factor')
-    parser.add_argument('--batch-size', type=int, default=64, help='Batch size (DQN only)')
-    parser.add_argument('--epsilon-decay', type=float, default=0.995, help='Epsilon decay (DQN only)')
-    parser.add_argument('--target-update-freq', type=int, default=10, help='Target update frequency (DQN only)')
+    parser.add_argument('--lr', type=float, default=3e-05, help='Learning rate')
+    parser.add_argument('--gamma', type=float, default=0.98, help='Discount factor')
+    parser.add_argument('--batch-size', type=int, default=128, help='Batch size (DQN only)')
+    parser.add_argument('--epsilon-decay', type=float, default=0.9927, help='Epsilon decay (DQN only)')
+    parser.add_argument('--target-update-freq', type=int, default=500, help='Target update frequency (DQN only)')
     
     # PPO hyperparameters
     parser.add_argument('--clip-epsilon', type=float, default=0.2, help='PPO clip epsilon')
     parser.add_argument('--epochs', type=int, default=10, help='PPO epochs per update')
+    parser.add_argument('--entropy-coef', type=float, default=0.01, help='PPO entropy coefficient')
     
     args = parser.parse_args()
     
@@ -119,12 +120,14 @@ def main():
         plot_dqn_training(rewards, losses)
         
     elif args.agent == 'ppo':
-        print(f"Hyperparameters: lr={args.lr}, gamma={args.gamma}, clip_epsilon={args.clip_epsilon}, epochs={args.epochs}")
+        print(f"Hyperparameters: lr={args.lr}, gamma={args.gamma}, clip_epsilon={args.clip_epsilon}, epochs={args.epochs}, batch_size={args.batch_size}, entropy_coef={args.entropy_coef}")
         agent = DiscretePPOAgent(
             lr=args.lr,
             gamma=args.gamma,
             clip_epsilon=args.clip_epsilon,
-            epochs=args.epochs
+            epochs=args.epochs,
+            batch_size=args.batch_size,
+            entropy_coef=args.entropy_coef
         )
         rewards, policy_losses, value_losses = agent.train(env, num_episodes=args.episodes, seed=args.seed,
                                                            save_path=args.save_path)

@@ -27,7 +27,6 @@ from plots import (
     plot_action_heatmap,
     plot_allocation_evolution,
     plot_investment_allocation_evolution,
-    plot_debt_timeline,
     plot_portfolio_snapshots,
     plot_metrics_comparison,
 )
@@ -71,8 +70,8 @@ def evaluate_agent(agent, env, num_episodes=100):
     # Track net worth trajectory
     monthly_net_worths = []
     
-    # Track portfolio snapshots at years 0, 10, 20, 30
-    snapshot_months = [0, 120, 240, 359]
+    # Track portfolio snapshots at years 0, 10, 20, 25, 30
+    snapshot_months = [0, 120, 240, 300, 359]
     portfolio_snapshots = {month: [] for month in snapshot_months}
     
     # Track actions and allocations
@@ -268,35 +267,31 @@ def analyze_q_policies_for_comparison(agents, env):
     return all_results
 
 
-def generate_plots(all_results, agents=None, env=None):
+def generate_plots(all_results, agents=None, env=None, output_dir='visualization'):
     """Generate interactive Plotly visualizations"""
-    os.makedirs('visualization', exist_ok=True)
+    os.makedirs(output_dir, exist_ok=True)
     
     print("\n=== GENERATING VISUALIZATIONS ===")
     
     # 1. Net worth trajectories (all agents)
     print("Creating net worth trajectories plot...")
-    plot_net_worth_trajectories(all_results)
+    plot_net_worth_trajectories(all_results, output_dir)
     
     # 2. Final net worth comparison (all agents)
     print("Creating final net worth comparison...")
-    plot_final_net_worth_comparison(all_results)
+    plot_final_net_worth_comparison(all_results, output_dir)
     
     # 3. Portfolio snapshots (all agents)
     print("Creating portfolio snapshots...")
-    plot_portfolio_snapshots(all_results)
+    plot_portfolio_snapshots(all_results, output_dir)
     
-    # 4. Debt timeline (all agents combined)
-    print("Creating combined debt timeline...")
-    plot_debt_timeline(all_results)
-    
-    # 5. Allocation evolution (all agents combined)
+    # 4. Allocation evolution (all agents combined)
     print("Creating combined allocation evolution...")
-    plot_allocation_evolution(all_results)
+    plot_allocation_evolution(all_results, output_dir)
     
-    # 6. Investment allocation (all agents combined)
+    # 5. Investment allocation (all agents combined)
     print("Creating combined investment allocation...")
-    plot_investment_allocation_evolution(all_results)
+    plot_investment_allocation_evolution(all_results, output_dir)
     
     # Agent-specific plots (only for RL agents with diverse actions)
     rl_results = [r for r in all_results if ('dqn' in r['agent_name'].lower() or 'ppo' in r['agent_name'].lower())]
@@ -308,7 +303,7 @@ def generate_plots(all_results, agents=None, env=None):
             
             # Action heatmap (only meaningful for RL agents)
             print(f"Creating action heatmap for {agent_name}...")
-            plot_action_heatmap(result['action_history'], agent_name)
+            plot_action_heatmap(result['action_history'], agent_name, output_dir)
     
     # Q-policy comparison (if agents and env provided)
     if agents and env:
@@ -320,18 +315,19 @@ def generate_plots(all_results, agents=None, env=None):
             from plots import plot_q_policy_heatmap, plot_strategy_profile
             
             print("Creating Q-policy heatmap...")
-            plot_q_policy_heatmap(q_policy_data)
+            plot_q_policy_heatmap(q_policy_data, output_dir)
             
             print("Creating strategy profile chart...")
-            plot_strategy_profile(q_policy_data)
+            plot_strategy_profile(q_policy_data, output_dir)
     
-    print("\n✓ All visualizations saved to visualization/ directory")
+    print(f"\n✓ All visualizations saved to {output_dir}/ directory")
 
 def main():
     parser = argparse.ArgumentParser(description='Evaluate discrete financial agents')
     parser.add_argument('--agents', nargs='+', choices=['dqn', 'ppo', '60/40', 'debt', 'equal', 'age', 'markowitz', 'all'],
                         default=['all'], help='Agents to evaluate')
     parser.add_argument('--episodes', type=int, default=100, help='Number of evaluation episodes')
+    parser.add_argument('--output-dir', type=str, default='visualization', help='Output directory for visualizations')
     args = parser.parse_args()
     
     print("=== DISCRETE AGENT EVALUATION ===\n")
@@ -341,20 +337,24 @@ def main():
     
     # Map agent names
     agent_map = {
-        'dqn80': ('models/dqn_sharpe80.pth', DiscreteDQNAgent),
-        'dqn70': ('models/dqn_sharpe70.pth', DiscreteDQNAgent),
-        'dqn60': ('models/dqn_sharpe60.pth', DiscreteDQNAgent),
-        'dqn50': ('models/dqn_sharpe50.pth', DiscreteDQNAgent),
-        'dqn40': ('models/dqn_sharpe40.pth', DiscreteDQNAgent),
-        'dqn30': ('models/dqn_sharpe30.pth', DiscreteDQNAgent),
-        'dqn20': ('models/dqn_sharpe20.pth', DiscreteDQNAgent),
-        'dqn10': ('models/dqn_sharpe10.pth', DiscreteDQNAgent),
+        # 'dqn80': ('models/dqn_sharpe80.pth', DiscreteDQNAgent),
+        # 'dqn70': ('models/dqn_sharpe70.pth', DiscreteDQNAgent),
+        # 'dqn60': ('models/dqn_sharpe60.pth', DiscreteDQNAgent),
+        # 'dqn50': ('models/dqn_sharpe50.pth', DiscreteDQNAgent),
+        # 'dqn40': ('models/dqn_sharpe40.pth', DiscreteDQNAgent),
+        # 'dqn30': ('models/dqn_sharpe30.pth', DiscreteDQNAgent),
+        # 'dqn20': ('models/dqn_sharpe20.pth', DiscreteDQNAgent),
+        # 'dqn10': ('models/dqn_sharpe10.pth', DiscreteDQNAgent),
+        'ppo60': ('models/ppo_sharpe60.pth', DiscretePPOAgent),
+        'ppo50': ('models/ppo_sharpe50.pth', DiscretePPOAgent),
+        'ppo40': ('models/ppo_sharpe40.pth', DiscretePPOAgent),
+        'ppo30': ('models/ppo_sharpe30.pth', DiscretePPOAgent),
         # 'ppo': ('models/ppo_best_model.pth', DiscretePPOAgent),
-        # '60/40': (None, SixtyFortyAgent),
-        # 'debt': (None, DebtAvalancheAgent),
-        # 'equal': (None, EqualWeightAgent),
-        # 'age': (None, AgeBasedAgent),
-        # 'markowitz': (None, MarkowitzAgent),
+        '60/40': (None, SixtyFortyAgent),
+        'debt': (None, DebtAvalancheAgent),
+        'equal': (None, EqualWeightAgent),
+        'age': (None, AgeBasedAgent),
+        'markowitz': (None, MarkowitzAgent),
     }
     
     # Select agents
@@ -398,7 +398,7 @@ def main():
         print(f"Action Diversity: {results['action_diversity']:.1%} of action space used")
     
     # Generate visualizations
-    generate_plots(all_results, agents=agents, env=env)
+    generate_plots(all_results, agents=agents, env=env, output_dir=args.output_dir)
     
     # Final rankings
     print(f"\n=== FINAL RANKINGS ===")

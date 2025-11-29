@@ -302,13 +302,34 @@ def plot_debt_timeline(all_results, output_dir='visualization'):
 
 def plot_portfolio_snapshots(all_results, output_dir='visualization'):
     """
-    Grouped bar chart showing portfolio composition at key milestones (Years 0, 10, 20, 30).
+    Grouped bar chart showing portfolio at key milestones.
+    Each agent has a unique color, with stacked segments using opacity to show composition.
     
     Args:
         all_results: list of result dicts with 'portfolio_snapshots'
     """
-    milestones = ['Year 0', 'Year 10', 'Year 20', 'Year 30']
-    snapshot_months = [0, 120, 240, 359]
+    # Milestones: Age 25, 35, 45, 50, 55 (Years 0, 10, 20, 25, 30)
+    milestones = ['Age 25\n(Year 0)', 'Age 35\n(Year 10)', 'Age 45\n(Year 20)', 'Age 50\n(Year 25)', 'Age 55\n(Year 30)']
+    snapshot_months = [0, 120, 240, 300, 359]
+    
+    # Agent colors (distinct colors for each agent)
+    agent_colors = {
+        '60/40': '#1f77b4',           # Blue
+        'Age-Based': '#ff7f0e',       # Orange
+        'Markowitz': '#2ca02c',       # Green
+        'Equal Weight': '#d62728',    # Red
+        'Debt Avalanche': '#9467bd',  # Purple
+        'DQN': '#8c564b',             # Brown
+        'PPO': '#e377c2',             # Pink
+    }
+    
+    # Asset categories with opacity levels
+    categories = [
+        ('stocks', 1.0, 'Stocks'),
+        ('bonds', 0.7, 'Bonds'),
+        ('real_estate', 0.5, 'Real Estate'),
+        ('emergency_fund', 0.3, 'Emergency Fund')
+    ]
     
     fig = go.Figure()
     
@@ -316,34 +337,64 @@ def plot_portfolio_snapshots(all_results, output_dir='visualization'):
     for result in all_results:
         agent_name = result['agent_name']
         snapshots = result['portfolio_snapshots']
+        base_color = agent_colors.get(agent_name, '#17becf')  # Default cyan if not found
         
-        # Calculate net worth at each milestone
-        net_worths = []
-        for month in snapshot_months:
-            snap = snapshots[month]
-            nw = (snap['stocks'] + snap['bonds'] + snap['real_estate'] + 
-                  snap['emergency_fund'] - snap['cc_debt'] - snap['student_loan'])
-            net_worths.append(nw)
-        
-        fig.add_trace(go.Bar(
-            name=agent_name,
-            x=milestones,
-            y=net_worths,
-            text=[f'${v:,.0f}' for v in net_worths],
-            textposition='outside',
-            hovertemplate='<b>%{fullData.name}</b><br>' +
-                         '%{x}<br>' +
-                         'Net Worth: $%{y:,.0f}<br>' +
-                         '<extra></extra>'
-        ))
+        # For each asset category (stacked)
+        for asset_key, opacity, asset_label in categories:
+            values = []
+            hover_texts = []
+            
+            for month in snapshot_months:
+                snap = snapshots[month]
+                value = snap[asset_key]
+                values.append(value)
+                
+                # Calculate percentage
+                total = snap['stocks'] + snap['bonds'] + snap['real_estate'] + snap['emergency_fund']
+                pct = (value / total * 100) if total > 0 else 0
+                
+                hover_texts.append(
+                    f"<b>{agent_name}</b><br>" +
+                    f"{asset_label}: ${value:,.0f} ({pct:.1f}%)<br>" +
+                    f"<extra></extra>"
+                )
+            
+            # Convert hex color to rgba with opacity
+            rgb = tuple(int(base_color.lstrip('#')[i:i+2], 16) for i in (0, 2, 4))
+            rgba_color = f'rgba({rgb[0]}, {rgb[1]}, {rgb[2]}, {opacity})'
+            
+            # Only show legend for first category of each agent
+            show_legend = (asset_key == 'stocks')
+            legend_name = agent_name if show_legend else None
+            
+            fig.add_trace(go.Bar(
+                name=legend_name,
+                x=milestones,
+                y=values,
+                marker_color=rgba_color,
+                legendgroup=agent_name,
+                showlegend=show_legend,
+                hovertemplate='%{hovertext}',
+                hovertext=hover_texts,
+                offsetgroup=agent_name  # Group bars by agent
+            ))
     
     fig.update_layout(
-        title='Net Worth at Key Milestones',
+        title='Portfolio Value at Key Life Milestones',
         xaxis_title='Milestone',
-        yaxis_title='Net Worth ($)',
-        barmode='group',
+        yaxis_title='Portfolio Value ($)',
+        barmode='stack',
         template='plotly_white',
-        height=600
+        height=600,
+        showlegend=True,
+        legend=dict(
+            title="Agent",
+            orientation="v",
+            yanchor="top",
+            y=1,
+            xanchor="left",
+            x=1.02
+        )
     )
     
     os.makedirs(output_dir, exist_ok=True)

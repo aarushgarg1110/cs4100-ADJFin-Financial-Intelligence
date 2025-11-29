@@ -52,14 +52,16 @@ class DiscretePPOAgent(BaseFinancialAgent):
     Args:
         state_dim: Dimension of state space (default: 13)
         num_actions: Number of discrete actions (default: 90)
-        lr: Learning rate (default: 3e-4)
-        gamma: Discount factor (default: 1.0)
+        lr: Learning rate (default: 3e-05)
+        gamma: Discount factor (default: 0.98)
         clip_epsilon: PPO clipping parameter (default: 0.2)
         epochs: Number of optimization epochs per update (default: 10)
+        batch_size: Batch size for training (default: 128)
+        entropy_coef: Entropy bonus coefficient for exploration (default: 0.01)
     """
     
-    def __init__(self, state_dim=13, num_actions=90, lr=3e-4, gamma=1.0,
-                 clip_epsilon=0.2, epochs=10, name="Discrete_PPO"):
+    def __init__(self, state_dim=13, num_actions=90, lr=3e-05, gamma=0.98,
+                 clip_epsilon=0.2, epochs=10, batch_size=128, entropy_coef=0.01, name="Discrete_PPO"):
         super().__init__(name)
         
         self.device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -76,6 +78,8 @@ class DiscretePPOAgent(BaseFinancialAgent):
         self.gamma = gamma
         self.clip_epsilon = clip_epsilon
         self.epochs = epochs
+        self.batch_size = batch_size
+        self.entropy_coef = entropy_coef
         
         # Episode buffers
         self.states = []
@@ -162,7 +166,10 @@ class DiscretePPOAgent(BaseFinancialAgent):
             ratio = (new_log_probs - old_log_probs).exp()
             surr1 = ratio * advantages
             surr2 = torch.clamp(ratio, 1 - self.clip_epsilon, 1 + self.clip_epsilon) * advantages
-            policy_loss = -torch.min(surr1, surr2).mean()
+            
+            # Entropy bonus to encourage exploration
+            entropy = dist.entropy().mean()
+            policy_loss = -torch.min(surr1, surr2).mean() - self.entropy_coef * entropy
             
             # Value loss
             value_loss = F.mse_loss(values, returns)
